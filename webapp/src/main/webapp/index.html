@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anjunar</title>
+    <script type="module" src="anjunar/app.js"></script>
+    <link rel="stylesheet" href="simplicity.css">
+    <link rel="stylesheet" href="elements.css">
+    <link rel="stylesheet" href="app.css">
+    <script>
+        if (document.location.hash.length === 0) {
+            document.location.hash = "/anjunar/welcome";
+        }
+    </script>
+</head>
+<body>
+    <app-anjunar></app-anjunar>
+</body>
+</html>

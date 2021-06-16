@@ -1,0 +1,30 @@
+<hibernate-configuration xmlns="http://www.hibernate.org/xsd/orm/cfg">
+    <session-factory name="main">
+<!--
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>
+        <property name="hibernate.connection.username">anjunar</property>
+        <property name="hibernate.connection.password">anjunar</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle12cDialect</property>
+-->
+
+        <mapping class="de.industrialsociety.common.ddd.AbstractAggregate"/>
+        <mapping class="de.industrialsociety.common.ddd.AbstractEntity"/>
+
+        <mapping class="de.industrialsociety.common.filedisk.HarddiskFile"/>
+
+        <mapping class="de.industrialsociety.common.security.Permission"/>
+        <mapping class="de.industrialsociety.common.security.Role"/>
+        <mapping class="de.industrialsociety.common.security.Relationship"/>
+        <mapping class="de.industrialsociety.common.security.User"/>
+        <mapping class="de.industrialsociety.common.security.UserImage"/>
+
+        <mapping class="de.industrialsociety.anjunar.pages.Page"/>
+        <mapping class="de.industrialsociety.anjunar.pages.PageImage"/>
+
+        <mapping class="de.industrialsociety.anjunar.timeline.TimelineImage"/>
+        <mapping class="de.industrialsociety.anjunar.timeline.Comment"/>
+        <mapping class="de.industrialsociety.anjunar.timeline.Post"/>
+
+    </session-factory>
+</hibernate-configuration>

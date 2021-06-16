@@ -1,0 +1,72 @@
+import {builder, customComponents} from "../simplicity.js";
+import {jsonClient} from "../services/client.js";
+import HateoasForm from "./hateoas-form";
+
+export function hateoasButton(attributes) {
+    return function (children) {
+        return Object.assign({
+            element : HateoasButton,
+            children : children
+        }, attributes)
+    }
+}
+
+export default class HateoasButton extends HTMLElement {
+
+    #hateoas;
+    #text = "";
+    #isInitialized = false;
+
+    get hateoas() {
+        return this.#hateoas;
+    }
+
+    set hateoas(value) {
+        this.#hateoas = value;
+    }
+
+    get text() {
+        return this.#text;
+    }
+
+    set text(value) {
+        this.#text = value;
+    }
+
+    render() {
+
+        if (! this.#isInitialized) {
+            builder(this, {
+                element : "button",
+                type : "button",
+                className : "button",
+                text : this.#text,
+                update : () => {
+                    let form = this.queryUpwards("hateoas-form");
+                    let link = form.model.form.actions.find((link) => link.rel === this.#hateoas);
+                    if (link) {
+                        this.style.display = "inline"
+                    } else {
+                        this.style.display = "none"
+                    }
+                },
+                onClick : () => {
+                    let hateoasForm = this.queryUpwards("hateoas-form");
+                    let domForm = this.queryUpwards("form")
+                    domForm.updateValue();
+                    let link = hateoasForm.model.form.actions.find((link) => link.rel === this.#hateoas);
+                    jsonClient.action(link.method, link.url, {body : domForm.value})
+                        .then((response) => {
+                            this.dispatchEvent(new CustomEvent("afterSubmit", {detail : response}))
+                        })
+                }
+            })
+
+            this.#isInitialized = true;
+        }
+
+    }
+
+}
+
+customComponents.define("hateoas-button", HateoasButton)

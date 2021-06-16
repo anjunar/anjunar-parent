@@ -1,0 +1,44 @@
+<subsystem xmlns="urn:jboss:domain:datasources:4.0">
+    <datasources>
+        <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
+            <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url>
+            <driver>h2</driver>
+            <security>
+                <service-name>sa</service-name>
+                <password>sa</password>
+            </security>
+        </datasource>
+        <datasource jndi-name="java:jboss/datasources/simplicity" pool-name="simplicity" enabled="true" use-java-context="true">
+            <connection-url>jdbc:p6spy:postgresql://localhost:5432/simplicity</connection-url>
+            <driver>p6spy</driver>
+            <pool>
+                <min-pool-size>5</min-pool-size>
+                <initial-pool-size>5</initial-pool-size>
+                <max-pool-size>100</max-pool-size>
+                <prefill>true</prefill>
+            </pool>
+            <security>
+                <service-name>postgres</service-name>
+                <password>root</password>
+            </security>
+            <validation>
+                <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+                <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
+            </validation>
+        </datasource>
+        <drivers>
+            <driver name="h2" module="com.h2database.h2">
+                <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+            </driver>
+            <driver name="mysql" module="com.mysql.jdbc">
+                <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
+            </driver>
+            <driver name="postgresql" module="org.postgresql">
+                <driver-class>org.postgresql.Driver</driver-class>
+            </driver>
+            <driver name="p6spy" module="com.p6spy">
+                <driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
+            </driver>
+        </drivers>
+    </datasources>
+</subsystem>

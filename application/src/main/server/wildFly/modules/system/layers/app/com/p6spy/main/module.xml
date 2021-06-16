@@ -1,0 +1,12 @@
+﻿<module xmlns="urn:jboss:module:1.1" name="com.p6spy">
+    <resources>
+        <resource-root path="p6spy-3.6.0.jar"/>
+    </resources>
+
+    <dependencies>
+        <module name="javax.api"/>
+        <module name="org.postgresql"/>
+        <module name="org.slf4j"/>
+        <module name="javax.transaction.api"/>
+    </dependencies>
+</module>

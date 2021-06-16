@@ -1,0 +1,99 @@
+How to Install WildFly on Ubuntu
+To install WildFly as a service on Ubuntu 14.04 do steps described below.
+
+This guide is suitable for installing WildFly 8 and 9.
+
+In order to run WildFly Java Development Kit (JDK) is required.
+
+To install Oracle JDK you can use WebUpd8 PPA.
+
+To add PPA add-apt-repository utility should be used.
+
+If add-apt-repository is not installed currently, you can install it by running:
+
+sudo apt-get install software-properties-common python-software-properties
+Add WebUpd8 PPA:
+
+sudo add-apt-repository ppa:webupd8team/java
+Update local package index to latest changes in repositories:
+
+sudo apt-get update
+Install JDK 8:
+
+sudo apt-get install oracle-java8-installer
+Check Java is properly installed:
+
+java -version
+Set Oracle JDK 8 as default Java:
+
+sudo apt-get install oracle-java8-set-default
+Download WildFly:
+
+wget http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.zip
+Unpack WildFly:
+
+sudo unzip wildfly-9.0.2.Final.zip -d /opt/
+Create symbolic link in order to simplify WildFly updates in future:
+
+sudo ln -s /opt/wildfly-9.0.2.Final /opt/wildfly
+Copy and edit init.d script configuration file:
+
+sudo cp /opt/wildfly/bin/init.d/wildfly.conf /etc/default/wildfly
+Edit variables in /etc/default/wildfly:
+
+## Location of JDK
+JAVA_HOME="/usr/lib/jvm/java-8-oracle"
+
+## Location of WildFly
+JBOSS_HOME="/opt/wildfly"
+
+## The username who should own the process.
+JBOSS_USER=wildfly
+
+## The mode WildFly should start, standalone or domain
+JBOSS_MODE=standalone
+
+## Configuration for standalone mode
+JBOSS_CONFIG=standalone.xml
+
+## Configuration for domain mode
+# JBOSS_DOMAIN_CONFIG=domain.xml
+# JBOSS_HOST_CONFIG=host-master.xml
+
+## The amount of time to wait for startup
+STARTUP_WAIT=60
+
+## The amount of time to wait for shutdown
+SHUTDOWN_WAIT=60
+
+## Location to keep the console log
+JBOSS_CONSOLE_LOG="/var/log/wildfly/console.log"
+
+## Additionals args to include in startup
+# JBOSS_OPTS="--admin-only -b 172.0.0.1"
+Copy init.d script:
+
+sudo cp /opt/wildfly/bin/init.d/wildfly-init-debian.sh /etc/init.d/wildfly
+Set proper permissions and ownership of init.d script:
+
+sudo chown root:root /etc/init.d/wildfly
+sudo chmod +X /etc/init.d/wildfly
+Add and enable WildFly as a service:
+
+sudo update-rc.d wildfly defaults
+sudo update-rc.d wildfly enable
+Create directory for logs:
+
+sudo mkdir -p /var/log/wildfly
+Add system service to run WildFly:
+
+sudo useradd --system --create-home wildfly
+Change the owner of WildFly directories:
+
+sudo chown -R wildfly:wildfly /opt/wildfly
+sudo chown -R wildfly:wildfly /var/log/wildfly
+Start WildFly:
+
+sudo service wildfly start
+
+iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
