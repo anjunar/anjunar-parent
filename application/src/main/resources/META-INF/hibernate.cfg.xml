@@ -8,23 +8,23 @@
         <property name="hibernate.dialect">org.hibernate.dialect.Oracle12cDialect</property>
 -->
 
-        <mapping class="de.industrialsociety.common.ddd.AbstractAggregate"/>
-        <mapping class="de.industrialsociety.common.ddd.AbstractEntity"/>
+        <mapping class="de.bitvale.common.ddd.AbstractAggregate"/>
+        <mapping class="de.bitvale.common.ddd.AbstractEntity"/>
 
-        <mapping class="de.industrialsociety.common.filedisk.HarddiskFile"/>
+        <mapping class="de.bitvale.common.filedisk.HarddiskFile"/>
 
-        <mapping class="de.industrialsociety.common.security.Permission"/>
-        <mapping class="de.industrialsociety.common.security.Role"/>
-        <mapping class="de.industrialsociety.common.security.Relationship"/>
-        <mapping class="de.industrialsociety.common.security.User"/>
-        <mapping class="de.industrialsociety.common.security.UserImage"/>
+        <mapping class="de.bitvale.common.security.Permission"/>
+        <mapping class="de.bitvale.common.security.Role"/>
+        <mapping class="de.bitvale.common.security.Relationship"/>
+        <mapping class="de.bitvale.common.security.User"/>
+        <mapping class="de.bitvale.common.security.UserImage"/>
 
-        <mapping class="de.industrialsociety.anjunar.pages.Page"/>
-        <mapping class="de.industrialsociety.anjunar.pages.PageImage"/>
+        <mapping class="de.bitvale.anjunar.pages.Page"/>
+        <mapping class="de.bitvale.anjunar.pages.PageImage"/>
 
-        <mapping class="de.industrialsociety.anjunar.timeline.TimelineImage"/>
-        <mapping class="de.industrialsociety.anjunar.timeline.Comment"/>
-        <mapping class="de.industrialsociety.anjunar.timeline.Post"/>
+        <mapping class="de.bitvale.anjunar.timeline.TimelineImage"/>
+        <mapping class="de.bitvale.anjunar.timeline.Comment"/>
+        <mapping class="de.bitvale.anjunar.timeline.Post"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -4,19 +4,19 @@ import registry from "./processors/processor-registry.js";
 import {getCookie} from "./services/tools.js";
 
 export function div(attributes) {
-    return function (children) {
+    return function () {
         return Object.assign({
             element : "div",
-            children : children
+            children : Array.from(arguments)
         }, attributes)
     }
 }
 
 export function h3(attributes) {
-    return function (children) {
+    return function () {
         return Object.assign({
             element : "h3",
-            children : children
+            children : Array.from(arguments)
         }, attributes)
     }
 }

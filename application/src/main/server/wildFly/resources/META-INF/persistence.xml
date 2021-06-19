@@ -2,31 +2,31 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
     <persistence-unit name="main" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/simplicity</jta-data-source>
-        <class>de.industrialsociety.common.ddd.AbstractAggregate</class>
-        <class>de.industrialsociety.common.ddd.AbstractEntity</class>
+        <class>de.bitvale.common.ddd.AbstractAggregate</class>
+        <class>de.bitvale.common.ddd.AbstractEntity</class>
 
-        <class>de.industrialsociety.common.filedisk.HarddiskFile</class>
+        <class>de.bitvale.common.filedisk.HarddiskFile</class>
 
-        <class>de.industrialsociety.common.security.Permission</class>
-        <class>de.industrialsociety.common.security.Role</class>
-        <class>de.industrialsociety.common.security.Relationship</class>
-        <class>de.industrialsociety.common.security.User</class>
-        <class>de.industrialsociety.common.security.UserImage</class>
+        <class>de.bitvale.common.security.Permission</class>
+        <class>de.bitvale.common.security.Role</class>
+        <class>de.bitvale.common.security.Relationship</class>
+        <class>de.bitvale.common.security.User</class>
+        <class>de.bitvale.common.security.UserImage</class>
 
-        <class>de.industrialsociety.anjunar.pages.Page</class>
-        <class>de.industrialsociety.anjunar.pages.PageImage</class>
-        <class>de.industrialsociety.anjunar.pages.page.forum.Topic</class>
-        <class>de.industrialsociety.anjunar.pages.page.forum.Reply</class>
+        <class>de.bitvale.anjunar.pages.Page</class>
+        <class>de.bitvale.anjunar.pages.PageImage</class>
+        <class>de.bitvale.anjunar.pages.page.forum.Topic</class>
+        <class>de.bitvale.anjunar.pages.page.forum.Reply</class>
 
-        <class>de.industrialsociety.anjunar.timeline.TimelineImage</class>
-        <class>de.industrialsociety.anjunar.timeline.Comment</class>
-        <class>de.industrialsociety.anjunar.timeline.Post</class>
+        <class>de.bitvale.anjunar.timeline.TimelineImage</class>
+        <class>de.bitvale.anjunar.timeline.Comment</class>
+        <class>de.bitvale.anjunar.timeline.Post</class>
 
-        <class>de.industrialsociety.anjunar.control.user.timeline.UserPost</class>
-        <class>de.industrialsociety.anjunar.control.groups.Group</class>
+        <class>de.bitvale.anjunar.control.user.timeline.UserPost</class>
+        <class>de.bitvale.anjunar.control.groups.Group</class>
 
         <properties>
-            <property name="hibernate.dialect" value="de.industrialsociety.anjunar.Oracle18Dialect"/>
+            <property name="hibernate.dialect" value="de.bitvale.anjunar.Oracle18Dialect"/>
             <property name="hibernate.connection.autocommit" value="false"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>

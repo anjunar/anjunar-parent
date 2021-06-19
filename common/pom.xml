@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>anjunar-parent</artifactId>
-        <groupId>de.industrialsociety.anjunar</groupId>
+        <groupId>de.bitvale.anjunar</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -100,13 +100,13 @@
         </dependency>
 
         <dependency>
-            <groupId>de.industrialsociety</groupId>
+            <groupId>de.bitvale</groupId>
             <artifactId>bean-introspector</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>de.industrialsociety</groupId>
-            <artifactId>jsr3339</artifactId>
+            <groupId>de.bitvale</groupId>
+            <artifactId>jsr3339-meta</artifactId>
         </dependency>
 
 

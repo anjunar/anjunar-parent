@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>anjunar-parent</artifactId>
-        <groupId>de.industrialsociety.anjunar</groupId>
+        <groupId>de.bitvale.anjunar</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -15,20 +15,20 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.industrialsociety.anjunar</groupId>
+            <groupId>de.bitvale.anjunar</groupId>
             <artifactId>webapp</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
 
         <dependency>
-            <groupId>de.industrialsociety.anjunar</groupId>
+            <groupId>de.bitvale.anjunar</groupId>
             <artifactId>rest</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>de.industrialsociety.anjunar</groupId>
+            <groupId>de.bitvale.anjunar</groupId>
             <artifactId>domain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -312,7 +312,7 @@
     </profiles>
 
     <build>
-        <finalName>de.industrialsociety.anjunar.client.main.war</finalName>
+        <finalName>de.bitvale.anjunar.client.main.war</finalName>
 
         <plugins>
             <plugin>

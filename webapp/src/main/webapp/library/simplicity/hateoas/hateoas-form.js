@@ -2,10 +2,10 @@ import {builder, customComponents} from "../simplicity.js";
 import DomForm from "../directives/dom-form.js";
 
 export function hateoasForm(attributes) {
-    return function (children) {
+    return function () {
         return Object.assign({
             element : HateoasForm,
-            children : children
+            children : Array.from(arguments)
         }, attributes)
     }
 }

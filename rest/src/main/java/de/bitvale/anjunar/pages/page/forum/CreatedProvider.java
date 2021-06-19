@@ -1,0 +1,23 @@
+package de.bitvale.anjunar.pages.page.forum;
+
+import de.bitvale.common.rest.api.jaxrs.AbstractRestPredicateProvider;
+import de.bitvale.common.security.Identity;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.time.LocalDate;
+import java.time.ZoneId;
+
+public class CreatedProvider extends AbstractRestPredicateProvider<String, Topic> {
+    @Override
+    public Predicate build(String value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Topic> root, CriteriaQuery<?> query) {
+        if (value == null) {
+            return builder.conjunction();
+        }
+        LocalDate localDate = LocalDate.parse(value);
+        return builder.between(root.get(Topic_.created), localDate.atStartOfDay(ZoneId.systemDefault()).toInstant(), localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+}

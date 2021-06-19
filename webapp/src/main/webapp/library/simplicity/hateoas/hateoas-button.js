@@ -1,12 +1,11 @@
 import {builder, customComponents} from "../simplicity.js";
 import {jsonClient} from "../services/client.js";
-import HateoasForm from "./hateoas-form";
 
 export function hateoasButton(attributes) {
-    return function (children) {
+    return function () {
         return Object.assign({
             element : HateoasButton,
-            children : children
+            children : Array.from(arguments)
         }, attributes)
     }
 }
