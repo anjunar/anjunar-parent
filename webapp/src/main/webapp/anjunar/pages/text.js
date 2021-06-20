@@ -8,7 +8,7 @@ export default class Text extends HTMLElement {
         let html = page.html;
 
         document.addEventListener("language", (event) => {
-            for (const pageLink of html.form.pageLinks) {
+            for (const pageLink of html.pageLinks) {
                 if (pageLink.language === event.detail) {
                     window.location.hash = `#/anjunar/pages/page?id=${pageLink.id}#/anjunar/pages/text`;
                     break;
@@ -22,7 +22,7 @@ export default class Text extends HTMLElement {
                     marginTop: "12px"
                 },
                 initialize : (element) => {
-                    element.innerHTML = html.form.content.html;
+                    element.innerHTML = html.content.html;
                 }
             },
                 {
@@ -31,7 +31,7 @@ export default class Text extends HTMLElement {
                     className: "button",
                     text: i18n("History"),
                     onClick : () => {
-                        window.location.hash = `#/anjunar/pages/page?id=${html.form.id}#/anjunar/pages/page/history?id=${html.form.id}`
+                        window.location.hash = `#/anjunar/pages/page?id=${html.id}#/anjunar/pages/page/history?id=${html.id}`
                     }
                 },
                 {
@@ -40,7 +40,7 @@ export default class Text extends HTMLElement {
                     className: "button",
                     text: i18n("Edit"),
                     onClick : () => {
-                        window.location.hash = `#/anjunar/pages/editor?id=${html.form.id}`
+                        window.location.hash = `#/anjunar/pages/editor?id=${html.id}`
                     }
                 }
             ]

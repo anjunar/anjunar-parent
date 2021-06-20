@@ -4,7 +4,6 @@ import de.bitvale.common.filedisk.FileDiskUtils;
 import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.FormController;
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
 import de.bitvale.anjunar.shared.users.user.UserResource;
@@ -45,7 +44,7 @@ public class UserCommentController implements FormController<CommentResource> {
     @Produces("application/json")
     @GET
     @Path("create")
-    public MetaForm<CommentResource> create(@QueryParam("post") UUID post) {
+    public CommentResource create(@QueryParam("post") UUID post) {
         CommentResource resource = new CommentResource();
 
         User user = identity.getUser();
@@ -66,18 +65,15 @@ public class UserCommentController implements FormController<CommentResource> {
         resource.setOwner(owner);
 
         identity.createLink("home/timeline/post/comments/comment", "POST", "save", resource::addAction);
+        identity.createLink("control/users", "POST", "likes", resource::addSource);
 
-        MetaForm<CommentResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
-
-        identity.createLink("control/users", "POST", "likes", metaForm::addSource);
-
-        return metaForm;
+        return resource;
     }
 
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public MetaForm<CommentResource> read(UUID id) {
+    public CommentResource read(UUID id) {
 
         Comment comment = entityManager.find(Comment.class, id);
 
@@ -102,11 +98,9 @@ public class UserCommentController implements FormController<CommentResource> {
             identity.createLink("home/timeline/post/comments/comment?id=" + comment.getId(), "DELETE", "delete", resource::addAction);
         }
 
-        MetaForm<CommentResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
+        identity.createLink("control/users", "POST", "likes", resource::addSource);
 
-        identity.createLink("control/users", "POST", "likes", metaForm::addSource);
-
-        return metaForm;
+        return resource;
     }
 
     @Override

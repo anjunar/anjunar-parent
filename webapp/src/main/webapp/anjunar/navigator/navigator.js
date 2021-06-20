@@ -22,11 +22,11 @@ export default class Navigator extends HTMLElement {
 
         this.style.display = "block"
 
-        this.#service.properties = this.#service.properties || [];
+        this.#service.meta = this.#service.meta || {};
+        this.#service.meta.properties = this.#service.meta.properties || [];
         this.#service.columns = this.#service.columns || [];
 
-        this.#service.form = this.#service.form || {}
-        this.#service.form.actions = this.#service.form.actions || [];
+        this.#service.actions = this.#service.actions || [];
 
         builder(this, [
             {
@@ -61,7 +61,7 @@ export default class Navigator extends HTMLElement {
                         children: [
                             {
                                 element: "div",
-                                children: this.#service.properties.map((property) => {
+                                children: this.#service.meta.properties.map((property) => {
                                     return {
                                         element: MatInputHolder,
                                         name: property.name
@@ -69,7 +69,7 @@ export default class Navigator extends HTMLElement {
                                 })
                             }, {
                                 element: "div",
-                                children: this.#service.form.actions.map((link) => {
+                                children: this.#service.actions.map((link) => {
                                     return {
                                         element: HateoasButton,
                                         hateoas: link.rel,
@@ -92,13 +92,7 @@ export default class Navigator extends HTMLElement {
                 element: HateoasTable,
                 model : this.#service,
                 onRow : (event) => {
-                    let link
-                    if (event.detail.form) {
-                        link = hateoas(event.detail.form.actions, "read");
-                    } else {
-                        link = hateoas(event.detail.actions, "read");
-                    }
-
+                    let link = hateoas(event.detail.actions, "read");
                     window.location.hash = `#/anjunar/navigator/navigator?link=${btoa(link.url)}`
                 },
                 onCreate : (event) => {

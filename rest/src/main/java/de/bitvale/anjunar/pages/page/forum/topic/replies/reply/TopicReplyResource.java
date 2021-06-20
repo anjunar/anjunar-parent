@@ -9,7 +9,7 @@ import de.bitvale.common.rest.api.meta.Input;
 import java.time.Instant;
 import java.util.UUID;
 
-public class TopicReplyResource extends AbstractRestEntity {
+public class TopicReplyResource extends AbstractRestEntity<TopicReplyResource> {
 
     @Input(placeholder = "Text", type = "editor")
     private Editor editor;

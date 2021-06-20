@@ -1,16 +1,16 @@
 package de.bitvale.anjunar.home.timeline.post;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Blob;
-import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.rest.api.meta.Input;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PostResource extends AbstractRestEntity {
+public class PostResource extends AbstractRestEntity<PostResource> {
 
     @Input(placeholder = "Text", type = "text")
     private String text;
@@ -22,7 +22,6 @@ public class PostResource extends AbstractRestEntity {
     private UserResource owner;
 
     @Input(placeholder = "Created", type = "datetime-local")
-    @JsonFormat(pattern = "YYYY-MM-dd'T'HH:mm",  timezone = "UTC")
     private Instant created;
 
     @Input(placeholder = "Likes", type = "lazymultiselect")

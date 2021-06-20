@@ -1,6 +1,5 @@
 package de.bitvale.anjunar.control.roles.role;
 
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.Role;
 import de.bitvale.common.rest.Secured;
@@ -39,17 +38,17 @@ public class RoleController implements FormController<RoleResource> {
     @GET
     @Path("create")
     @RolesAllowed("Administrator")
-    public MetaForm<RoleResource> create() {
+    public RoleResource create() {
         RoleResource resource = new RoleResource();
 
         identity.createLink("control/roles/role", "POST", "save", resource::addLink);
 
-        return new MetaForm<>(resource, identity.getLanguage());
+        return resource;
     }
 
     @Override
     @RolesAllowed({"Administrator", "User"})
-    public MetaForm<RoleResource> read(UUID id) {
+    public RoleResource read(UUID id) {
 
         Role role = entityManager.find(Role.class, id);
 
@@ -58,11 +57,9 @@ public class RoleController implements FormController<RoleResource> {
         resource.setName(role.getName());
         resource.setDescription(role.getDescription());
 
-        MetaForm<RoleResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
+        identity.createLink("control/permissions?role=" + role.getId(), "GET", "permissions", resource::addLink);
 
-        identity.createLink("control/permissions?role=" + role.getId(), "GET", "permissions", metaForm::addLink);
-
-        return metaForm;
+        return resource;
     }
 
     @Override

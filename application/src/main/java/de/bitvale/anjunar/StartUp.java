@@ -4,12 +4,11 @@ import de.bitvale.common.security.IdentityService;
 import de.bitvale.common.security.Relationship;
 import de.bitvale.common.security.Role;
 import de.bitvale.common.security.User;
-import de.bitvale.common.security.*;
+import jakarta.servlet.ServletContext;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
-import javax.servlet.ServletContext;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 

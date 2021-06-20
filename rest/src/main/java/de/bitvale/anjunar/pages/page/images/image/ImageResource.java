@@ -5,7 +5,7 @@ import de.bitvale.anjunar.pages.page.images.PageResource;
 
 import java.time.LocalDateTime;
 
-public class ImageResource extends AbstractRestEntity {
+public class ImageResource extends AbstractRestEntity<ImageResource> {
 
     private String name;
 

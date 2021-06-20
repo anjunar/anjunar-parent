@@ -6,7 +6,7 @@ export default class Comments extends HTMLElement {
 
     #post;
 
-    #comment = {form : {text : ""}};
+    #comment = {text : ""};
     #items;
 
     #index = 0;
@@ -78,7 +78,7 @@ export default class Comments extends HTMLElement {
                 children : [
                     {
                         element : "img",
-                        src : this.#post.form.owner.image.data,
+                        src : this.#post.owner.image.data,
                         style : {
                             height: "40px",
                             width: "40px",
@@ -96,10 +96,10 @@ export default class Comments extends HTMLElement {
                         },
                         value : {
                             input : () => {
-                                return this.#comment.form.text;
+                                return this.#comment.text;
                             },
                             output : (value) => {
-                                this.#comment.form.text = value;
+                                this.#comment.text = value;
                             },
                         },
                         onFocus : () => {
@@ -111,7 +111,7 @@ export default class Comments extends HTMLElement {
                         },
                         onKeyup : (event) => {
                             if (event.key === "Enter") {
-                                this.#comment.post = this.#post.form.id;
+                                this.#comment.post = this.#post.id;
                                 jsonClient.post(`service/home/timeline/post/comments/comment`, {body : this.#comment})
                                     .then((response) => {
                                         this.load();

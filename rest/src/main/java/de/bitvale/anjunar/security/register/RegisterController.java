@@ -1,7 +1,6 @@
 package de.bitvale.anjunar.security.register;
 
 import de.bitvale.common.rest.api.Link;
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.Role;
 import de.bitvale.common.security.Relationship;
@@ -33,12 +32,12 @@ public class RegisterController {
 
     @GET
     @Produces("application/json")
-    public MetaForm<RegisterResource> register() {
+    public RegisterResource register() {
         RegisterResource resource = new RegisterResource();
 
         resource.addAction(new Link("security/register", "POST", "register"));
 
-        return new MetaForm<>(resource, identity.getLanguage());
+        return resource;
     }
 
     @POST

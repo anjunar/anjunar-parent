@@ -30,7 +30,7 @@ export default class Comment extends HTMLElement {
                     children : [
                         {
                             element : "img",
-                            src : this.#comment.form.owner.image.data,
+                            src : this.#comment.owner.image.data,
                             style : {
                                 height: "40px",
                                 width: "40px",
@@ -55,7 +55,7 @@ export default class Comment extends HTMLElement {
                                     children : [
                                         {
                                             element : "strong",
-                                            text : `${this.#comment.form.owner.firstName} ${this.#comment.form.owner.lastName}`
+                                            text : `${this.#comment.owner.firstName} ${this.#comment.owner.lastName}`
                                         },
                                         {
                                             element : "div",
@@ -90,7 +90,7 @@ export default class Comment extends HTMLElement {
                                     children : [
                                         {
                                             element : "div",
-                                            text : this.#comment.form.text
+                                            text : this.#comment.text
                                         },
                                     ]
                                 }, {

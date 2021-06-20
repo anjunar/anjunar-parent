@@ -41,7 +41,7 @@ export default class Page extends HTMLElement {
                     children: [
                         {
                             element: "h3",
-                            text: this.#html.form.title
+                            text: this.#html.title
                         },
                         {
                             element: "hr"
@@ -78,10 +78,10 @@ export default class Page extends HTMLElement {
                                     header: false,
                                     model: this.#topics,
                                     onCreate : (event) => {
-                                        window.location.hash = `#/anjunar/pages/page?id=${this.#html.form.id}#/anjunar/pages/page/topic?page=${this.#html.form.id}`
+                                        window.location.hash = `#/anjunar/pages/page?id=${this.#html.id}#/anjunar/pages/page/topic?page=${this.#html.id}`
                                     },
                                     onRow : (event) => {
-                                        window.location.hash = `#/anjunar/pages/page?id=${this.#html.form.id}#/anjunar/pages/page/topic/replies?id=${event.detail.id}`
+                                        window.location.hash = `#/anjunar/pages/page?id=${this.#html.id}#/anjunar/pages/page/topic/replies?id=${event.detail.id}`
                                     },
                                     meta: {
                                         body : this.#topics.columns.map((column) => {

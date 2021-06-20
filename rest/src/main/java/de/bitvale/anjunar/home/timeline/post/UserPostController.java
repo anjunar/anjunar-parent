@@ -5,7 +5,6 @@ import de.bitvale.common.filedisk.FileDiskUtils;
 import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.FormController;
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
@@ -22,6 +21,8 @@ import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -47,7 +48,7 @@ public class UserPostController implements FormController<PostResource> {
     @GET
     @Path("create")
     @RolesAllowed({"Administrator", "User"})
-    public MetaForm<PostResource> create() {
+    public PostResource create() {
         PostResource resource = new PostResource();
 
         Blob image = new Blob();
@@ -75,20 +76,20 @@ public class UserPostController implements FormController<PostResource> {
 
         identity.createLink("home/timeline/post", "POST", "save", resource::addAction);
 
-        return new MetaForm<>(resource, identity.getLanguage());
+        return resource;
     }
 
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public MetaForm<PostResource> read(UUID id) {
+    public PostResource read(UUID id) {
 
         UserPost post = entityManager.find(UserPost.class, id);
 
-        PostResource resource1 = new PostResource();
-        resource1.setId(post.getId());
-        resource1.setText(post.getText());
-        resource1.setCreated(post.getCreated());
+        PostResource resource = new PostResource();
+        resource.setId(post.getId());
+        resource.setText(post.getText());
+        resource.setCreated(post.getCreated());
 
         UserResource userResource = new UserResource();
         userResource.setId(post.getOwner().getId());
@@ -101,7 +102,7 @@ public class UserPostController implements FormController<PostResource> {
         image.setData(FileDiskUtils.buildBase64(post.getOwner().getPicture().getType(), post.getOwner().getPicture().getSubType(), post.getOwner().getPicture().getData()));
         userResource.setImage(image);
 
-        resource1.setOwner(userResource);
+        resource.setOwner(userResource);
 
         for (User like : post.getLikes()) {
             UserResource likeResource = new UserResource();
@@ -109,23 +110,20 @@ public class UserPostController implements FormController<PostResource> {
             likeResource.setFirstName(like.getFirstName());
             likeResource.setLastName(like.getLastName());
             likeResource.setBirthDate(like.getBirthDate());
-            resource1.getLikes().add(likeResource);
+            resource.getLikes().add(likeResource);
         }
-        PostResource resource = resource1;
 
         if (identity.getUser().equals(post.getOwner())) {
             identity.createLink("home/timeline/post?id=" + post.getId(), "PUT", "update", resource::addAction);
             identity.createLink("home/timeline/post?id=" + post.getId(), "DELETE", "delete", resource::addAction);
         }
 
-        MetaForm<PostResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
-
-        Property likes = metaForm.find("likes");
+        Property likes = resource.getMeta().find("likes");
         identity.createLink("control/users", "POST", "list", likes::addLink);
 
-        identity.createLink("home/timeline/post/comments?post=" + post.getId(), "GET", "comments", metaForm::addLink);
+        identity.createLink("home/timeline/post/comments?post=" + post.getId(), "GET", "comments", resource::addLink);
 
-        return metaForm;
+        return resource;
     }
 
     @Override

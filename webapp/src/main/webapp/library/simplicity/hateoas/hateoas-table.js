@@ -219,11 +219,6 @@ export default class HateoasTable extends HTMLElement {
                                                 height: "100px"
                                             },
                                             src : () => {
-                                                if (c.form) {
-                                                    if (c.form.picture) {
-                                                        return c.form.picture.data
-                                                    }
-                                                }
                                                 if (c.picture) {
                                                     return c.picture.data
                                                 }

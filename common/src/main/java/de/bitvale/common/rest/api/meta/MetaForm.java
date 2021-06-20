@@ -1,32 +1,19 @@
 package de.bitvale.common.rest.api.meta;
 
-import de.bitvale.common.rest.api.ActionsContainer;
-import de.bitvale.common.rest.api.Link;
-import de.bitvale.common.rest.api.LinksContainer;
-import de.bitvale.common.rest.api.SourcesContainer;
 import de.bitvale.introspector.bean.BeanIntrospector;
 import de.bitvale.introspector.bean.BeanModel;
 import de.bitvale.introspector.bean.BeanProperty;
+import jakarta.validation.Constraint;
 
-import javax.validation.Constraint;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-public class MetaForm<E> implements LinksContainer, ActionsContainer, SourcesContainer {
+public class MetaForm<E> {
 
     private final List<Property> properties = new ArrayList<>();
 
-    private final Set<Link> links = new HashSet<>();
-
-    private final Set<Link> actions = new HashSet<>();
-
-    private final Set<Link> sources = new HashSet<>();
-
-    private final E form;
-
-    public MetaForm(E instance, Locale locale) {
-        form = instance;
-        BeanModel<E> model = BeanIntrospector.create((Class<E>) instance.getClass());
+    public MetaForm(Class<E> instance, Locale locale) {
+        BeanModel<E> model = BeanIntrospector.create(instance);
 
         for (BeanProperty<E, ?> beanProperty : model.getProperties()) {
             Input type = beanProperty.getAnnotation(Input.class);
@@ -43,7 +30,7 @@ public class MetaForm<E> implements LinksContainer, ActionsContainer, SourcesCon
                         placeholder = type.placeholder();
                     }
                     if (type.type().equals("form")) {
-                        MetaProperty<?> property = new MetaProperty<>(beanProperty.apply(instance), beanProperty.getKey(), placeholder, type.type(), locale);
+                        MetaProperty<?> property = new MetaProperty<>(beanProperty.getType().getRawType(), beanProperty.getKey(), placeholder, type.type(), locale);
                         properties.add(property);
                     } else {
                         Property property = new Property(beanProperty.getKey(), placeholder, type.type());
@@ -64,38 +51,6 @@ public class MetaForm<E> implements LinksContainer, ActionsContainer, SourcesCon
 
     public List<Property> getProperties() {
         return properties;
-    }
-
-    @Override
-    public Set<Link> getLinks() {
-        return links;
-    }
-
-    public Set<Link> getActions() {
-        return actions;
-    }
-
-    @Override
-    public boolean addLink(Link link) {
-        return links.add(link);
-    }
-
-    public boolean addAction(Link link) {
-        return actions.add(link);
-    }
-
-    @Override
-    public Set<Link> getSources() {
-        return sources;
-    }
-
-    @Override
-    public boolean addSource(Link link) {
-        return sources.add(link);
-    }
-
-    public E getForm() {
-        return form;
     }
 
     public Property find(String property) {

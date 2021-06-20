@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-public class PageForm extends AbstractRestEntity {
+public class PageForm extends AbstractRestEntity<PageForm> {
 
     @Input(placeholder = "de.bitvale.anjunar.pages.page.PageForm.title.message", type = "text")
     private String title;
@@ -19,7 +19,7 @@ public class PageForm extends AbstractRestEntity {
     @Input(placeholder = "de.bitvale.anjunar.pages.page.PageForm.language.message", type = "lazyselect")
     private Locale language;
 
-    @Input(placeholder = "de.bitvale.anjunar.pages.page.PageForm.language.message", type = "lazymultiselect")
+    @Input(placeholder = "de.bitvale.anjunar.pages.page.PageForm.pageLinks.message", type = "lazymultiselect")
     private Set<PageSelect> pageLinks = new HashSet<>();
 
     public String getTitle() {

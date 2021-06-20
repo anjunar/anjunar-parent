@@ -5,8 +5,7 @@ import de.bitvale.common.filedisk.FileDiskUtils;
 import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Container;
-import de.bitvale.common.rest.api.ListFormController;
-import de.bitvale.common.rest.api.meta.MetaForm;
+import de.bitvale.common.rest.api.ListController;
 import de.bitvale.common.rest.api.meta.MetaTable;
 import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.rest.api.meta.Sortable;
@@ -30,7 +29,7 @@ import java.util.UUID;
 @ApplicationScoped
 @Path("home/timeline/post/comments")
 @Secured
-public class UserCommentsController implements ListFormController<CommentResource, UserCommentsSearch> {
+public class UserCommentsController implements ListController<CommentResource, UserCommentsSearch> {
 
     private final UserCommentsService service;
 
@@ -71,13 +70,13 @@ public class UserCommentsController implements ListFormController<CommentResourc
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public Container<MetaForm<CommentResource>> list(UserCommentsSearch search) {
+    public Container<CommentResource> list(UserCommentsSearch search) {
 
         Identity identity = service.identity();
         List<Comment> comments = service.find(search);
         long count = service.count(search);
 
-        List<MetaForm<CommentResource>> resources = new ArrayList<>();
+        List<CommentResource> resources = new ArrayList<>();
 
         for (Comment comment : comments) {
             CommentResource resource = new CommentResource();
@@ -113,7 +112,7 @@ public class UserCommentsController implements ListFormController<CommentResourc
                 resource.getLikes().add(likeResource);
             }
 
-            resources.add(new MetaForm<>(resource, identity.getLanguage()));
+            resources.add(resource);
 
             if (identity.getUser().equals(comment.getOwner())) {
                 identity.createLink("home/timeline/post/comments/comment?id=" + comment.getId(), "GET", "read", resource::addAction);
@@ -125,7 +124,7 @@ public class UserCommentsController implements ListFormController<CommentResourc
 
         }
 
-        Container<MetaForm<CommentResource>> container = new Container<>(resources, count);
+        Container<CommentResource> container = new Container<>(resources, count);
 
         identity.createLink("home/timeline/post/comments/comment/create?post=" + search.getPost(), "GET", "create", container::addLink);
 

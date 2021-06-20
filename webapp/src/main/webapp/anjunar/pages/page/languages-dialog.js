@@ -28,10 +28,10 @@ export default class LanguagesDialog extends HTMLElement {
                         label: "Links",
                         value: {
                             input: () => {
-                                return this.#page.form.pageLinks
+                                return this.#page.pageLinks
                             },
                             output: (value) => {
-                                this.#page.form.pageLinks = value
+                                this.#page.pageLinks = value
                             }
                         },
                         placeholder: "Page",

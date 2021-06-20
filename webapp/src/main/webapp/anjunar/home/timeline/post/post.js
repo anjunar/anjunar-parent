@@ -19,7 +19,7 @@ export default class Post extends HTMLElement {
 
     render() {
 
-        let matTimeline = this.queryUpwards("mat-timeline")
+        let matTimeline = this.queryUpwards("home-timeline")
 
         builder(this, {
             element: "div",
@@ -39,7 +39,7 @@ export default class Post extends HTMLElement {
                     children : [
                         {
                             element : "img",
-                            src : this.#post.form.owner.image.data,
+                            src : this.#post.owner.image.data,
                             style : {
                                 height: "50px",
                                 width: "50px",
@@ -55,14 +55,14 @@ export default class Post extends HTMLElement {
                             children : [
                                 {
                                     element : "div",
-                                    text : `${this.#post.form.owner.firstName} ${this.#post.form.owner.lastName}`
+                                    text : `${this.#post.owner.firstName} ${this.#post.owner.lastName}`
                                 },
                                 {
                                     element : "div",
                                     style : {
                                         fontSize : "small"
                                     },
-                                    text : dateFormat(this.#post.form.created)
+                                    text : dateFormat(this.#post.created)
                                 }
                             ]
                         },{
@@ -95,18 +95,18 @@ export default class Post extends HTMLElement {
                     style : {
                         padding : "5px"
                     },
-                    text : this.#post.form.text
+                    text : this.#post.text
                 },
                 {
                     element : "img",
                     if :() => {
-                        return this.#post.form.image?.data;
+                        return this.#post.image?.data;
                     },
                     style : {
                         width : "500px",
                         margin : "auto"
                     },
-                    src : this.#post.form.image?.data
+                    src : this.#post.image?.data
                 },
                 {
                     element : "hr",
@@ -117,7 +117,7 @@ export default class Post extends HTMLElement {
                 },
                 {
                     element : PostLikes,
-                    post : this.#post.form
+                    post : this.#post
                 },
                 {
                     element : "hr",
@@ -130,7 +130,7 @@ export default class Post extends HTMLElement {
                     post: this.#post,
                     items: {
                         direct : (query, callback) => {
-                            jsonClient.post(`service/home/timeline/post/comments?post=${this.#post.form.id}&index=${query.index}&limit=${query.limit}`)
+                            jsonClient.post(`service/home/timeline/post/comments?post=${this.#post.id}&index=${query.index}&limit=${query.limit}`)
                                 .then((response) => {
                                     callback(response.rows, response.size, response.links)
                                 })

@@ -6,7 +6,6 @@ import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.FormController;
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
 import de.bitvale.anjunar.pages.Page;
@@ -18,6 +17,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import java.time.Instant;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -44,10 +44,11 @@ public class PageTopicController implements FormController<PageTopicResource> {
     @GET
     @Path("create")
     @RolesAllowed({"Administrator", "User"})
-    public MetaForm<PageTopicResource> create(@QueryParam("page") UUID page) {
+    public PageTopicResource create(@QueryParam("page") UUID page) {
         PageTopicResource resource = new PageTopicResource();
         resource.setPage(page);
         resource.setEditor(new Editor());
+        resource.setCreated(Instant.now());
         UserResource owner = new UserResource();
 
         owner.setId(identity.getUser().getId());
@@ -64,12 +65,12 @@ public class PageTopicController implements FormController<PageTopicResource> {
 
         identity.createLink("pages/page/topics/topic", "POST", "save", resource::addAction);
 
-        return new MetaForm<>(resource, identity.getLanguage());
+        return resource;
     }
 
     @Transactional
     @RolesAllowed({"Administrator", "User", "Guest"})
-    public MetaForm<PageTopicResource> read(@QueryParam("id") UUID uuid) {
+    public PageTopicResource read(@QueryParam("id") UUID uuid) {
         Topic topic = entityManager.find(Topic.class, uuid);
 
         PageTopicResource resource = new PageTopicResource();
@@ -103,11 +104,9 @@ public class PageTopicController implements FormController<PageTopicResource> {
             identity.createLink("pages/page/topics/topic?id=" + topic.getId(), "DELETE", "delete", resource::addAction);
         }
 
-        MetaForm<PageTopicResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
+        identity.createLink("pages/page/topics/topic/replies?topic=" + topic.getId(), "GET", "replies", resource::addLink);
 
-        identity.createLink("pages/page/topics/topic/replies?topic=" + topic.getId(), "GET", "replies", metaForm::addLink);
-
-        return metaForm;
+        return resource;
     }
 
     @Override

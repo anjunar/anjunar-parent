@@ -1,7 +1,6 @@
 package de.bitvale.anjunar.pages;
 
 import de.bitvale.common.rest.Secured;
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.security.Identity;
 
 import javax.annotation.security.RolesAllowed;
@@ -28,13 +27,13 @@ public class PagesSearchController {
     @GET
     @Produces("application/json")
     @RolesAllowed({"Administrator", "User", "Guest"})
-    public MetaForm<PagesResource> create() {
+    public PagesResource create() {
         PagesResource resource = new PagesResource();
 
         identity.createLink("pages/like", "PUT", "like", resource::addAction);
         identity.createLink("pages/word", "PUT", "word", resource::addAction);
 
-        return new MetaForm<>(resource, identity.getLanguage());
+        return resource;
     }
 
 }

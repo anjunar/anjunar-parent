@@ -6,7 +6,7 @@ import de.bitvale.common.rest.api.AbstractRestEntity;
 
 import java.time.Instant;
 
-public class PageHistoryResource extends AbstractRestEntity {
+public class PageHistoryResource extends AbstractRestEntity<PageHistoryResource> {
 
     @Input(placeholder = "Title", type = "text")
     private String title;

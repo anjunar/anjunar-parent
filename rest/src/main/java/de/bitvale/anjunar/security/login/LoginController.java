@@ -1,9 +1,8 @@
 package de.bitvale.anjunar.security.login;
 
-import de.bitvale.common.rest.api.meta.MetaForm;
-import de.bitvale.common.security.Identity;
 import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Link;
+import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
 
 import javax.annotation.security.RolesAllowed;
@@ -32,7 +31,7 @@ public class LoginController {
     @GET
     @Produces("application/json")
     @Path("login")
-    public MetaForm<LoginResource> login() {
+    public LoginResource login() {
         LoginResource loginResource = new LoginResource();
 
         loginResource.setFirstName("Patrick");
@@ -42,7 +41,7 @@ public class LoginController {
 
         loginResource.addAction(new Link("service/security/login", "POST", "login"));
 
-        return new MetaForm<>(loginResource, identity.getLanguage());
+        return loginResource;
     }
 
     @POST

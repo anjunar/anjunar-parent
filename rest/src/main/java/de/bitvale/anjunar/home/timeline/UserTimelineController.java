@@ -5,8 +5,7 @@ import de.bitvale.common.filedisk.FileDiskUtils;
 import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Container;
-import de.bitvale.common.rest.api.ListFormController;
-import de.bitvale.common.rest.api.meta.MetaForm;
+import de.bitvale.common.rest.api.ListController;
 import de.bitvale.common.rest.api.meta.MetaTable;
 import de.bitvale.common.rest.api.meta.Sortable;
 import de.bitvale.common.security.Identity;
@@ -23,13 +22,15 @@ import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
 @Path("home/timeline")
 @Secured
-public class UserTimelineController implements ListFormController<PostResource, UserTimelineSearch> {
+public class UserTimelineController implements ListController<PostResource, UserTimelineSearch> {
 
     private final UserTimelineService service;
 
@@ -68,20 +69,20 @@ public class UserTimelineController implements ListFormController<PostResource, 
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public Container<MetaForm<PostResource>> list(UserTimelineSearch search) {
+    public Container<PostResource> list(UserTimelineSearch search) {
         Identity identity = service.identity();
 
         List<UserPost> posts = service.find(search);
         long count = service.count(search);
 
-        List<MetaForm<PostResource>> resources = new ArrayList<>();
+        List<PostResource> resources = new ArrayList<>();
 
         for (UserPost post : posts) {
 
-            PostResource resource1 = new PostResource();
-            resource1.setId(post.getId());
-            resource1.setText(post.getText());
-            resource1.setCreated(post.getCreated());
+            PostResource resource = new PostResource();
+            resource.setId(post.getId());
+            resource.setText(post.getText());
+            resource.setCreated(post.getCreated());
 
             UserResource userResource = new UserResource();
             User owner = post.getOwner();
@@ -105,10 +106,10 @@ public class UserTimelineController implements ListFormController<PostResource, 
                 blob.setName(timelineImage.getName());
                 blob.setLastModified(timelineImage.getLastModified());
                 blob.setData(FileDiskUtils.buildBase64(timelineImage.getType(), timelineImage.getSubType(), timelineImage.getData()));
-                resource1.setImage(blob);
+                resource.setImage(blob);
             }
 
-            resource1.setOwner(userResource);
+            resource.setOwner(userResource);
 
             for (User like : post.getLikes()) {
                 UserResource likeResource = new UserResource();
@@ -116,11 +117,9 @@ public class UserTimelineController implements ListFormController<PostResource, 
                 likeResource.setFirstName(like.getFirstName());
                 likeResource.setLastName(like.getLastName());
                 likeResource.setBirthDate(like.getBirthDate());
-                resource1.getLikes().add(likeResource);
+                resource.getLikes().add(likeResource);
             }
-            PostResource resource = resource1;
-
-            resources.add(new MetaForm<>(resource, identity.getLanguage()));
+            resources.add(resource);
 
             if (identity.getUser().equals(post.getOwner())) {
                 identity.createLink("home/timeline/post?id=" + post.getId(), "GET", "read", resource::addAction);
@@ -131,7 +130,7 @@ public class UserTimelineController implements ListFormController<PostResource, 
             }
         }
 
-        Container<MetaForm<PostResource>> container = new Container<>(resources, count);
+        Container<PostResource> container = new Container<>(resources, count);
 
         identity.createLink("home/timeline/post/create", "GET", "create", container::addLink);
 

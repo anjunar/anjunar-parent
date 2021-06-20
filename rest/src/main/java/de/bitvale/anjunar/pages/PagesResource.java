@@ -3,7 +3,7 @@ package de.bitvale.anjunar.pages;
 import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.meta.Input;
 
-public class PagesResource extends AbstractRestEntity {
+public class PagesResource extends AbstractRestEntity<PagesResource> {
 
     @Input(placeholder = "Title", type = "text")
     private String title;

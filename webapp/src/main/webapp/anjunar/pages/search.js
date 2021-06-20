@@ -63,7 +63,7 @@ export default class Search extends HTMLElement {
                             type : "button",
                             text : i18n("Like"),
                             onClick : () => {
-                                jsonClient.post(`service/pages/like?title=${this.#search.form.title}&index=0&limit=20&lang=${getCookie("language")}`)
+                                jsonClient.post(`service/pages/like?title=${this.#search.title}&index=0&limit=20&lang=${getCookie("language")}`)
                                     .then((response) => {
                                         this.#results = response.rows;
                                     })
@@ -75,7 +75,7 @@ export default class Search extends HTMLElement {
                             type : "button",
                             text : i18n("Word"),
                             onClick : () => {
-                                jsonClient.post(`service/pages/word?title=${this.#search.form.title}&index=0&limit=20&lang=${getCookie("language")}`)
+                                jsonClient.post(`service/pages/word?title=${this.#search.title}&index=0&limit=20&lang=${getCookie("language")}`)
                                     .then((response) => {
                                         this.#results = response.rows;
                                     })

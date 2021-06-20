@@ -24,7 +24,7 @@ export default class HateoasForm extends HTMLElement {
     }
 
     field(name) {
-        return this.#model.properties.find(field => field.name === name);
+        return this.#model.meta.properties.find(field => field.name === name);
     }
 
     addValidator(validator) {
@@ -38,10 +38,10 @@ export default class HateoasForm extends HTMLElement {
             element : DomForm,
             value : {
                 input : () => {
-                    return this.#model.form
+                    return this.#model
                 },
                 output : (value) => {
-                    this.#model.form = value
+                    this.#model = value
                 }
             },
             initialize : (element) => {

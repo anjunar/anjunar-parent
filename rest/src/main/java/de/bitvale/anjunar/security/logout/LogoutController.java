@@ -2,7 +2,6 @@ package de.bitvale.anjunar.security.logout;
 
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.rest.api.Link;
-import de.bitvale.common.rest.api.meta.MetaForm;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -27,14 +26,12 @@ public class LogoutController {
     @GET
     @Produces("application/json")
     @RolesAllowed({"Administrator", "User", "Guest"})
-    public MetaForm<LogoutResource> logout1() {
+    public LogoutResource logout1() {
         LogoutResource resource = new LogoutResource();
-
-        MetaForm<LogoutResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
 
         resource.addAction(new Link("service/security/logout", "POST", "logout" ));
 
-        return metaForm;
+        return resource;
     }
 
     @POST

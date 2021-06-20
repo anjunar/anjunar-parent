@@ -61,7 +61,7 @@ export default class Replies extends HTMLElement {
                                         objectFit: "cover"
                                     },
                                     element: "img",
-                                    src: this.#topic.form.owner.image.data
+                                    src: this.#topic.owner.image.data
                                 }
                             ]
                         },
@@ -74,13 +74,13 @@ export default class Replies extends HTMLElement {
                                         color: "var(--main-blue-color)"
                                     },
                                     text: () => {
-                                        return this.#topic.form.topic
+                                        return this.#topic.topic
                                     }
                                 },
                                 {
                                     element: "div",
                                     innerHTML: () => {
-                                        return this.#topic.form.editor.html
+                                        return this.#topic.editor.html
                                     }
                                 },
                                 {
@@ -96,14 +96,14 @@ export default class Replies extends HTMLElement {
                                                 fontSize: "12px",
                                                 width: "64px"
                                             },
-                                            text: `${i18n("Views")}: ${this.#topic.form.views}`
+                                            text: `${i18n("Views")}: ${this.#topic.views}`
                                         },
                                         {
                                             element: HateoasButton,
                                             hateoas: "update",
                                             text: i18n("Edit"),
                                             onClick: () => {
-                                                window.location.hash = `#/anjunar/pages/page?id=${html.form.id}#/anjunar/pages/page/topic?id=${this.#topic.form.id}`
+                                                window.location.hash = `#/anjunar/pages/page?id=${html.id}#/anjunar/pages/page/topic?id=${this.#topic.id}`
                                             }
                                         },
                                         {
@@ -117,7 +117,7 @@ export default class Replies extends HTMLElement {
                                             style: {
                                                 fontSize: "12px"
                                             },
-                                            text: dateFormat(this.#topic.form.created)
+                                            text: dateFormat(this.#topic.created)
                                         },
                                     ]
                                 },
@@ -163,7 +163,7 @@ export default class Replies extends HTMLElement {
                                 }
                             },
                             onCreate: (event) => {
-                                jsonClient.get(`service/pages/page/topics/topic/replies/reply/create?topic=${this.#topic.form.id}`)
+                                jsonClient.get(`service/pages/page/topics/topic/replies/reply/create?topic=${this.#topic.id}`)
                                     .then((response) => {
                                         let dialog = new ReplyDialog();
                                         dialog.reply = response;

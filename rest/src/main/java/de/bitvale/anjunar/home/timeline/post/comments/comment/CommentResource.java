@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class CommentResource extends AbstractRestEntity {
+public class CommentResource extends AbstractRestEntity<CommentResource> {
 
     @Input(placeholder = "Text", type = "text")
     private String text;

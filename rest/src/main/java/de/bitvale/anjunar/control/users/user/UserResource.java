@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NaturalId
-public class UserResource extends AbstractRestEntity {
+public class UserResource extends AbstractRestEntity<UserResource> {
 
     @Size(min = 3, max = 80)
     @Input(placeholder = "de.bitvale.anjunar.control.users.user.UserResource.firstName.message", type = "text")

@@ -7,7 +7,7 @@ import de.bitvale.common.rest.api.meta.Input;
 import java.time.LocalDate;
 import java.util.Locale;
 
-public class UserResource extends AbstractRestEntity {
+public class UserResource extends AbstractRestEntity<UserResource> {
 
     @Input(placeholder = "First Name", type = "text")
     private String firstName;

@@ -42,7 +42,7 @@ export default class HateoasButton extends HTMLElement {
                 text : this.#text,
                 update : () => {
                     let form = this.queryUpwards("hateoas-form");
-                    let link = form.model.form.actions.find((link) => link.rel === this.#hateoas);
+                    let link = form.model.actions.find((link) => link.rel === this.#hateoas);
                     if (link) {
                         this.style.display = "inline"
                     } else {
@@ -53,7 +53,7 @@ export default class HateoasButton extends HTMLElement {
                     let hateoasForm = this.queryUpwards("hateoas-form");
                     let domForm = this.queryUpwards("form")
                     domForm.updateValue();
-                    let link = hateoasForm.model.form.actions.find((link) => link.rel === this.#hateoas);
+                    let link = hateoasForm.model.actions.find((link) => link.rel === this.#hateoas);
                     jsonClient.action(link.method, link.url, {body : domForm.value})
                         .then((response) => {
                             this.dispatchEvent(new CustomEvent("afterSubmit", {detail : response}))

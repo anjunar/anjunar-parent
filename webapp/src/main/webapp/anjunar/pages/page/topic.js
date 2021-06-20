@@ -67,7 +67,7 @@ export default class Topic extends HTMLElement {
                     hateoas : "save",
                     text : i18n("Save"),
                     onAfterSubmit : (event) => {
-                        window.location.hash = `#/anjunar/pages/page?id=${html.form.id}#/anjunar/pages/page/topic/replies?id=${event.detail.id}`
+                        window.location.hash = `#/anjunar/pages/page?id=${html.id}#/anjunar/pages/page/topic/replies?id=${event.detail.id}`
                     }
                 },
                 {
@@ -75,7 +75,7 @@ export default class Topic extends HTMLElement {
                     hateoas : "update",
                     text : i18n("Update"),
                     onAfterSubmit : (event) => {
-                        window.location.hash = `#/anjunar/pages/page?id=${html.form.id}#/anjunar/pages/page/topic/replies?id=${event.detail.id}`
+                        window.location.hash = `#/anjunar/pages/page?id=${html.id}#/anjunar/pages/page/topic/replies?id=${event.detail.id}`
                     }
                 },
                 {
@@ -83,7 +83,7 @@ export default class Topic extends HTMLElement {
                     hateoas : "delete",
                     text : i18n("Delete"),
                     onAfterSubmit : (event) => {
-                        window.location.hash = `#/anjunar/pages/page?id=${html.form.id}#/anjunar/pages/text`
+                        window.location.hash = `#/anjunar/pages/page?id=${html.id}#/anjunar/pages/text`
                     }
                 }
             ]

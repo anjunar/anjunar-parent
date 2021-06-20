@@ -4,7 +4,7 @@ import de.bitvale.common.rest.api.AbstractRestEntity;
 
 import java.time.LocalDateTime;
 
-public class ImageResource extends AbstractRestEntity {
+public class ImageResource extends AbstractRestEntity<ImageResource> {
 
     private String name;
 

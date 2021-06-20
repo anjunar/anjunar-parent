@@ -29,7 +29,7 @@ export default class CommentLikes extends HTMLElement {
                     style : {
                         fontSize : "small",
                         color : () => {
-                            let like = this.#comment.form.likes.find((like) => like.id === user.id);
+                            let like = this.#comment.likes.find((like) => like.id === user.id);
                             if (like) {
                                 return "var(--main-selected-color)"
                             } else {
@@ -39,16 +39,16 @@ export default class CommentLikes extends HTMLElement {
                     },
                     text : i18n("I like it"),
                     onClick : () => {
-                        let like = this.#comment.form.likes.find((like) => like.id === user.id);
+                        let like = this.#comment.likes.find((like) => like.id === user.id);
 
                         if (like) {
-                            let indexOf = this.#comment.form.likes.indexOf(like);
-                            this.#comment.form.likes.splice(indexOf);
+                            let indexOf = this.#comment.likes.indexOf(like);
+                            this.#comment.likes.splice(indexOf);
                         } else {
-                            this.#comment.form.likes.push(user);
+                            this.#comment.likes.push(user);
                         }
 
-                        let link = this.#comment.form.actions.find(link => link.rel === "update");
+                        let link = this.#comment.actions.find(link => link.rel === "update");
                         jsonClient.put(link.url, {body : this.#comment})
                     }
                 },
@@ -65,7 +65,7 @@ export default class CommentLikes extends HTMLElement {
                         color : "var(--main-grey-color)"
                     },
                     text :() => {
-                        return `${i18n("Likes")} ${this.#comment.form.likes.length}`
+                        return `${i18n("Likes")} ${this.#comment.likes.length}`
                     }
                 }
             ]

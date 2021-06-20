@@ -1,13 +1,11 @@
 package de.bitvale.anjunar.control.users.user;
 
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.security.*;
 import de.bitvale.common.filedisk.Base64Resource;
 import de.bitvale.common.filedisk.FileDiskUtils;
 import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.FormController;
-import de.bitvale.common.security.*;
 import de.bitvale.anjunar.control.roles.role.RoleResource;
 
 import javax.annotation.security.RolesAllowed;
@@ -81,7 +79,7 @@ public class UserController implements FormController<UserResource> {
     @GET
     @Path("create")
     @RolesAllowed("Administrator")
-    public MetaForm<UserResource> create() {
+    public UserResource create() {
         UserResource resource = new UserResource();
 
         Blob picture = new Blob();
@@ -91,14 +89,11 @@ public class UserController implements FormController<UserResource> {
         resource.setPicture(picture);
 
         identity.createLink("control/users/user", "POST", "save", resource::addAction);
-
-        MetaForm<UserResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
-
-        identity.createLink("control/users/user/validate", "POST", "validate", metaForm::addSource);
-        identity.createLink("control/roles", "POST", "roles", metaForm::addSource);
+        identity.createLink("control/users/user/validate", "POST", "validate", resource::addSource);
+        identity.createLink("control/roles", "POST", "roles", resource::addSource);
 
 
-        return metaForm;
+        return resource;
     }
 
     @Transactional
@@ -147,7 +142,7 @@ public class UserController implements FormController<UserResource> {
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public MetaForm<UserResource> read(UUID id) {
+    public UserResource read(UUID id) {
 
         User user = entityManager.find(User.class, id);
 
@@ -183,13 +178,11 @@ public class UserController implements FormController<UserResource> {
         identity.createLink("control/users/user?id=" + user.getId(), "DELETE", "delete", resource::addAction);
         identity.createLink("security/runas?id=" + user.getId(), "POST", "runas", resource::addAction);
 
-        MetaForm<UserResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
-
-        identity.createLink("control/users/user/validate", "POST", "validate", metaForm::addSource);
-        identity.createLink("control/roles", "POST", "roles", metaForm::addSource);
+        identity.createLink("control/users/user/validate", "POST", "validate", resource::addSource);
+        identity.createLink("control/roles", "POST", "roles", resource::addSource);
 
 
-        return metaForm;
+        return resource;
     }
 
     @Override

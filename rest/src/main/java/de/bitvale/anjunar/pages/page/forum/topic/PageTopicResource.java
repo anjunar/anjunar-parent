@@ -9,7 +9,7 @@ import de.bitvale.common.rest.api.meta.Input;
 import java.time.Instant;
 import java.util.UUID;
 
-public class PageTopicResource extends AbstractRestEntity {
+public class PageTopicResource extends AbstractRestEntity<PageTopicResource> {
 
     @Input(placeholder = "Page", type = "text")
     private UUID page;

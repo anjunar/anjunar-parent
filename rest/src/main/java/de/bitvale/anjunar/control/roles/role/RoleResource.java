@@ -3,7 +3,7 @@ package de.bitvale.anjunar.control.roles.role;
 import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.meta.Input;
 
-public class RoleResource extends AbstractRestEntity {
+public class RoleResource extends AbstractRestEntity<RoleResource> {
 
     @Input(placeholder = "Name", type = "text")
     private String name;

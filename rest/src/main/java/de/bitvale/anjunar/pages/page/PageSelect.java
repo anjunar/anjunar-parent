@@ -4,7 +4,7 @@ import de.bitvale.common.rest.api.AbstractRestEntity;
 
 import java.util.Locale;
 
-public class PageSelect extends AbstractRestEntity {
+public class PageSelect extends AbstractRestEntity<PageSelect> {
 
     private String title;
 

@@ -5,7 +5,6 @@ import de.bitvale.common.filedisk.FileDiskUtils;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.FormController;
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
@@ -44,7 +43,7 @@ public class TopicReplyController implements FormController<TopicReplyResource> 
     @GET
     @Path("create")
     @RolesAllowed({"Administrator", "User"})
-    public MetaForm<TopicReplyResource> create(@QueryParam("topic") UUID uuid) {
+    public TopicReplyResource create(@QueryParam("topic") UUID uuid) {
         TopicReplyResource resource = new TopicReplyResource();
 
         resource.setTopic(uuid);
@@ -53,15 +52,13 @@ public class TopicReplyController implements FormController<TopicReplyResource> 
 
         identity.createLink("pages/page/topics/topic/replies/reply", "POST", "save", resource::addAction);
 
-        MetaForm<TopicReplyResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
-
-        return metaForm;
+        return resource;
     }
 
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User", "Guest"})
-    public MetaForm<TopicReplyResource> read(UUID id) {
+    public TopicReplyResource read(UUID id) {
 
         Reply reply = entityManager.find(Reply.class, id);
 
@@ -94,11 +91,10 @@ public class TopicReplyController implements FormController<TopicReplyResource> 
             identity.createLink("pages/page/topics/topic/replies/reply?id=" + reply.getId(), "DELETE", "delete", resource::addAction);
         }
 
-        MetaForm<TopicReplyResource> metaForm = new MetaForm<>(resource, identity.getLanguage());
-        Property property = metaForm.find("owner");
+        Property property = resource.getMeta().find("owner");
         identity.createLink("control/users", "POST", "list", property::addLink);
 
-        return metaForm;
+        return resource;
     }
 
     @Override

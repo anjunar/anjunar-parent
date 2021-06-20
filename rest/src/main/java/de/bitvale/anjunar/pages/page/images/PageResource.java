@@ -2,7 +2,7 @@ package de.bitvale.anjunar.pages.page.images;
 
 import de.bitvale.common.rest.api.AbstractRestEntity;
 
-public class PageResource extends AbstractRestEntity {
+public class PageResource extends AbstractRestEntity<PageResource> {
 
     private String title;
 

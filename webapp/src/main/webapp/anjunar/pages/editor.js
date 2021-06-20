@@ -17,7 +17,7 @@ export default class Editor extends HTMLElement {
         super();
 
         document.addEventListener("language", (event) => {
-            for (const pageLink of this.#html.form.pageLinks) {
+            for (const pageLink of this.#html.pageLinks) {
                 if (pageLink.language === event.detail) {
                     window.location.hash = `#/anjunar/pages/editor?id=${pageLink.id}`;
                     break;

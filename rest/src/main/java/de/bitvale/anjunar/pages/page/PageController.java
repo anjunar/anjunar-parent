@@ -3,7 +3,6 @@ package de.bitvale.anjunar.pages.page;
 import de.bitvale.anjunar.pages.page.forum.Topic;
 import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Editor;
-import de.bitvale.common.rest.api.meta.MetaForm;
 import de.bitvale.common.security.Identity;
 import de.bitvale.anjunar.pages.Page;
 import org.hibernate.envers.AuditReader;
@@ -43,21 +42,21 @@ public class PageController {
     @GET
     @Path("create")
     @RolesAllowed({"Administrator", "User"})
-    public MetaForm<PageForm> create() {
+    public PageForm create() {
 
         PageForm pageForm = new PageForm();
         pageForm.setContent(new Editor());
         identity.createLink("pages/page", "POST", "save", (pageForm::addAction));
         identity.createLink("pages/page/topics", "GET", "topics", pageForm::addLink);
 
-        return new MetaForm<>(pageForm, identity.getLanguage());
+        return pageForm;
     }
 
     @Transactional
     @Produces("application/json")
     @GET
     @RolesAllowed({"Administrator", "User", "Guest"})
-    public MetaForm<PageForm> read(@QueryParam("id") UUID id, @QueryParam("revision") Integer revision) {
+    public PageForm read(@QueryParam("id") UUID id, @QueryParam("revision") Integer revision) {
 
         AuditReader auditReader = AuditReaderFactory.get(entityManager);
 
@@ -88,13 +87,11 @@ public class PageController {
         identity.createLink("pages/page?id=" + page.getId(), "PUT", "update", pageForm::addAction);
         identity.createLink("pages/page?id=" + page.getId(), "DELETE", "delete", pageForm::addAction);
 
-        MetaForm<PageForm> metaForm = new MetaForm<>(pageForm, identity.getLanguage());
+        identity.createLink("pages/page/images", "GET", "images", pageForm::addSource);
+        identity.createLink("pages/page/images/image", "GET", "upload", pageForm::addSource);
+        identity.createLink("pages/page/topics?page=" + page.getId(), "GET", "topics", pageForm::addLink);
 
-        identity.createLink("pages/page/images", "GET", "images", metaForm::addSource);
-        identity.createLink("pages/page/images/image", "GET", "upload", metaForm::addSource);
-        identity.createLink("pages/page/topics?page=" + page.getId(), "GET", "topics", metaForm::addLink);
-
-        return metaForm;
+        return pageForm;
     }
 
     @Transactional
