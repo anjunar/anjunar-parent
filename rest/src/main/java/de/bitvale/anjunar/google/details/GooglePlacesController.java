@@ -5,10 +5,10 @@ import de.bitvale.common.rest.URLBuilder;
 import de.bitvale.common.rest.URLBuilderFactory;
 import de.bitvale.anjunar.google.details.client.PlaceDetailForm;
 import de.bitvale.anjunar.google.details.client.PlaceDetailsForm;
+import jakarta.servlet.http.HttpServletRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;

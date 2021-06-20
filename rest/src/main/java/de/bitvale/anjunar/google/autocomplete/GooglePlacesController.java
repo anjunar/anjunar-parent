@@ -6,10 +6,10 @@ import de.bitvale.common.rest.URLBuilderFactory;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.anjunar.google.autocomplete.client.PlacePredictionForm;
 import de.bitvale.anjunar.google.autocomplete.client.PlacePredictions;
+import jakarta.servlet.http.HttpServletRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

@@ -4,10 +4,10 @@ import com.google.common.collect.Sets;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.rest.api.Link;
 import de.bitvale.anjunar.shared.users.user.UserResource;
+import jakarta.servlet.ServletContext;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -22,9 +22,6 @@ public class ApplicationController {
 
     private final Identity identity;
 
-    @Context
-    private ServletContext servletContext;
-
     @Inject
     public ApplicationController(Identity identity) {
         this.identity = identity;
@@ -38,17 +35,6 @@ public class ApplicationController {
     @Produces("application/json")
     @Transactional
     public ApplicationResource service(@QueryParam("lang") Locale locale) {
-        Set<String> resourcePaths = getResourcePaths("");
-
-        List<ExtensionPointResource> endpoints = new ArrayList<>();
-        for (String resourcePath : resourcePaths) {
-            if (resourcePath.contains("ExtensionPoint")) {
-                ExtensionPointResource resource = new ExtensionPointResource();
-                resource.setHref(resourcePath);
-                resource.setName(resourcePath);
-                endpoints.add(resource);
-            }
-        }
 
         if (locale != null) {
             identity.setLanguage(locale);
@@ -56,7 +42,6 @@ public class ApplicationController {
 
         if (identity.isLoggedIn()) {
             ApplicationResource resource = new ApplicationResource();
-            resource.setExtensionPoints(endpoints);
 
             UserResource userResource = new UserResource();
             userResource.setId(identity.getUser().getId());
@@ -81,7 +66,6 @@ public class ApplicationController {
             return resource;
         } else {
             ApplicationResource resource = new ApplicationResource();
-            resource.setExtensionPoints(endpoints);
 
             UserResource userResource = new UserResource();
             userResource.setFirstName("Guest");
@@ -97,19 +81,5 @@ public class ApplicationController {
         }
 
     }
-
-    Set<String> getResourcePaths(String path) {
-        Set<String> resourcePaths = servletContext.getResourcePaths(path);
-        Set<String> result = Sets.newHashSet(resourcePaths);
-
-        for (String resourcePath : resourcePaths) {
-            if (resourcePath.endsWith("/")) {
-                result = Sets.union(result, getResourcePaths(resourcePath));
-            }
-        }
-
-        return result;
-    }
-
 
 }

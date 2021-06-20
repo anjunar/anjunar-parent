@@ -1,6 +1,7 @@
 package de.bitvale.anjunar;
 
-import javax.servlet.*;
+import jakarta.servlet.*;
+
 import java.io.IOException;
 
 public class CharacterEncodingFilter implements Filter {
