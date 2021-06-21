@@ -6,8 +6,10 @@ import de.bitvale.common.ddd.AbstractEntity;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "do_reply")
 public class Reply extends AbstractEntity {
 
     @Lob

@@ -9,7 +9,6 @@
 
         <class>de.bitvale.common.security.Permission</class>
         <class>de.bitvale.common.security.Role</class>
-        <class>de.bitvale.common.security.Relationship</class>
         <class>de.bitvale.common.security.User</class>
         <class>de.bitvale.common.security.UserImage</class>
 
@@ -23,7 +22,6 @@
         <class>de.bitvale.anjunar.timeline.Post</class>
 
         <class>de.bitvale.anjunar.control.user.timeline.UserPost</class>
-        <class>de.bitvale.anjunar.control.groups.Group</class>
 
         <properties>
             <property name="hibernate.dialect" value="de.bitvale.anjunar.Oracle18Dialect"/>

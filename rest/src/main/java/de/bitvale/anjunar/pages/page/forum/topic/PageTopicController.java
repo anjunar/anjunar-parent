@@ -2,7 +2,6 @@ package de.bitvale.anjunar.pages.page.forum.topic;
 
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.FormController;
@@ -22,7 +21,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("pages/page/topics/topic")
-@Secured
 public class PageTopicController implements FormController<PageTopicResource> {
 
     private final EntityManager entityManager;

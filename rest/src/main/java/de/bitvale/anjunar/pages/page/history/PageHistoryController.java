@@ -1,14 +1,13 @@
 package de.bitvale.anjunar.pages.page.history;
 
+import de.bitvale.anjunar.pages.Page;
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.rest.api.Container;
+import de.bitvale.common.rest.api.ListController;
 import de.bitvale.common.rest.api.meta.MetaTable;
 import de.bitvale.common.rest.api.meta.Sortable;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
-import de.bitvale.common.rest.Secured;
-import de.bitvale.common.rest.api.ListController;
-import de.bitvale.anjunar.pages.Page;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 
@@ -26,7 +25,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("pages/page/history")
-@Secured
 public class PageHistoryController implements ListController<PageHistoryResource, PageHistorySearch> {
 
     private final EntityManager entityManager;
@@ -46,14 +44,14 @@ public class PageHistoryController implements ListController<PageHistoryResource
 
     @GET
     @Produces("application/json")
-    public MetaTable<PageHistoryResource> list(@QueryParam("id")UUID id) {
+    public MetaTable<PageHistoryResource> list(@QueryParam("id") UUID id) {
         MetaTable<PageHistoryResource> metaTable = new MetaTable<>(PageHistoryResource.class, identity.getLanguage());
 
-        metaTable.addSortable(new Sortable[] {
+        metaTable.addSortable(new Sortable[]{
                 new Sortable("revision", true, true),
                 new Sortable("modified", true, true),
                 new Sortable("modifier", true, true)
-        }) ;
+        });
 
         identity.createLink("pages/page/history?id=" + id, "POST", "list", metaTable::addSource);
 

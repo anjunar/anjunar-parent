@@ -1,9 +1,9 @@
 package de.bitvale.anjunar.pages.page.forum.topic.replies;
 
+import de.bitvale.anjunar.pages.page.forum.Reply;
 import de.bitvale.anjunar.pages.page.forum.topic.replies.reply.TopicReplyResource;
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.Editor;
@@ -13,7 +13,6 @@ import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.rest.api.meta.Sortable;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
-import de.bitvale.anjunar.pages.page.forum.Reply;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -28,7 +27,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("pages/page/topics/topic/replies")
-@Secured
 public class TopicRelpiesController implements ListController<TopicReplyResource, TopicRepliesSearch> {
 
     private final TopicRepliesService service;

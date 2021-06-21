@@ -1,6 +1,6 @@
 package de.bitvale.anjunar;
 
-import jakarta.ejb.Stateful;
+import javax.ejb.Stateful;
 
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;

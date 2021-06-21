@@ -1,6 +1,5 @@
 package de.bitvale.anjunar.pages;
 
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.ListController;
 import de.bitvale.common.rest.api.meta.MetaTable;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @ApplicationScoped
 @Path("pages/word")
-@Secured
 public class PagesWordController implements ListController<PagesResource, PagesWordSearch> {
 
     private final PagesWordService service;
@@ -39,7 +37,7 @@ public class PagesWordController implements ListController<PagesResource, PagesW
     public MetaTable<PagesResource> list(@QueryParam("title") String title) {
         MetaTable<PagesResource> metaTable = new MetaTable<>(PagesResource.class, identity.getLanguage());
 
-        metaTable.addSortable(new Sortable[] {
+        metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
                 new Sortable("title", true, true)
         });

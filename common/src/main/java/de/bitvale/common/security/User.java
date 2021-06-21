@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Set;
 
 @Entity
-@Table(name = "ge_user")
+@Table(name = "co_user")
 public class User extends AbstractAggregate {
 
     private String firstName;
@@ -28,11 +28,13 @@ public class User extends AbstractAggregate {
 
     private Locale language = Locale.ENGLISH;
 
+    private String token;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private UserImage picture;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final Set<Relationship> relationships = new HashSet<>();
+    @ManyToMany
+    private final Set<Role> roles = new HashSet<>();
 
     public String getFirstName() {
         return firstName;
@@ -98,8 +100,8 @@ public class User extends AbstractAggregate {
         this.picture = picture;
     }
 
-    public Set<Relationship> getRelationships() {
-        return relationships;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public Locale getLanguage() {
@@ -108,5 +110,13 @@ public class User extends AbstractAggregate {
 
     public void setLanguage(Locale language) {
         this.language = language;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

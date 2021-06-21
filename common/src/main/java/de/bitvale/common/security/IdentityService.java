@@ -38,6 +38,12 @@ public class IdentityService {
         return entityManager.find(User.class, primaryKey);
     }
 
+    public User findUser(String primaryKey) {
+        return entityManager.createQuery("select u from User u where u.email = :email", User.class)
+                .setParameter("email", primaryKey)
+                .getSingleResult();
+    }
+
     public boolean authenticate(User user) {
         return entityManager
                 .createQuery("select count(e) from User e where e.firstName = :firstName and e.lastName = :lastName and e.birthDate = :birthDate and e.password = :password", Long.class)
@@ -52,10 +58,6 @@ public class IdentityService {
         return entityManager.createQuery("select (e) from Role e where e.name = :name", Role.class)
                 .setParameter("name", name)
                 .getSingleResult();
-    }
-
-    public void saveRelationShip(Relationship relationship) {
-        entityManager.persist(relationship);
     }
 
     public void saveRole(Role role) {
@@ -88,5 +90,15 @@ public class IdentityService {
 
     public void savePermission(Permission permission) {
         entityManager.persist(permission);
+    }
+
+    public User findUserByToken(String token) {
+        try {
+            return entityManager.createQuery("select u from User u where u.token = :token", User.class)
+                    .setParameter("token", token)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

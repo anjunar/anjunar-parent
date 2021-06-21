@@ -1,15 +1,12 @@
 package de.bitvale.anjunar.google.autocomplete;
 
-import de.bitvale.common.rest.Secured;
-import de.bitvale.common.rest.URLBuilder;
-import de.bitvale.common.rest.URLBuilderFactory;
-import de.bitvale.common.rest.api.Container;
 import de.bitvale.anjunar.google.autocomplete.client.PlacePredictionForm;
 import de.bitvale.anjunar.google.autocomplete.client.PlacePredictions;
-import jakarta.servlet.http.HttpServletRequest;
+import de.bitvale.common.rest.api.Container;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -38,7 +35,6 @@ public class GooglePlacesController {
 
     @POST
     @Path("place/autocomplete")
-    @Secured
     public Container<LocationForm> geoCoding(@Context HttpServletRequest request, LocationForm address) {
         PlacePredictions placePredictions = service.find(address.getName(), request.getLocale());
         List<LocationForm> forms = new ArrayList<>();
@@ -54,13 +50,6 @@ public class GooglePlacesController {
         }
 
         return new Container<>(forms, forms.size());
-    }
-
-    public static URLBuilder<GooglePlacesController> linkGeoCoding(URLBuilderFactory builderFactory) {
-        return builderFactory
-                .from(GooglePlacesController.class)
-                .record((method) -> method.geoCoding(null, null))
-                .rel("geoCoding");
     }
 
 }

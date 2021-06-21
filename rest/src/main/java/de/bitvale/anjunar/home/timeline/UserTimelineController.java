@@ -1,8 +1,10 @@
 package de.bitvale.anjunar.home.timeline;
 
+import de.bitvale.anjunar.control.user.timeline.UserPost;
 import de.bitvale.anjunar.home.timeline.post.PostResource;
+import de.bitvale.anjunar.shared.users.user.UserResource;
+import de.bitvale.anjunar.timeline.TimelineImage;
 import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.ListController;
@@ -11,9 +13,6 @@ import de.bitvale.common.rest.api.meta.Sortable;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
 import de.bitvale.common.security.UserImage;
-import de.bitvale.anjunar.control.user.timeline.UserPost;
-import de.bitvale.anjunar.shared.users.user.UserResource;
-import de.bitvale.anjunar.timeline.TimelineImage;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -22,14 +21,11 @@ import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
 @Path("home/timeline")
-@Secured
 public class UserTimelineController implements ListController<PostResource, UserTimelineSearch> {
 
     private final UserTimelineService service;
@@ -52,7 +48,7 @@ public class UserTimelineController implements ListController<PostResource, User
     public MetaTable<PostResource> list() {
         MetaTable<PostResource> metaTable = new MetaTable<>(PostResource.class, identity.getLanguage());
 
-        metaTable.addSortable(new Sortable[] {
+        metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
                 new Sortable("text", true, true),
                 new Sortable("image", false, true),

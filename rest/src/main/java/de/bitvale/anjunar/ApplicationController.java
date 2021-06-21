@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.rest.api.Link;
 import de.bitvale.anjunar.shared.users.user.UserResource;
-import jakarta.servlet.ServletContext;
+import javax.servlet.ServletContext;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

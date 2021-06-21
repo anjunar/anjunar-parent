@@ -3,7 +3,6 @@ package de.bitvale.anjunar.pages.page.forum;
 import de.bitvale.anjunar.pages.page.forum.topic.PageTopicResource;
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.Editor;
@@ -29,7 +28,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("pages/page/topics")
-@Secured
 public class PageTopicsController implements ListController<PageTopicResource, PageTopicsSearch> {
 
     private final PageTopicsService service;
@@ -55,7 +53,7 @@ public class PageTopicsController implements ListController<PageTopicResource, P
         Property owner = metaTable.find("owner");
         identity.createLink("control/users", "POST", "list", owner::addLink);
 
-        metaTable.addSortable(new Sortable[] {
+        metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
                 new Sortable("owner", false, true),
                 new Sortable("topic", true, true),

@@ -1,5 +1,7 @@
 package de.bitvale.anjunar.pages.page.forum.topic.replies.reply;
 
+import de.bitvale.anjunar.pages.page.forum.Reply;
+import de.bitvale.anjunar.pages.page.forum.Topic;
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.filedisk.FileDiskUtils;
 import de.bitvale.common.rest.api.Blob;
@@ -8,9 +10,6 @@ import de.bitvale.common.rest.api.FormController;
 import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
-import de.bitvale.common.rest.Secured;
-import de.bitvale.anjunar.pages.page.forum.Reply;
-import de.bitvale.anjunar.pages.page.forum.Topic;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -22,7 +21,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("pages/page/topics/topic/replies/reply")
-@Secured
 public class TopicReplyController implements FormController<TopicReplyResource> {
 
     private final EntityManager entityManager;
@@ -131,7 +129,7 @@ public class TopicReplyController implements FormController<TopicReplyResource> 
 
         Reply reply = entityManager.find(Reply.class, id);
 
-        if (! reply.getOwner().getId().equals(identity.getUser().getId())) {
+        if (!reply.getOwner().getId().equals(identity.getUser().getId())) {
             throw new NotAllowedException("Not Allowed");
         }
 

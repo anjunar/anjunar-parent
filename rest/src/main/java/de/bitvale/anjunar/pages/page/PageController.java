@@ -1,10 +1,9 @@
 package de.bitvale.anjunar.pages.page;
 
+import de.bitvale.anjunar.pages.Page;
 import de.bitvale.anjunar.pages.page.forum.Topic;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.security.Identity;
-import de.bitvale.anjunar.pages.Page;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 
@@ -21,7 +20,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("pages/page")
-@Secured
 public class PageController {
 
     private final EntityManager entityManager;

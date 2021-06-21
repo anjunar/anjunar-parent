@@ -1,12 +1,11 @@
 package de.bitvale.anjunar.pages.page.images;
 
+import de.bitvale.anjunar.pages.Page;
+import de.bitvale.anjunar.pages.PageImage;
 import de.bitvale.anjunar.pages.page.images.image.ImageResource;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.ListController;
 import de.bitvale.common.security.Identity;
-import de.bitvale.common.rest.Secured;
-import de.bitvale.anjunar.pages.PageImage;
-import de.bitvale.anjunar.pages.Page;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -17,7 +16,6 @@ import java.util.Base64;
 import java.util.List;
 
 @ApplicationScoped
-@Secured
 @Path("pages/page/images")
 public class ImagesController implements ListController<ImageResource, ImagesSearch> {
 

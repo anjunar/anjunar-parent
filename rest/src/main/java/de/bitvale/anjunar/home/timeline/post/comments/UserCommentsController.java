@@ -1,8 +1,9 @@
 package de.bitvale.anjunar.home.timeline.post.comments;
 
 import de.bitvale.anjunar.home.timeline.post.comments.comment.CommentResource;
+import de.bitvale.anjunar.shared.users.user.UserResource;
+import de.bitvale.anjunar.timeline.Comment;
 import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.ListController;
@@ -11,8 +12,6 @@ import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.rest.api.meta.Sortable;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
-import de.bitvale.anjunar.shared.users.user.UserResource;
-import de.bitvale.anjunar.timeline.Comment;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -28,7 +27,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("home/timeline/post/comments")
-@Secured
 public class UserCommentsController implements ListController<CommentResource, UserCommentsSearch> {
 
     private final UserCommentsService service;
@@ -51,7 +49,7 @@ public class UserCommentsController implements ListController<CommentResource, U
     public MetaTable<CommentResource> list(@QueryParam("post") UUID id) {
         MetaTable<CommentResource> metaTable = new MetaTable<>(CommentResource.class, identity.getLanguage());
 
-        metaTable.addSortable(new Sortable[] {
+        metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, true),
                 new Sortable("text", false, true),
                 new Sortable("post", false, true),

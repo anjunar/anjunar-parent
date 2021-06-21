@@ -1,10 +1,9 @@
 package de.bitvale.anjunar;
 
 import de.bitvale.common.security.IdentityService;
-import de.bitvale.common.security.Relationship;
 import de.bitvale.common.security.Role;
 import de.bitvale.common.security.User;
-import jakarta.servlet.ServletContext;
+import javax.servlet.ServletContext;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Initialized;
@@ -41,11 +40,9 @@ public class StartUp {
             patrick.setFirstName("Patrick");
             patrick.setBirthDate(birthdate);
             patrick.setPassword("patrick");
+            patrick.setEmail("patrick.bittner@hamburg.de");
+            patrick.getRoles().add(administratorRole);
             service.saveUser(patrick);
-            Relationship relationship = new Relationship();
-            relationship.setUser(patrick);
-            relationship.setGroup(administratorRole);
-            service.saveRelationShip(relationship);
 
 
         }

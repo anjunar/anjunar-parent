@@ -14,9 +14,8 @@ public class UserProvider extends AbstractRestPredicateProvider<UUID, Role> {
         if (value == null) {
             return builder.conjunction();
         }
-        SetJoin<Role, Relationship> join = root.join(Role_.relationships);
-        Path<User> path = join.get(Relationship_.user);
-        Path<UUID> uuidPath = path.get(User_.id);
+        SetJoin<Role, User> join = root.join(Role_.users);
+        Path<UUID> uuidPath = join.get(User_.id);
 
         return builder.equal(uuidPath, value);
     }

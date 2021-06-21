@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "ti_comment")
+@Table(name = "do_comment")
 public class Comment extends AbstractAggregate {
 
     @Lob

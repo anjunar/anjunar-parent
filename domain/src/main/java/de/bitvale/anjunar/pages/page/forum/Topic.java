@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "do_topic")
 public class Topic extends AbstractAggregate {
 
     @Lob

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "ti_post")
+@Table(name = "do_post")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Post extends AbstractAggregate {
 

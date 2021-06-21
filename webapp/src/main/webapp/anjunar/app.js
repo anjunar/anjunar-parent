@@ -13,7 +13,7 @@ export default class App extends HTMLElement {
         super();
 
         registerExceptionHandler((response) => {
-            if (response.status === 403) {
+            if (response.status === 401) {
                 document.location.hash = `/anjunar/security/login`;
             }
             if (response.status === 404) {

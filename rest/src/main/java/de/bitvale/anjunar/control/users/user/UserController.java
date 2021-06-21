@@ -1,12 +1,14 @@
 package de.bitvale.anjunar.control.users.user;
 
-import de.bitvale.common.security.*;
+import de.bitvale.anjunar.control.roles.role.RoleResource;
 import de.bitvale.common.filedisk.Base64Resource;
 import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.FormController;
-import de.bitvale.anjunar.control.roles.role.RoleResource;
+import de.bitvale.common.security.Identity;
+import de.bitvale.common.security.Role;
+import de.bitvale.common.security.User;
+import de.bitvale.common.security.UserImage;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -14,13 +16,15 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Secured
 @ApplicationScoped
 @Path("control/users/user")
 public class UserController implements FormController<UserResource> {
@@ -105,13 +109,12 @@ public class UserController implements FormController<UserResource> {
 
         User user = entityManager.find(User.class, identity.getUser().getId());
 
-        Set<Relationship> relationships = user.getRelationships();
+        Set<Role> relationships = user.getRoles();
         Set<RoleResource> roles = new HashSet<>();
-        for (Relationship relationship : relationships) {
-            Role group = relationship.getGroup();
+        for (Role role : relationships) {
             RoleResource resource = new RoleResource();
-            resource.setId(group.getId());
-            resource.setName(group.getName());
+            resource.setId(role.getId());
+            resource.setName(role.getName());
             roles.add(resource);
         }
 
@@ -146,13 +149,12 @@ public class UserController implements FormController<UserResource> {
 
         User user = entityManager.find(User.class, id);
 
-        Set<Relationship> relationships = user.getRelationships();
+        Set<Role> relationships = user.getRoles();
         Set<RoleResource> roles = new HashSet<>();
-        for (Relationship relationship : relationships) {
-            Role group = relationship.getGroup();
+        for (Role role : relationships) {
             RoleResource resource = new RoleResource();
-            resource.setId(group.getId());
-            resource.setName(group.getName());
+            resource.setId(role.getId());
+            resource.setName(role.getName());
             roles.add(resource);
         }
 
@@ -212,13 +214,10 @@ public class UserController implements FormController<UserResource> {
         }
 
         Set<RoleResource> roleResources = resource.getRoles();
-        user.getRelationships().clear();
+        user.getRoles().clear();
         for (RoleResource roleResource : roleResources) {
             Role role = entityManager.find(Role.class, roleResource.getId());
-            Relationship relationship = new Relationship();
-            relationship.setGroup(role);
-            relationship.setUser(user);
-            user.getRelationships().add(relationship);
+            user.getRoles().add(role);
         }
 
 
@@ -257,13 +256,10 @@ public class UserController implements FormController<UserResource> {
         }
 
         Set<RoleResource> roleResources = resource.getRoles();
-        user.getRelationships().clear();
+        user.getRoles().clear();
         for (RoleResource roleResource : roleResources) {
             Role role = entityManager.find(Role.class, roleResource.getId());
-            Relationship relationship = new Relationship();
-            relationship.setGroup(role);
-            relationship.setUser(user);
-            user.getRelationships().add(relationship);
+            user.getRoles().add(role);
         }
 
         if (identity.isLoggedIn()) {

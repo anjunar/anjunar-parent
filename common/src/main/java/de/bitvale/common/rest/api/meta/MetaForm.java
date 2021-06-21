@@ -3,8 +3,8 @@ package de.bitvale.common.rest.api.meta;
 import de.bitvale.introspector.bean.BeanIntrospector;
 import de.bitvale.introspector.bean.BeanModel;
 import de.bitvale.introspector.bean.BeanProperty;
-import jakarta.validation.Constraint;
 
+import javax.validation.Constraint;
 import java.lang.annotation.Annotation;
 import java.util.*;
 

@@ -1,9 +1,8 @@
 package de.bitvale.anjunar.control.roles.role;
 
+import de.bitvale.common.rest.api.FormController;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.Role;
-import de.bitvale.common.rest.Secured;
-import de.bitvale.common.rest.api.FormController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -17,7 +16,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("control/roles/role")
-@Secured
 public class RoleController implements FormController<RoleResource> {
 
     private final EntityManager entityManager;

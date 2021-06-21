@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "ge_role")
+@Table(name = "co_role")
 public class Role extends AbstractAggregate {
 
     private String name;
@@ -17,8 +17,8 @@ public class Role extends AbstractAggregate {
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Permission> permissions = new HashSet<>();
 
-    @OneToMany(mappedBy = "role")
-    private Set<Relationship> relationships;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 
     public String getName() {
         return name;
@@ -44,11 +44,11 @@ public class Role extends AbstractAggregate {
         this.permissions = permissions;
     }
 
-    public Set<Relationship> getRelationships() {
-        return relationships;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setRelationships(Set<Relationship> relationships) {
-        this.relationships = relationships;
+    public void setUsers(Set<User> relationships) {
+        this.users = relationships;
     }
 }

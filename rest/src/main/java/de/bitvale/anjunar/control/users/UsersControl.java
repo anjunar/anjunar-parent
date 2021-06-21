@@ -1,14 +1,13 @@
 package de.bitvale.anjunar.control.users;
 
 import de.bitvale.anjunar.control.users.user.UserResource;
-import de.bitvale.common.rest.api.meta.MetaTable;
-import de.bitvale.common.security.Identity;
-import de.bitvale.common.security.User;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.ListMetaController;
+import de.bitvale.common.rest.api.meta.MetaTable;
 import de.bitvale.common.rest.api.meta.Sortable;
+import de.bitvale.common.security.Identity;
+import de.bitvale.common.security.User;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -20,7 +19,6 @@ import java.util.List;
 
 @ApplicationScoped
 @Path("control/users")
-@Secured
 public class UsersControl implements ListMetaController<UserResource, UsersSearch> {
 
     private final UsersService service;
@@ -42,7 +40,7 @@ public class UsersControl implements ListMetaController<UserResource, UsersSearc
     public MetaTable<UserResource> list() {
         MetaTable<UserResource> metaTable = new MetaTable<>(UserResource.class, identity.getLanguage());
 
-        metaTable.addSortable(new Sortable[] {
+        metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
                 new Sortable("firstName", true, true),
                 new Sortable("lastName", true, true),

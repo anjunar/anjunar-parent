@@ -3,7 +3,6 @@ package de.bitvale.anjunar.security.register;
 import de.bitvale.common.rest.api.Link;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.Role;
-import de.bitvale.common.security.Relationship;
 import de.bitvale.common.security.User;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -59,14 +58,7 @@ public class RegisterController {
                 .setParameter("role", "User")
                 .getSingleResult();
 
-        Relationship relationship = new Relationship();
-        relationship.setGroup(userRole);
-        relationship.setUser(user);
-
-        entityManager.persist(relationship);
-
-        identity.authenticate(user);
-
+        user.getRoles().add(userRole);
 
     }
 

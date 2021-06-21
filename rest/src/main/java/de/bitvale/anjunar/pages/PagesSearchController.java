@@ -1,15 +1,15 @@
 package de.bitvale.anjunar.pages;
 
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.security.Identity;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 @ApplicationScoped
-@Secured
 @Path("pages/search")
 public class PagesSearchController {
 

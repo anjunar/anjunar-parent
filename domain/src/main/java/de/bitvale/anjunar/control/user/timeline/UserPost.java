@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "pa_user_post")
+@Table(name = "do_user_post")
 public class UserPost extends Post {
 
     @ManyToOne

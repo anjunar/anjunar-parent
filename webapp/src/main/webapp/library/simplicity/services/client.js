@@ -84,6 +84,12 @@ export const jsonClient = new class JSONClient {
         request.open(method, url);
         request.setRequestHeader("content-type", "application/json");
 
+        if (options?.headers) {
+            for (const key of Object.keys(options.headers)) {
+                request.setRequestHeader(key, options.headers[key]);
+            }
+        }
+
         let executor = (resolve, reject) => {
             request.addEventListener("loadend", (event) => {
                 let status = event.target.status;

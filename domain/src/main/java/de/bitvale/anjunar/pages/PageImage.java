@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity(name = "PostImage")
-@Table(name = "pa_image")
+@Table(name = "do_image")
 public class PageImage extends HarddiskFile {
 
     @ManyToOne

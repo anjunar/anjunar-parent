@@ -1,9 +1,8 @@
 package de.bitvale.anjunar.pages.page.images.image;
 
-import de.bitvale.common.rest.Secured;
-import de.bitvale.anjunar.pages.page.images.PageResource;
-import de.bitvale.anjunar.pages.PageImage;
 import de.bitvale.anjunar.pages.Page;
+import de.bitvale.anjunar.pages.PageImage;
+import de.bitvale.anjunar.pages.page.images.PageResource;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -19,7 +18,6 @@ import java.util.regex.Pattern;
 
 @Path("pages/page/images/image")
 @ApplicationScoped
-@Secured
 public class ImageController {
 
     private final EntityManager entityManager;

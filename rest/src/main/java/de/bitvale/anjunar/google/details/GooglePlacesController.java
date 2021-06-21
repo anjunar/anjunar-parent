@@ -1,14 +1,11 @@
 package de.bitvale.anjunar.google.details;
 
-import de.bitvale.common.rest.Secured;
-import de.bitvale.common.rest.URLBuilder;
-import de.bitvale.common.rest.URLBuilderFactory;
 import de.bitvale.anjunar.google.details.client.PlaceDetailForm;
 import de.bitvale.anjunar.google.details.client.PlaceDetailsForm;
-import jakarta.servlet.http.HttpServletRequest;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -34,7 +31,6 @@ public class GooglePlacesController {
 
     @GET
     @Path("place/{id}/details")
-    @Secured
     public LocationDetailForm details(@Context HttpServletRequest request, @PathParam("id") String id) {
         PlaceDetailsForm details = service.findDetails(id, request.getLocale());
 
@@ -69,12 +65,5 @@ public class GooglePlacesController {
         return null;
     }
 
-
-    public static URLBuilder<GooglePlacesController> linkGeoCoding(URLBuilderFactory builderFactory) {
-        return builderFactory
-                .from(GooglePlacesController.class)
-                .record((method) -> method.details(null, null))
-                .rel("details");
-    }
 
 }

@@ -1,20 +1,23 @@
 package de.bitvale.anjunar.security.login;
 
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Link;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
 
 import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.security.enterprise.SecurityContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Path("security")
-@ApplicationScoped
+@RequestScoped
 public class LoginController {
 
     private final Identity identity;
@@ -50,11 +53,9 @@ public class LoginController {
     @Path("login")
     public Response login(LoginResource resource) {
 
-        User authenticate = identity.findUser(resource.getFirstName(), resource.getLastName(), resource.getBirthdate());
+        User user = identity.findUser(resource.getFirstName(), resource.getLastName(), resource.getBirthdate());
 
-        if (authenticate.getPassword().equals(resource.getPassword())) {
-            identity.authenticate(authenticate);
-
+        if (identity.authenticate(user)) {
             resource.addLink(new Link("service/root", "GET", "redirect"));
 
             return Response.accepted(resource).build();
@@ -64,7 +65,6 @@ public class LoginController {
     }
 
     @POST
-    @Secured
     @Path("runas")
     @RolesAllowed({"Administrator"})
     public Response runAs(@QueryParam("id") UUID id) {

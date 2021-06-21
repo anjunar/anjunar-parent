@@ -71,13 +71,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <dependency>
-                <groupId>jakarta.platform</groupId>
-                <artifactId>jakarta.jakartaee-bom</artifactId>
-                <version>9.1.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <!--=====================================================================================================-->
             <!--                                                                                                     -->
             <!--                                            Testing                                                  -->
@@ -101,9 +94,15 @@
             <!--============================================ WildFly Libraries ======================================-->
 
             <dependency>
-                <groupId>jakarta.platform</groupId>
-                <artifactId>jakarta.jakartaee-api</artifactId>
-                <version>9.1.0</version>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>8.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.security.enterprise</groupId>
+                <artifactId>javax.security.enterprise-api</artifactId>
+                <version>1.0</version>
             </dependency>
 
             <dependency>
@@ -210,7 +209,21 @@
 
             <!--=========================================== 3rd Party Libraries =====================================-->
 
-
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>0.11.2</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>0.11.2</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>0.11.2</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>

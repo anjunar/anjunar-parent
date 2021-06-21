@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "ge_permission")
+@Table(name = "co_permission")
 public class Permission extends AbstractEntity {
 
     private String url;

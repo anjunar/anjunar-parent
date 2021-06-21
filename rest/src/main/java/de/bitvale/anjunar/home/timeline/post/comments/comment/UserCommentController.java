@@ -1,14 +1,13 @@
 package de.bitvale.anjunar.home.timeline.post.comments.comment;
 
+import de.bitvale.anjunar.shared.users.user.UserResource;
+import de.bitvale.anjunar.timeline.Comment;
+import de.bitvale.anjunar.timeline.Post;
 import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.FormController;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
-import de.bitvale.anjunar.shared.users.user.UserResource;
-import de.bitvale.anjunar.timeline.Comment;
-import de.bitvale.anjunar.timeline.Post;
 import de.bitvale.common.security.UserImage;
 
 import javax.annotation.security.RolesAllowed;
@@ -24,7 +23,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("/home/timeline/post/comments/comment")
-@Secured
 public class UserCommentController implements FormController<CommentResource> {
 
     private final EntityManager entityManager;

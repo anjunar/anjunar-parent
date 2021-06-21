@@ -1,13 +1,12 @@
 package de.bitvale.anjunar.control.roles;
 
-import de.bitvale.common.rest.api.meta.MetaTable;
-import de.bitvale.common.security.Identity;
-import de.bitvale.common.rest.Secured;
+import de.bitvale.anjunar.control.roles.role.RoleResource;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.ListMetaController;
+import de.bitvale.common.rest.api.meta.MetaTable;
 import de.bitvale.common.rest.api.meta.Sortable;
+import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.Role;
-import de.bitvale.anjunar.control.roles.role.RoleResource;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -16,7 +15,6 @@ import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-@Secured
 @ApplicationScoped
 @Path("control/roles")
 public class RolesControl implements ListMetaController<RoleResource, RolesSearch> {
@@ -41,7 +39,7 @@ public class RolesControl implements ListMetaController<RoleResource, RolesSearc
 
         MetaTable<RoleResource> metaTable = new MetaTable<>(RoleResource.class, identity.getLanguage());
 
-        metaTable.addSortable(new Sortable[] {
+        metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
                 new Sortable("name", true, true),
                 new Sortable("description", true, true)
@@ -52,7 +50,6 @@ public class RolesControl implements ListMetaController<RoleResource, RolesSearc
         return metaTable;
     }
 
-    @Secured
     @Override
     @RolesAllowed({"Administrator", "User"})
     public Container<RoleResource> list(RolesSearch search) {

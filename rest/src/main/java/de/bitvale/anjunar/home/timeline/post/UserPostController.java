@@ -1,17 +1,16 @@
 package de.bitvale.anjunar.home.timeline.post;
 
+import de.bitvale.anjunar.control.user.timeline.UserPost;
+import de.bitvale.anjunar.shared.users.user.UserResource;
+import de.bitvale.anjunar.timeline.TimelineImage;
 import de.bitvale.common.filedisk.Base64Resource;
 import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.Secured;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.FormController;
 import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
 import de.bitvale.common.security.UserImage;
-import de.bitvale.anjunar.control.user.timeline.UserPost;
-import de.bitvale.anjunar.shared.users.user.UserResource;
-import de.bitvale.anjunar.timeline.TimelineImage;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -21,13 +20,10 @@ import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.UUID;
 
 @ApplicationScoped
 @Path("home/timeline/post")
-@Secured
 public class UserPostController implements FormController<PostResource> {
 
     private final EntityManager entityManager;
@@ -154,7 +150,7 @@ public class UserPostController implements FormController<PostResource> {
         }
 
         Blob resourceImage = resource.getImage();
-        if (resourceImage != null && resourceImage.getData() != null && ! resourceImage.getData().equals("")) {
+        if (resourceImage != null && resourceImage.getData() != null && !resourceImage.getData().equals("")) {
             Base64Resource base64Resource = FileDiskUtils.extractBase64(resourceImage.getData());
             TimelineImage timelineImage = new TimelineImage();
             timelineImage.setName(resourceImage.getName());
@@ -212,7 +208,7 @@ public class UserPostController implements FormController<PostResource> {
         }
 
         Blob resourceImage = resource.getImage();
-        if (resourceImage != null && resourceImage.getData() != null && ! resourceImage.getData().equals("")) {
+        if (resourceImage != null && resourceImage.getData() != null && !resourceImage.getData().equals("")) {
             Base64Resource base64Resource = FileDiskUtils.extractBase64(resourceImage.getData());
             TimelineImage timelineImage = new TimelineImage();
             timelineImage.setName(resourceImage.getName());

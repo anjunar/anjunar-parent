@@ -6,5 +6,5 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ti_image")
+@Table(name = "do_image")
 public class TimelineImage extends HarddiskFile { }
