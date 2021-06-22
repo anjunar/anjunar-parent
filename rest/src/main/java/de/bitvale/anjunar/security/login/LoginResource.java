@@ -105,4 +105,5 @@ public class LoginResource implements LinksContainer, ActionsContainer {
     public MetaForm<LoginResource> getMeta() {
         return meta;
     }
+
 }

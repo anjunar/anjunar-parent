@@ -15,4 +15,13 @@ public class PagesResource extends AbstractRestEntity<PagesResource> {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public static PagesResource factory(Page page) {
+        PagesResource resource = new PagesResource();
+
+        resource.setId(page.getId());
+        resource.setTitle(page.getTitle());
+
+        return resource;
+    }
 }

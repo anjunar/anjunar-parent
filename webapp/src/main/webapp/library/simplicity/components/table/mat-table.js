@@ -1,6 +1,7 @@
-import {builder, customComponents, i18nFactory} from "../../simplicity.js";
+import {builder, customComponents} from "../../simplicity.js";
 import MatTableDialog from "./mat-table-dialog.js";
 import {hateoas} from "../../services/tools.js";
+import {i18nFactory} from "../../services/i18nResolver.js";
 
 export default class MatTable extends HTMLTableElement {
 
@@ -448,11 +449,11 @@ customComponents.define("mat-table", MatTable, {extends: "table"})
 
 const i18n = i18nFactory({
     "Create" : {
-        en : "Create",
-        de : "Erstellen"
+        "en-DE" : "Create",
+        "de-DE" : "Erstellen"
     },
     "Configuration" : {
-        en : "Configuration",
-        de : "Konfiguration"
+        "en-DE" : "Configuration",
+        "de-DE" : "Konfiguration"
     }
 });

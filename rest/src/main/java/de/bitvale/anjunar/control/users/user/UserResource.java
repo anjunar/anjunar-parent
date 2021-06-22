@@ -4,7 +4,11 @@ import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.anjunar.control.roles.role.RoleResource;
 import de.bitvale.common.rest.api.meta.Input;
+import de.bitvale.common.security.Role;
+import de.bitvale.common.security.User;
+import de.bitvale.common.security.UserImage;
 
+import javax.persistence.EntityManager;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,7 +36,7 @@ public class UserResource extends AbstractRestEntity<UserResource> {
     private String password;
 
     @Input(placeholder = "de.bitvale.anjunar.control.users.user.UserResource.picture.message", type = "image")
-    private Blob picture;
+    private Blob picture = new Blob();
 
     @Email
     @Input(placeholder = "de.bitvale.anjunar.control.users.user.UserResource.email.message", type = "email")
@@ -110,6 +114,42 @@ public class UserResource extends AbstractRestEntity<UserResource> {
 
     public String getName() {
         return firstName + " " + lastName;
+    }
+
+    public static UserResource factory(User user) {
+        UserResource resource = new UserResource();
+        resource.setId(user.getId());
+        resource.setFirstName(user.getFirstName());
+        resource.setLastName(user.getLastName());
+        resource.setBirthdate(user.getBirthDate());
+        resource.setPassword(user.getPassword());
+        resource.setEmail(user.getEmail());
+        resource.setPicture(Blob.factory(user.getPicture()));
+        Set<RoleResource> roleResources = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            roleResources.add(RoleResource.factory(role));
+        }
+        resource.setRoles(roleResources);
+        return resource;
+    }
+
+    public static User updater(UserResource resource, User user, EntityManager entityManager) {
+        user.setFirstName(resource.getFirstName());
+        user.setLastName(resource.getLastName());
+        user.setBirthDate(resource.getBirthdate());
+        user.setPassword(resource.getPassword());
+        user.setEnabled(resource.isEnabled());
+        user.setEmail(resource.getEmail());
+        user.setPicture((UserImage) Blob.updater(resource.getPicture(), user.getPicture()));
+
+        Set<RoleResource> roleResources = resource.getRoles();
+        user.getRoles().clear();
+        for (RoleResource roleResource : roleResources) {
+            Role role = entityManager.find(Role.class, roleResource.getId());
+            user.getRoles().add(role);
+        }
+
+        return user;
     }
 
 }

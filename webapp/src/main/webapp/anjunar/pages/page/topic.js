@@ -1,9 +1,10 @@
-import {builder, customViews, i18nFactory} from "../../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../../library/simplicity/simplicity.js";
 import DomInput from "../../../library/simplicity/directives/dom-input.js";
 import MatEditor from "../../../library/simplicity/components/form/mat-editor.js";
 import {jsonClient} from "../../../library/simplicity/services/client.js";
 import HateoasButton from "../../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasForm from "../../../library/simplicity/hateoas/hateoas-form.js";
+import {i18nFactory} from "../../../library/simplicity/services/i18nResolver.js";
 
 export default class Topic extends HTMLElement {
 
@@ -108,32 +109,32 @@ customViews.define({
 
 const i18n = i18nFactory({
     "Include all the information someone would need to answer your question" : {
-        en : "Include all the information someone would need to answer your question",
-        de : "Geben Sie alle Informationen an, die jemand benötigt, um Ihre Frage zu beantworten"
+        "en-DE" : "Include all the information someone would need to answer your question",
+        "de-DE" : "Geben Sie alle Informationen an, die jemand benötigt, um Ihre Frage zu beantworten"
     },
     "Be specific and imagine you’re asking a question to another person" : {
-        en : "Be specific and imagine you’re asking a question to another person",
-        de : "Seien Sie konkret und stellen Sie sich vor, Sie stellen einer anderen Person eine Frage"
+        "en-DE" : "Be specific and imagine you’re asking a question to another person",
+        "de-DE" : "Seien Sie konkret und stellen Sie sich vor, Sie stellen einer anderen Person eine Frage"
     },
     "Insert here..." : {
-        en : "Insert here...",
-        de : "Hier einfügen..."
+        "en-DE" : "Insert here...",
+        "de-DE" : "Hier einfügen..."
     },
     "Title" : {
-        en : "Title",
-        de : "Titel"
+        "en-DE" : "Title",
+        "de-DE" : "Titel"
     },
     Save : {
-        en : "Save",
-        de : "Speichern"
+        "en-DE" : "Save",
+        "de-DE" : "Speichern"
     },
     Update : {
-        en : "Update",
-        de : "Aktualisieren"
+        "en-DE" : "Update",
+        "de-DE" : "Aktualisieren"
     },
     Delete : {
-        en : "Delete",
-        de : "Löschen"
+        "en-DE" : "Delete",
+        "de-DE" : "Löschen"
     }
 });
 

@@ -78,31 +78,7 @@ public class PageTopicsController implements ListController<PageTopicResource, P
         List<PageTopicResource> resources = new ArrayList<>();
 
         for (Topic topic : topics) {
-            PageTopicResource resource = new PageTopicResource();
-
-            resource.setId(topic.getId());
-            Editor editor = new Editor();
-            editor.setText(topic.getText());
-            editor.setHtml(topic.getHtml());
-            resource.setEditor(editor);
-            resource.setTopic(topic.getTopic());
-            resource.setCreated(topic.getCreated());
-            resource.setPage(topic.getPage().getId());
-
-            UserResource owner = new UserResource();
-            User user = topic.getOwner();
-            owner.setId(user.getId());
-            owner.setFirstName(user.getFirstName());
-            owner.setLastName(user.getLastName());
-            owner.setBirthDate(user.getBirthDate());
-
-            Blob image = new Blob();
-            UserImage picture = user.getPicture();
-            image.setName(picture.getName());
-            image.setLastModified(picture.getLastModified());
-            image.setData(FileDiskUtils.buildBase64(picture.getType(), picture.getSubType(), picture.getData()));
-            owner.setImage(image);
-            resource.setOwner(owner);
+            PageTopicResource resource = PageTopicResource.factory(topic);
 
             identity.createLink("pages/page/topics/topic?id=" + topic.getId(), "GET", "read", resource::addAction);
             identity.createLink("pages/page/topics/topic?id=" + topic.getId(), "PUT", "update", resource::addAction);

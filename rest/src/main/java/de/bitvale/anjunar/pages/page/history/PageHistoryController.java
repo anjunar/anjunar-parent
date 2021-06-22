@@ -69,24 +69,7 @@ public class PageHistoryController implements ListController<PageHistoryResource
         for (Number revision : revisions) {
             Page page = auditReader.find(Page.class, search.getId(), revision);
 
-            PageHistoryResource resource = new PageHistoryResource();
-
-            resource.setId(page.getId());
-            resource.setTitle(page.getTitle());
-            resource.setContent(page.getContent());
-            resource.setText(page.getText());
-            resource.setRevision(revision);
-            resource.setModified(page.getModified());
-
-            UserResource userResource = new UserResource();
-
-            User modifier = page.getModifier();
-            userResource.setId(modifier.getId());
-            userResource.setFirstName(modifier.getFirstName());
-            userResource.setLastName(modifier.getLastName());
-            userResource.setBirthDate(modifier.getBirthDate());
-
-            resource.setModifier(userResource);
+            PageHistoryResource resource = PageHistoryResource.factory(page, revision);
 
             resources.add(resource);
         }

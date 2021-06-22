@@ -9,6 +9,8 @@ import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import de.bitvale.anjunar.fasterxml.UTCInstantDeserializer;
 import de.bitvale.anjunar.fasterxml.UTCInstantSerializer;
+import de.bitvale.anjunar.fasterxml.UTCLocalDateTimeDeserializer;
+import de.bitvale.anjunar.fasterxml.UTCLocalDateTimeSerializer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -36,8 +38,8 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
         JavaTimeModule module = new JavaTimeModule();
 
-        module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-        module.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        module.addSerializer(LocalDateTime.class, new UTCLocalDateTimeSerializer());
+        module.addDeserializer(LocalDateTime.class, new UTCLocalDateTimeDeserializer());
         module.addSerializer(Instant.class, new UTCInstantSerializer());
         module.addDeserializer(Instant.class, new UTCInstantDeserializer());
 

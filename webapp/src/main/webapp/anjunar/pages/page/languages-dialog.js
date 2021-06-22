@@ -1,7 +1,8 @@
-import {builder, customComponents, i18nFactory} from "../../../library/simplicity/simplicity.js";
+import {builder, customComponents} from "../../../library/simplicity/simplicity.js";
 import MatDialog from "../../../library/simplicity/components/modal/mat-dialog.js";
 import {jsonClient} from "../../../library/simplicity/services/client.js";
 import MatMultiSelect from "../../../library/simplicity/components/form/mat-multi-select.js";
+import {i18nFactory} from "../../../library/simplicity/services/i18nResolver.js";
 
 export default class LanguagesDialog extends HTMLElement {
 

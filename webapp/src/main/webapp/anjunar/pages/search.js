@@ -1,9 +1,9 @@
-import {builder, customViews, i18nFactory} from "../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../library/simplicity/simplicity.js";
 import MatInputContainer from "../../library/simplicity/components/form/containers/mat-input-container.js";
 import DomInput from "../../library/simplicity/directives/dom-input.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
-import {getCookie} from "../../library/simplicity/services/tools.js";
+import {getLanguage, i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
 export default class Search extends HTMLElement {
 
@@ -63,7 +63,7 @@ export default class Search extends HTMLElement {
                             type : "button",
                             text : i18n("Like"),
                             onClick : () => {
-                                jsonClient.post(`service/pages/like?title=${this.#search.title}&index=0&limit=20&lang=${getCookie("language")}`)
+                                jsonClient.post(`service/pages/like?title=${this.#search.title}&index=0&limit=20&lang=${getLanguage()}`)
                                     .then((response) => {
                                         this.#results = response.rows;
                                     })
@@ -75,7 +75,7 @@ export default class Search extends HTMLElement {
                             type : "button",
                             text : i18n("Word"),
                             onClick : () => {
-                                jsonClient.post(`service/pages/word?title=${this.#search.title}&index=0&limit=20&lang=${getCookie("language")}`)
+                                jsonClient.post(`service/pages/word?title=${this.#search.title}&index=0&limit=20&lang=${getLanguage()}`)
                                     .then((response) => {
                                         this.#results = response.rows;
                                     })
@@ -126,19 +126,19 @@ customViews.define({
 
 const i18n = i18nFactory({
     "Search" : {
-        en : "Search",
-        de : "Suche"
+        "en-DE" : "Search",
+        "de-DE" : "Suche"
     },
     Like : {
-        en : "Like",
-        de : "Ähnlich"
+        "en-DE" : "Like",
+        "de-DE" : "Ähnlich"
     },
     Title : {
-        en : "Title",
-        de : "Titel"
+        "en-DE" : "Title",
+        "de-DE" : "Titel"
     },
     Word : {
-        en : "Word",
-        de : "Wort"
+        "en-DE" : "Word",
+        "de-DE" : "Wort"
     }
 });

@@ -1,10 +1,11 @@
-import {builder, customViews, i18nFactory} from "../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../library/simplicity/simplicity.js";
 import MatInfiniteScroll from "../../library/simplicity/components/table/mat-infinite-scroll.js";
 import MatInputContainer from "../../library/simplicity/components/form/containers/mat-input-container.js";
 import DomInput from "../../library/simplicity/directives/dom-input.js";
 import PostDialog from "./timeline/post/post-dialog.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import Post from "./timeline/post/post.js";
+import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
 export default class Timeline extends HTMLElement {
 
@@ -93,7 +94,7 @@ customViews.define({
 
 const i18n = i18nFactory({
     "Post here..." : {
-        en : "Post here...",
-        de : "Hier posten..."
+        "en-DE" : "Post here...",
+        "de-DE" : "Hier posten..."
     }
 });

@@ -1,11 +1,16 @@
 package de.bitvale.anjunar.shared.users.user;
 
+import de.bitvale.anjunar.control.roles.role.RoleResource;
 import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.meta.Input;
+import de.bitvale.common.security.Role;
+import de.bitvale.common.security.User;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class UserResource extends AbstractRestEntity<UserResource> {
 
@@ -67,4 +72,16 @@ public class UserResource extends AbstractRestEntity<UserResource> {
     public void setLanguage(Locale language) {
         this.language = language;
     }
+
+    public static UserResource factory(User user) {
+        UserResource resource = new UserResource();
+        resource.setId(user.getId());
+        resource.setFirstName(user.getFirstName());
+        resource.setLastName(user.getLastName());
+        resource.setBirthDate(user.getBirthDate());
+        resource.setLanguage(user.getLanguage());
+        resource.setImage(Blob.factory(user.getPicture()));
+        return resource;
+    }
+
 }

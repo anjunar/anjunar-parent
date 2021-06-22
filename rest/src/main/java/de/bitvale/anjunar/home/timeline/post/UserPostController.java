@@ -47,28 +47,7 @@ public class UserPostController implements FormController<PostResource> {
     public PostResource create() {
         PostResource resource = new PostResource();
 
-        Blob image = new Blob();
-        image.setData("");
-
-        resource.setImage(image);
-        UserResource userResource = new UserResource();
-        resource.setOwner(userResource);
-
-        User owner = identity.getUser();
-        userResource.setId(owner.getId());
-        userResource.setFirstName(owner.getFirstName());
-        userResource.setLastName(owner.getLastName());
-        userResource.setBirthDate(owner.getBirthDate());
-
-        UserImage picture = owner.getPicture();
-        if (picture != null) {
-            Blob blob = new Blob();
-            blob.setName(picture.getName());
-            blob.setLastModified(picture.getLastModified());
-            blob.setData(FileDiskUtils.buildBase64(picture.getType(), picture.getSubType(), picture.getData()));
-            userResource.setImage(blob);
-        }
-
+        resource.setOwner(UserResource.factory(identity.getUser()));
 
         identity.createLink("home/timeline/post", "POST", "save", resource::addAction);
 
@@ -82,32 +61,7 @@ public class UserPostController implements FormController<PostResource> {
 
         UserPost post = entityManager.find(UserPost.class, id);
 
-        PostResource resource = new PostResource();
-        resource.setId(post.getId());
-        resource.setText(post.getText());
-        resource.setCreated(post.getCreated());
-
-        UserResource userResource = new UserResource();
-        userResource.setId(post.getOwner().getId());
-        userResource.setFirstName(post.getOwner().getFirstName());
-        userResource.setLastName(post.getOwner().getLastName());
-        userResource.setBirthDate(post.getOwner().getBirthDate());
-        Blob image = new Blob();
-        image.setName(post.getOwner().getPicture().getName());
-        image.setLastModified(post.getOwner().getPicture().getLastModified());
-        image.setData(FileDiskUtils.buildBase64(post.getOwner().getPicture().getType(), post.getOwner().getPicture().getSubType(), post.getOwner().getPicture().getData()));
-        userResource.setImage(image);
-
-        resource.setOwner(userResource);
-
-        for (User like : post.getLikes()) {
-            UserResource likeResource = new UserResource();
-            likeResource.setId(like.getId());
-            likeResource.setFirstName(like.getFirstName());
-            likeResource.setLastName(like.getLastName());
-            likeResource.setBirthDate(like.getBirthDate());
-            resource.getLikes().add(likeResource);
-        }
+        PostResource resource = PostResource.factory(post);
 
         if (identity.getUser().equals(post.getOwner())) {
             identity.createLink("home/timeline/post?id=" + post.getId(), "PUT", "update", resource::addAction);
@@ -128,47 +82,11 @@ public class UserPostController implements FormController<PostResource> {
     public PostResource save(PostResource resource) {
 
         UserPost post = new UserPost();
-        post.setUser(identity.getUser());
 
-        post.setOwner(identity.getUser());
-        post.setText(resource.getText());
-
-        UserImage image = post.getOwner().getPicture();
-        if (image != null) {
-            String base64Resource = FileDiskUtils.buildBase64(image.getType(), image.getSubType(), image.getData());
-            Blob blob = new Blob();
-            blob.setName(image.getName());
-            blob.setData(base64Resource);
-            blob.setLastModified(image.getLastModified());
-
-            UserResource userResource = new UserResource();
-            userResource.setId(post.getOwner().getId());
-            userResource.setFirstName(post.getOwner().getFirstName());
-            userResource.setLastName(post.getOwner().getLastName());
-            userResource.setImage(blob);
-            resource.setOwner(userResource);
-        }
-
-        Blob resourceImage = resource.getImage();
-        if (resourceImage != null && resourceImage.getData() != null && !resourceImage.getData().equals("")) {
-            Base64Resource base64Resource = FileDiskUtils.extractBase64(resourceImage.getData());
-            TimelineImage timelineImage = new TimelineImage();
-            timelineImage.setName(resourceImage.getName());
-            timelineImage.setData(base64Resource.getData());
-            timelineImage.setLastModified(resourceImage.getLastModified());
-            timelineImage.setType(base64Resource.getType());
-            timelineImage.setSubType(base64Resource.getSubType());
-            post.setImage(timelineImage);
-        }
-
-        post.getLikes().clear();
-
-        for (UserResource like : resource.getLikes()) {
-            User user = identity.findUser(like.getId());
-            post.getLikes().add(user);
-        }
+        PostResource.updater(resource, post, identity, entityManager);
 
         entityManager.persist(post);
+
         resource.setId(post.getId());
 
 
@@ -188,43 +106,7 @@ public class UserPostController implements FormController<PostResource> {
 
         UserPost post = entityManager.find(UserPost.class, id);
 
-        post.setOwner(identity.getUser());
-        post.setText(resource.getText());
-
-        UserImage image = post.getOwner().getPicture();
-        if (image != null) {
-            String base64Resource = FileDiskUtils.buildBase64(image.getType(), image.getSubType(), image.getData());
-            Blob blob = new Blob();
-            blob.setName(image.getName());
-            blob.setData(base64Resource);
-            blob.setLastModified(image.getLastModified());
-
-            UserResource userResource = new UserResource();
-            userResource.setId(post.getOwner().getId());
-            userResource.setFirstName(post.getOwner().getFirstName());
-            userResource.setLastName(post.getOwner().getLastName());
-            userResource.setImage(blob);
-            resource.setOwner(userResource);
-        }
-
-        Blob resourceImage = resource.getImage();
-        if (resourceImage != null && resourceImage.getData() != null && !resourceImage.getData().equals("")) {
-            Base64Resource base64Resource = FileDiskUtils.extractBase64(resourceImage.getData());
-            TimelineImage timelineImage = new TimelineImage();
-            timelineImage.setName(resourceImage.getName());
-            timelineImage.setData(base64Resource.getData());
-            timelineImage.setLastModified(resourceImage.getLastModified());
-            timelineImage.setType(base64Resource.getType());
-            timelineImage.setSubType(base64Resource.getSubType());
-            post.setImage(timelineImage);
-        }
-
-        post.getLikes().clear();
-
-        for (UserResource like : resource.getLikes()) {
-            User user = identity.findUser(like.getId());
-            post.getLikes().add(user);
-        }
+        PostResource.updater(resource, post, identity, entityManager);
 
         if (identity.getUser().equals(post.getOwner())) {
             identity.createLink("home/timeline/post?id=" + post.getId(), "GET", "read", resource::addAction);

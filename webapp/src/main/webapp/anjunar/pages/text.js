@@ -1,4 +1,5 @@
-import {builder, customViews, i18nFactory} from "../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../library/simplicity/simplicity.js";
+import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
 export default class Text extends HTMLElement {
 
@@ -55,11 +56,11 @@ customViews.define({
 
 const i18n = i18nFactory({
     History : {
-        en : "History",
-        de : "Historie"
+        "en-DE" : "History",
+        "de-DE" : "Historie"
     },
     Edit : {
-        en : "Edit",
-        de : "Bearbeiten"
+        "en-DE" : "Edit",
+        "de-DE" : "Bearbeiten"
     }
 });

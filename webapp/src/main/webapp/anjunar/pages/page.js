@@ -1,7 +1,8 @@
-import {builder, customViews, i18nFactory} from "../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import DomRouter from "../../library/simplicity/directives/dom-router.js";
 import HateoasTable from "../../library/simplicity/hateoas/hateoas-table.js";
+import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
 export default class Page extends HTMLElement {
 
@@ -154,7 +155,7 @@ customViews.define({
 
 const i18n = i18nFactory({
     "Questions" : {
-        en : "Questions",
-        de : "Fragen"
+        "en-DE" : "Questions",
+        "de-DE" : "Fragen"
     }
 });

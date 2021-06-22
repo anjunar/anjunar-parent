@@ -75,46 +75,8 @@ public class UserTimelineController implements ListController<PostResource, User
 
         for (UserPost post : posts) {
 
-            PostResource resource = new PostResource();
-            resource.setId(post.getId());
-            resource.setText(post.getText());
-            resource.setCreated(post.getCreated());
+            PostResource resource = PostResource.factory(post);
 
-            UserResource userResource = new UserResource();
-            User owner = post.getOwner();
-            userResource.setId(owner.getId());
-            userResource.setFirstName(owner.getFirstName());
-            userResource.setLastName(owner.getLastName());
-            userResource.setBirthDate(owner.getBirthDate());
-
-            UserImage picture = owner.getPicture();
-            if (picture != null) {
-                Blob blob = new Blob();
-                blob.setName(picture.getName());
-                blob.setLastModified(picture.getLastModified());
-                blob.setData(FileDiskUtils.buildBase64(picture.getType(), picture.getSubType(), picture.getData()));
-                userResource.setImage(blob);
-            }
-
-            TimelineImage timelineImage = post.getImage();
-            if (timelineImage != null) {
-                Blob blob = new Blob();
-                blob.setName(timelineImage.getName());
-                blob.setLastModified(timelineImage.getLastModified());
-                blob.setData(FileDiskUtils.buildBase64(timelineImage.getType(), timelineImage.getSubType(), timelineImage.getData()));
-                resource.setImage(blob);
-            }
-
-            resource.setOwner(userResource);
-
-            for (User like : post.getLikes()) {
-                UserResource likeResource = new UserResource();
-                likeResource.setId(like.getId());
-                likeResource.setFirstName(like.getFirstName());
-                likeResource.setLastName(like.getLastName());
-                likeResource.setBirthDate(like.getBirthDate());
-                resource.getLikes().add(likeResource);
-            }
             resources.add(resource);
 
             if (identity.getUser().equals(post.getOwner())) {

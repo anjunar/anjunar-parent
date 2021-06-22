@@ -1,5 +1,6 @@
-import {builder, customComponents, i18nFactory} from "../../../../simplicity.js";
+import {builder, customComponents} from "../../../../simplicity.js";
 import DomSelect from "../../../../directives/dom-select.js";
+import {i18nFactory} from "../../../../services/i18nResolver.js";
 
 export default class ToolbarFont extends HTMLElement {
 
@@ -459,7 +460,7 @@ customComponents.define("toolbar-font", ToolbarFont);
 
 const i18n = i18nFactory({
     "Choose" : {
-        en : "Choose",
-        de : "Auswählen"
+        "en-DE" : "Choose",
+        "de-DE" : "Auswählen"
     }
 });

@@ -1,10 +1,11 @@
-import {builder, customViews, i18nFactory} from "../../../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../../../library/simplicity/services/client.js";
 import HateoasButton from "../../../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasTable from "../../../../library/simplicity/hateoas/hateoas-table.js";
 import ReplyDialog from "./reply-dialog.js";
 import {dateFormat, hateoas} from "../../../../library/simplicity/services/tools.js";
 import HateoasForm from "../../../../library/simplicity/hateoas/hateoas-form.js";
+import {i18nFactory} from "../../../../library/simplicity/services/i18nResolver.js";
 
 export default class Replies extends HTMLElement {
 
@@ -250,15 +251,15 @@ customViews.define({
 
 const i18n = i18nFactory({
     Replies : {
-        en : "Replies",
-        de : "Antworten"
+        "en-DE" : "Replies",
+        "de-DE" : "Antworten"
     },
     Views : {
-        en : "Views",
-        de : "Sichten"
+        "en-DE" : "Views",
+        "de-DE" : "Sichten"
     },
     "Edit" : {
-        en : "Edit",
-        de : "Bearbeiten"
+        "en-DE" : "Edit",
+        "de-DE" : "Bearbeiten"
     }
 });

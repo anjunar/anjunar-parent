@@ -1,5 +1,6 @@
-import {builder, customViews, i18nFactory} from "../library/simplicity/simplicity.js";
+import {builder, customViews} from "../library/simplicity/simplicity.js";
 import {loadRoot} from "./service.js";
+import {i18nFactory} from "../library/simplicity/services/i18nResolver.js";
 
 export default class Welcome extends HTMLElement {
 
@@ -79,19 +80,19 @@ customViews.define({
 
 const i18n = i18nFactory({
     Welcome : {
-        en : "Welcome",
-        de : "Willkommen"
+        "en-DE" : "Welcome",
+        "de-DE" : "Willkommen"
     },
     "click here to logout" : {
-        en : "click here to logout",
-        de : "hier klicken um abzumelden"
+        "en-DE" : "click here to logout",
+        "de-DE" : "hier klicken um abzumelden"
     },
     "Register here" : {
-        en : "Register here",
-        de : "Hier Registrieren"
+        "en-DE" : "Register here",
+        "de-DE" : "Hier Registrieren"
     },
     "please log in." : {
-        en : "please log in.",
-        de : "Bitte anmelden"
+        "en-DE" : "please log in.",
+        "de-DE" : "Bitte anmelden"
     }
 });

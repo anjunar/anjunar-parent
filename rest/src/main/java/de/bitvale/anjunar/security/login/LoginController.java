@@ -37,11 +37,6 @@ public class LoginController {
     public LoginResource login() {
         LoginResource loginResource = new LoginResource();
 
-        loginResource.setFirstName("Patrick");
-        loginResource.setLastName("Bittner");
-        loginResource.setBirthdate(LocalDate.of(1980, 4, 1));
-        loginResource.setPassword("patrick");
-
         loginResource.addAction(new Link("service/security/login", "POST", "login"));
 
         return loginResource;

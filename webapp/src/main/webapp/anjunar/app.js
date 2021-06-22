@@ -1,10 +1,11 @@
 import MatToolbar from "../library/simplicity/components/navigation/mat-toolbar.js";
 import DomRouter from "../library/simplicity/directives/dom-router.js";
-import {builder, customComponents, i18nFactory} from "../library/simplicity/simplicity.js";
+import {builder, customComponents} from "../library/simplicity/simplicity.js";
 import {registerExceptionHandler} from "../library/simplicity/services/client.js";
-import {getCookie, hateoas, setCookie} from "../library/simplicity/services/tools.js";
+import {hateoas} from "../library/simplicity/services/tools.js";
 import {loadRoot} from "./service.js";
 import DomSelect from "../library/simplicity/directives/dom-select.js";
+import {getLanguage, i18nFactory, setLanguage} from "../library/simplicity/services/i18nResolver.js";
 
 export default class App extends HTMLElement {
 
@@ -23,7 +24,7 @@ export default class App extends HTMLElement {
     }
 
     get service() {
-        return loadRoot(false, getCookie("language"));
+        return loadRoot();
     }
 
     render() {
@@ -95,7 +96,7 @@ export default class App extends HTMLElement {
                         {
                             element: "a",
                             text: "Navigator",
-                            href : `#/anjunar/navigator/navigator?link=${btoa("service/root")}`,
+                            href : `#/anjunar/navigator/navigator?link=${btoa("service")}`,
                             style: {
                                 marginLeft: "5px",
                                 display : () => {
@@ -111,11 +112,10 @@ export default class App extends HTMLElement {
                             },
                             value : {
                                 input : () => {
-                                    return getCookie("language") || "en"
+                                    return getLanguage() || "en"
                                 },
                                 output : (value) => {
-                                    setCookie("language", value, 365)
-                                    loadRoot(true, value);
+                                    setLanguage(value);
                                 }
                             },
                             onChange(event) {
@@ -124,14 +124,14 @@ export default class App extends HTMLElement {
                             },
                             children : [{
                                 element : "option",
-                                value : "en",
+                                value : "en-DE",
                                 text : "English",
                                 attributes : {
                                     selected : false
                                 }
                             }, {
                                 element: "option",
-                                value: "de",
+                                value: "de-DE",
                                 text : "Deutsch",
                             }]
                         }
@@ -176,16 +176,16 @@ export default class App extends HTMLElement {
 
 const i18n = i18nFactory({
     "Welcome" : {
-        en : "Welcome",
-        de : "Willkommen"
+        "en-DE" : "Welcome",
+        "de-DE" : "Willkommen"
     },
     "People" : {
-        en : "People",
-        de : "Leute"
+        "en-DE" : "People",
+        "de-DE" : "Leute"
     },
     "Search" : {
-        en : "Search",
-        de : "Suchen"
+        "en-DE" : "Search",
+        "de-DE" : "Suchen"
     }
 });
 

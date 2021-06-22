@@ -62,25 +62,7 @@ public class UsersControl implements ListMetaController<UserResource, UsersSearc
 
         List<UserResource> resources = new ArrayList<>();
         for (User user : users) {
-            UserResource resource = new UserResource();
-            resource.setId(user.getId());
-            resource.setFirstName(user.getFirstName());
-            resource.setLastName(user.getLastName());
-            resource.setBirthdate(user.getBirthDate());
-            resource.setEnabled(user.isEnabled());
-            if (user.getPicture() != null) {
-                Base64.Encoder encoder = Base64.getMimeEncoder();
-                byte[] encode = encoder.encode(user.getPicture().getData());
-                String base64 = "data:" + user.getPicture().getType() + "/" + user.getPicture().getSubType() + ";base64,";
-
-                Blob picture = new Blob();
-                picture.setName(user.getPicture().getName());
-                picture.setData(base64 + new String(encode));
-                picture.setLastModified(user.getPicture().getLastModified());
-                resource.setPicture(picture);
-            }
-            resources.add(resource);
-
+            UserResource resource = UserResource.factory(user);
             identity.createLink("control/users/user?id=" + user.getId(), "GET", "read", resource::addAction);
 
         }

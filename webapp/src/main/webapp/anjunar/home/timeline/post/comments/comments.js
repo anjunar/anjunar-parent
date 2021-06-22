@@ -1,6 +1,7 @@
-import {builder, customComponents, i18nFactory} from "../../../../../library/simplicity/simplicity.js";
+import {builder, customComponents} from "../../../../../library/simplicity/simplicity.js";
 import Comment from "./comment.js";
 import {jsonClient} from "../../../../../library/simplicity/services/client.js";
+import {i18nFactory} from "../../../../../library/simplicity/services/i18nResolver.js";
 
 export default class Comments extends HTMLElement {
 
@@ -131,7 +132,7 @@ customComponents.define("post-comments", Comments);
 
 const i18n = i18nFactory({
     "Comment here..." : {
-        en : "Comment here...",
-        de : "Hier kommentieren..."
+        "en-DE" : "Comment here...",
+        "de-DE" : "Hier kommentieren..."
     }
 });

@@ -43,7 +43,7 @@ public class PageController {
     public PageForm create() {
 
         PageForm pageForm = new PageForm();
-        pageForm.setContent(new Editor());
+
         identity.createLink("pages/page", "POST", "save", (pageForm::addAction));
         identity.createLink("pages/page/topics", "GET", "topics", pageForm::addLink);
 
@@ -64,23 +64,7 @@ public class PageController {
 
         Page page = auditReader.find(Page.class, id, revision);
 
-        PageForm pageForm = new PageForm();
-
-        pageForm.setId(page.getId());
-        Editor editor = new Editor();
-        editor.setHtml(page.getContent());
-        editor.setText(page.getText());
-        pageForm.setContent(editor);
-        pageForm.setTitle(page.getTitle());
-        pageForm.setLanguage(page.getLanguage());
-
-        for (Page pageLink : page.getLinks()) {
-            PageSelect pageSelect = new PageSelect();
-            pageSelect.setId(pageLink.getId());
-            pageSelect.setTitle(pageLink.getTitle());
-            pageSelect.setLanguage(pageLink.getLanguage());
-            pageForm.getPageLinks().add(pageSelect);
-        }
+        PageForm pageForm = PageForm.factory(page);
 
         identity.createLink("pages/page?id=" + page.getId(), "PUT", "update", pageForm::addAction);
         identity.createLink("pages/page?id=" + page.getId(), "DELETE", "delete", pageForm::addAction);
@@ -100,19 +84,12 @@ public class PageController {
     public PageForm save(PageForm resource) throws UnsupportedEncodingException {
 
         Page page = new Page();
-        page.setTitle(resource.getTitle());
-        page.setContent(resource.getContent().getHtml());
-        page.setText(resource.getContent().getText());
-        page.setModifier(identity.getUser());
-        page.setLanguage(resource.getLanguage());
-        entityManager.persist(page);
-        resource.setId(page.getId());
 
-        page.getLinks().clear();
-        for (PageSelect pageSelect : resource.getPageLinks()) {
-            Page pageLink = entityManager.find(Page.class, pageSelect.getId());
-            page.getLinks().add(pageLink);
-        }
+        PageForm.updater(resource, page, identity, entityManager);
+
+        entityManager.persist(page);
+
+        resource.setId(page.getId());
 
         identity.createLink("pages/page?id=" + page.getId(), "GET", "read", resource::addAction);
         identity.createLink("pages/page?id=" + page.getId(), "PUT", "update", resource::addAction);
@@ -129,17 +106,8 @@ public class PageController {
     public PageForm update(@QueryParam("id") UUID id, PageForm resource) {
 
         Page page = entityManager.find(Page.class, id);
-        page.setTitle(resource.getTitle());
-        page.setContent(resource.getContent().getHtml());
-        page.setText(resource.getContent().getText());
-        page.setModifier(identity.getUser());
-        page.setLanguage(resource.getLanguage());
 
-        page.getLinks().clear();
-        for (PageSelect pageSelect : resource.getPageLinks()) {
-            Page pageLink = entityManager.find(Page.class, pageSelect.getId());
-            page.getLinks().add(pageLink);
-        }
+        PageForm.updater(resource, page, identity, entityManager);
 
         identity.createLink("pages/page?id=" + page.getId(), "GET", "read", resource::addAction);
         identity.createLink("pages/page?id=" + page.getId(), "PUT", "update", resource::addAction);

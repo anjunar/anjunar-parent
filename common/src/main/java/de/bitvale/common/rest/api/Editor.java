@@ -21,4 +21,12 @@ public class Editor {
     public void setText(String text) {
         this.text = text;
     }
+
+    public static Editor factory(String content, String text) {
+        Editor editor = new Editor();
+        editor.setHtml(content);
+        editor.setText(text);
+        return editor;
+    }
+
 }

@@ -48,19 +48,8 @@ public class UserCommentController implements FormController<CommentResource> {
         User user = identity.getUser();
 
         resource.setPost(post);
-        UserResource owner = new UserResource();
-        owner.setId(user.getId());
-        owner.setFirstName(user.getFirstName());
-        owner.setLastName(user.getLastName());
-        owner.setBirthDate(user.getBirthDate());
-        Blob image = new Blob();
-        UserImage picture = user.getPicture();
-        image.setName(picture.getName());
-        image.setData(FileDiskUtils.buildBase64(picture.getType(), picture.getSubType(), picture.getData()));
-        image.setLastModified(picture.getLastModified());
-        owner.setImage(image);
 
-        resource.setOwner(owner);
+        resource.setOwner(UserResource.factory(user));
 
         identity.createLink("home/timeline/post/comments/comment", "POST", "save", resource::addAction);
         identity.createLink("control/users", "POST", "likes", resource::addSource);
@@ -75,21 +64,7 @@ public class UserCommentController implements FormController<CommentResource> {
 
         Comment comment = entityManager.find(Comment.class, id);
 
-        CommentResource resource = new CommentResource();
-        resource.setText(comment.getText());
-        resource.setId(comment.getId());
-        resource.setPost(comment.getPost().getId());
-        UserResource owner = new UserResource();
-        owner.setId(comment.getOwner().getId());
-        owner.setFirstName(comment.getOwner().getFirstName());
-        owner.setLastName(comment.getOwner().getLastName());
-        owner.setBirthDate(comment.getOwner().getBirthDate());
-        Blob image = new Blob();
-        image.setName(comment.getOwner().getPicture().getName());
-        image.setData(FileDiskUtils.buildBase64(comment.getOwner().getPicture().getType(), comment.getOwner().getPicture().getSubType(), comment.getOwner().getPicture().getData()));
-        image.setLastModified(comment.getOwner().getPicture().getLastModified());
-        owner.setImage(image);
-        resource.setOwner(owner);
+        CommentResource resource = CommentResource.factory(comment);
 
         if (identity.getUser().equals(comment.getOwner())) {
             identity.createLink("home/timeline/post/comments/comment?id=" + comment.getId(), "PUT", "update", resource::addAction);
@@ -106,30 +81,12 @@ public class UserCommentController implements FormController<CommentResource> {
     @RolesAllowed({"Administrator", "User"})
     public CommentResource save(CommentResource resource) {
 
-        Post post = entityManager.find(Post.class, resource.getPost());
-        User owner = identity.getUser();
         Comment comment = new Comment();
 
-        comment.setText(resource.getText());
-        comment.setPost(post);
-        comment.setOwner(owner);
-
-        UserResource userResource = new UserResource();
-        userResource.setId(owner.getId());
-        userResource.setFirstName(owner.getFirstName());
-        userResource.setLastName(owner.getLastName());
-        userResource.setBirthDate(owner.getBirthDate());
-
-        resource.setOwner(userResource);
-
-        comment.getLikes().clear();
-
-        for (UserResource like : resource.getLikes()) {
-            User user = identity.findUser(like.getId());
-            comment.getLikes().add(user);
-        }
+        CommentResource.updater(resource, comment, identity, entityManager);
 
         entityManager.persist(comment);
+
         resource.setId(comment.getId());
 
         if (identity.getUser().equals(comment.getOwner())) {
@@ -147,28 +104,9 @@ public class UserCommentController implements FormController<CommentResource> {
     @Transactional
     @RolesAllowed({"Administrator", "User"})
     public CommentResource update(UUID id, CommentResource resource) {
-        Post post = entityManager.find(Post.class, resource.getPost());
-        User owner = identity.getUser();
         Comment comment = entityManager.find(Comment.class, id);
 
-        comment.setText(resource.getText());
-        comment.setPost(post);
-        comment.setOwner(owner);
-
-        UserResource userResource = new UserResource();
-        userResource.setId(owner.getId());
-        userResource.setFirstName(owner.getFirstName());
-        userResource.setLastName(owner.getLastName());
-        userResource.setBirthDate(owner.getBirthDate());
-
-        resource.setOwner(userResource);
-
-        comment.getLikes().clear();
-
-        for (UserResource like : resource.getLikes()) {
-            User user = identity.findUser(like.getId());
-            comment.getLikes().add(user);
-        }
+        CommentResource.updater(resource, comment, identity, entityManager);
 
         if (identity.getUser().equals(comment.getOwner())) {
             identity.createLink("home/timeline/post/comments/comment?id=" + comment.getId(), "GET", "read", resource::addAction);

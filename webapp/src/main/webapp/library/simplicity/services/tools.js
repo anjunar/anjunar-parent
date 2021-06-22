@@ -1,3 +1,5 @@
+import {getLanguage} from "./i18nResolver.js";
+
 let parser = new DOMParser();
 
 export function setCookie(cname, cvalue, exdays) {
@@ -33,7 +35,7 @@ export function hateoas(links, name) {
 export function dateFormat(value) {
     let date = new Date(value);
     let options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'};
-    return new Intl.DateTimeFormat(getCookie("language"), options).format(date);
+    return new Intl.DateTimeFormat(getLanguage(), options).format(date);
 }
 
 export function distinct(items, extractor) {

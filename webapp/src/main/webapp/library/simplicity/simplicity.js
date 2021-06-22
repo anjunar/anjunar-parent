@@ -1,32 +1,6 @@
 import {register} from "./services/router.js"
 import {lifeCycle} from "./processors/lifecycle-processor.js";
 import registry from "./processors/processor-registry.js";
-import {getCookie} from "./services/tools.js";
-
-export function div(attributes) {
-    return function () {
-        return Object.assign({
-            element : "div",
-            children : Array.from(arguments)
-        }, attributes)
-    }
-}
-
-export function h3(attributes) {
-    return function () {
-        return Object.assign({
-            element : "h3",
-            children : Array.from(arguments)
-        }, attributes)
-    }
-}
-
-export function hr() {
-    return {
-        element : "hr"
-    }
-}
-
 
 Node.prototype.queryUpwards = function (query) {
     if (this.localName && this.localName === query) {
@@ -80,12 +54,6 @@ HTMLElement.prototype.insertBefore = (function (_super) {
         }
     }
 })(HTMLElement.prototype.insertBefore);
-
-export function i18nFactory(language) {
-    return function (value) {
-        return language[value][getCookie("language") || "en"];
-    }
-}
 
 function elementFactory(property, array, tree) {
 

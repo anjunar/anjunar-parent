@@ -1,5 +1,6 @@
 package de.bitvale.common.security;
 
+import de.bitvale.common.i18n.i18nResolver;
 import de.bitvale.common.rest.api.Link;
 import de.bitvale.common.security.enterprise.Authenticator;
 import de.bitvale.common.security.enterprise.CivilCredential;
@@ -12,8 +13,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.credential.Password;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -31,17 +30,18 @@ public class Identity implements Serializable {
 
     private final Authenticator authenticator;
 
-    private Locale language = Locale.ENGLISH;
+    private final i18nResolver resolver;
 
     @Inject
-    public Identity(IdentityService service, JaxRSExtension extension, Authenticator authenticator) {
+    public Identity(IdentityService service, JaxRSExtension extension, Authenticator authenticator, i18nResolver resolver) {
         this.service = service;
         this.extension = extension;
         this.authenticator = authenticator;
+        this.resolver = resolver;
     }
 
     public Identity() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
 
     public boolean authenticate(User user) {
@@ -131,20 +131,11 @@ public class Identity implements Serializable {
     }
 
     public Locale getLanguage() {
-        if (isLoggedIn()) {
-            if (getUser().getLanguage() == null) {
-                return language;
-            }
-            return getUser().getLanguage();
-        }
-        return language;
+        return resolver.getLocale();
     }
 
     public void setLanguage(Locale language) {
-        if (isLoggedIn()) {
-            getUser().setLanguage(language);
-        }
-        this.language = language;
+        resolver.setLocale(language);
     }
 
     public User findUserByToken(String token) {

@@ -50,10 +50,7 @@ public class RoleController implements FormController<RoleResource> {
 
         Role role = entityManager.find(Role.class, id);
 
-        RoleResource resource = new RoleResource();
-        resource.setId(role.getId());
-        resource.setName(role.getName());
-        resource.setDescription(role.getDescription());
+        RoleResource resource = RoleResource.factory(role);
 
         identity.createLink("control/permissions?role=" + role.getId(), "GET", "permissions", resource::addLink);
 
@@ -67,8 +64,7 @@ public class RoleController implements FormController<RoleResource> {
 
         Role role = new Role();
 
-        role.setName(form.getName());
-        role.setDescription(form.getDescription());
+        RoleResource.updater(form, role);
 
         entityManager.persist(role);
 
@@ -84,12 +80,9 @@ public class RoleController implements FormController<RoleResource> {
 
         Role role = entityManager.find(Role.class, id);
 
-        RoleResource resource = new RoleResource();
-        resource.setId(role.getId());
-        resource.setName(role.getName());
-        resource.setDescription(role.getDescription());
+        RoleResource.updater(form, role);
 
-        return resource;
+        return form;
     }
 
     @Override

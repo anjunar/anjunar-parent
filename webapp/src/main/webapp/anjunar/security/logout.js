@@ -1,6 +1,7 @@
-import {builder, customViews, i18nFactory} from "../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import {loadRoot} from "../service.js";
+import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
 export default class Logout extends HTMLElement {
 
@@ -44,11 +45,11 @@ customViews.define({
 
 const i18n = i18nFactory({
     "Do you really logout?" : {
-        en : "Do you really logout?",
-        de : "Möchten sie sich wirklich Abmelden?"
+        "en-DE" : "Do you really logout?",
+        "de-DE" : "Möchten sie sich wirklich Abmelden?"
     },
     "Send" : {
-        en : "Send",
-        de : "Senden"
+        "en-DE" : "Send",
+        "de-DE" : "Senden"
     }
 });

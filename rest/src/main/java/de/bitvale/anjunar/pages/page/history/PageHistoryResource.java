@@ -1,8 +1,10 @@
 package de.bitvale.anjunar.pages.page.history;
 
+import de.bitvale.anjunar.pages.Page;
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.rest.api.meta.Input;
 import de.bitvale.common.rest.api.AbstractRestEntity;
+import de.bitvale.common.security.User;
 
 import java.time.Instant;
 
@@ -72,5 +74,18 @@ public class PageHistoryResource extends AbstractRestEntity<PageHistoryResource>
 
     public void setModified(Instant modified) {
         this.modified = modified;
+    }
+
+    public static PageHistoryResource factory(Page page, Number revision) {
+        PageHistoryResource resource = new PageHistoryResource();
+        resource.setId(page.getId());
+        resource.setTitle(page.getTitle());
+        resource.setContent(page.getContent());
+        resource.setText(page.getText());
+        resource.setRevision(revision);
+        resource.setModified(page.getModified());
+
+        resource.setModifier(UserResource.factory(page.getModifier()));
+        return resource;
     }
 }

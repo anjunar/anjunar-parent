@@ -59,13 +59,8 @@ public class RolesControl implements ListMetaController<RoleResource, RolesSearc
 
         List<RoleResource> resources = new ArrayList<>();
         for (Role role : roles) {
-            RoleResource resource = new RoleResource();
-            resource.setId(role.getId());
-            resource.setName(role.getName());
-            resources.add(resource);
-
+            RoleResource resource = RoleResource.factory(role);
             identity.createLink("control/roles/role?id=" + role.getId(), "GET", "read", resource::addAction);
-
         }
 
         return new Container<>(resources, count);

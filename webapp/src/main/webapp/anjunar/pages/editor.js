@@ -1,4 +1,4 @@
-import {builder, customViews, i18nFactory} from "../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import MatEditor from "../../library/simplicity/components/form/mat-editor.js";
 import LinkDialog from "./editor/link-dialog.js";
@@ -7,7 +7,7 @@ import HateoasButton from "../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
 import LanguagesDialog from "./page/languages-dialog.js";
 import DomInput from "../../library/simplicity/directives/dom-input.js";
-import {getCookie} from "../../library/simplicity/services/tools.js";
+import {getLanguage, i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
 export default class Editor extends HTMLElement {
 
@@ -67,7 +67,7 @@ export default class Editor extends HTMLElement {
                     name : "language",
                     value : {
                         input : () => {
-                            return getCookie("language")
+                            return getLanguage();
                         }
                     }
                 },
@@ -141,19 +141,19 @@ customViews.define({
 
 const i18n = i18nFactory({
     Save : {
-        en : "Save",
-        de : "Speichern"
+        "en-DE" : "Save",
+        "de-DE" : "Speichern"
     },
     Update : {
-        en : "Update",
-        de : "Aktualisieren"
+        "en-DE" : "Update",
+        "de-DE" : "Aktualisieren"
     },
     Delete : {
-        en : "Delete",
-        de : "Löschen"
+        "en-DE" : "Delete",
+        "de-DE" : "Löschen"
     },
     "Languages" : {
-        en : "Languages",
-        de : "Sprachen"
+        "en-DE" : "Languages",
+        "de-DE" : "Sprachen"
     }
 });

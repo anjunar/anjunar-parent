@@ -1,22 +1,20 @@
 package de.bitvale.anjunar;
 
-import com.google.common.collect.Sets;
-import de.bitvale.common.security.Identity;
-import de.bitvale.common.rest.api.Link;
 import de.bitvale.anjunar.shared.users.user.UserResource;
-import javax.servlet.ServletContext;
+import de.bitvale.common.rest.api.Link;
+import de.bitvale.common.security.Identity;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import java.util.ArrayList;
-import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 import java.util.Locale;
-import java.util.Set;
 
-@Path("/root")
+@Path("/")
 @ApplicationScoped
 public class ApplicationController {
 
@@ -32,13 +30,21 @@ public class ApplicationController {
     }
 
     @GET
-    @Produces("application/json")
     @Transactional
-    public ApplicationResource service(@QueryParam("lang") Locale locale) {
+    @Path("language")
+    public Response language(@QueryParam("lang") String locale) {
 
         if (locale != null) {
-            identity.setLanguage(locale);
+            identity.setLanguage(Locale.forLanguageTag(locale));
         }
+
+        return Response.ok().build();
+    }
+
+    @GET
+    @Produces("application/json")
+    @Transactional
+    public ApplicationResource service() {
 
         if (identity.isLoggedIn()) {
             ApplicationResource resource = new ApplicationResource();
@@ -48,7 +54,7 @@ public class ApplicationController {
             userResource.setFirstName(identity.getUser().getFirstName());
             userResource.setLastName(identity.getUser().getLastName());
             userResource.setBirthDate(identity.getUser().getBirthDate());
-            userResource.setLanguage(identity.getUser().getLanguage());
+            userResource.setLanguage(identity.getLanguage());
             resource.setUser(userResource);
 
             Link logout = new Link("service/security/logout", "POST", "logout");

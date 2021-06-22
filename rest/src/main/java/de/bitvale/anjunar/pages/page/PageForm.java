@@ -1,9 +1,12 @@
 package de.bitvale.anjunar.pages.page;
 
+import de.bitvale.anjunar.pages.Page;
 import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.meta.Input;
+import de.bitvale.common.security.Identity;
 
+import javax.persistence.EntityManager;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -14,7 +17,7 @@ public class PageForm extends AbstractRestEntity<PageForm> {
     private String title;
 
     @Input(placeholder = "de.bitvale.anjunar.pages.page.PageForm.content.message", type = "editor")
-    private Editor content;
+    private Editor content = new Editor();
 
     @Input(placeholder = "de.bitvale.anjunar.pages.page.PageForm.language.message", type = "lazyselect")
     private Locale language;
@@ -52,5 +55,31 @@ public class PageForm extends AbstractRestEntity<PageForm> {
 
     public void setPageLinks(Set<PageSelect> pageLinks) {
         this.pageLinks = pageLinks;
+    }
+
+    public static PageForm factory(Page page) {
+        PageForm pageForm = new PageForm();
+
+        pageForm.setId(page.getId());
+        pageForm.setTitle(page.getTitle());
+        pageForm.setContent(Editor.factory(page.getContent(), page.getText()));
+        pageForm.setLanguage(page.getLanguage());
+        for (Page link : page.getLinks()) {
+            pageForm.getPageLinks().add(PageSelect.factory(link));
+        }
+        return pageForm;
+    }
+
+    public static Page updater(PageForm pageForm, Page page, Identity identity, EntityManager entityManager) {
+        page.setTitle(pageForm.getTitle());
+        page.setContent(pageForm.getContent().getHtml());
+        page.setText(pageForm.getContent().getText());
+        page.setModifier(identity.getUser());
+        page.setLanguage(pageForm.getLanguage());
+        page.getLinks().clear();
+        for (PageSelect pageLink : pageForm.getPageLinks()) {
+            page.getLinks().add(entityManager.find(Page.class, pageLink.getId()));
+        }
+        return page;
     }
 }

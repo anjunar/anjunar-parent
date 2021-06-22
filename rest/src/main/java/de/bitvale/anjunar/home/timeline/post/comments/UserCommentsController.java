@@ -77,40 +77,7 @@ public class UserCommentsController implements ListController<CommentResource, U
         List<CommentResource> resources = new ArrayList<>();
 
         for (Comment comment : comments) {
-            CommentResource resource = new CommentResource();
-
-            resource.setId(comment.getId());
-            resource.setText(comment.getText());
-
-            resource.setPost(comment.getPost().getId());
-
-            UserResource userResource = new UserResource();
-            User owner = comment.getOwner();
-            userResource.setId(owner.getId());
-            userResource.setFirstName(owner.getFirstName());
-            userResource.setLastName(owner.getLastName());
-            userResource.setBirthDate(owner.getBirthDate());
-
-            Blob picture = new Blob();
-            if (owner.getPicture() != null) {
-                picture.setData(FileDiskUtils.buildBase64(owner.getPicture().getType(), owner.getPicture().getSubType(), owner.getPicture().getData()));
-                picture.setName(owner.getPicture().getName());
-                picture.setLastModified(owner.getPicture().getLastModified());
-            }
-            userResource.setImage(picture);
-
-            resource.setOwner(userResource);
-
-            for (User like : comment.getLikes()) {
-                UserResource likeResource = new UserResource();
-                likeResource.setId(like.getId());
-                likeResource.setFirstName(like.getFirstName());
-                likeResource.setLastName(like.getLastName());
-                likeResource.setBirthDate(like.getBirthDate());
-                resource.getLikes().add(likeResource);
-            }
-
-            resources.add(resource);
+            CommentResource resource = CommentResource.factory(comment);
 
             if (identity.getUser().equals(comment.getOwner())) {
                 identity.createLink("home/timeline/post/comments/comment?id=" + comment.getId(), "GET", "read", resource::addAction);

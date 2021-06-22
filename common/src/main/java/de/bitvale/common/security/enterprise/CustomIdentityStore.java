@@ -5,6 +5,7 @@ import de.bitvale.common.security.Role;
 import de.bitvale.common.security.User;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
@@ -18,13 +19,16 @@ public class CustomIdentityStore implements IdentityStore {
 
     private final Identity identity;
 
+    private final Event<LoggedInEvent> event;
+
     @Inject
-    public CustomIdentityStore(Identity identity) {
+    public CustomIdentityStore(Identity identity, Event<LoggedInEvent> event) {
         this.identity = identity;
+        this.event = event;
     }
 
     public CustomIdentityStore() {
-        this(null);
+        this(null, null);
     }
 
     @Override
@@ -36,6 +40,8 @@ public class CustomIdentityStore implements IdentityStore {
 
         if (user != null) {
             if (user.getPassword().equals(civilCredential.getPasswordAsString())) {
+                event.fire(new LoggedInEvent(user));
+
                 Set<Role> relationships = user.getRoles();
                 Set<String> roles = new HashSet<>();
                 for (Role role : relationships) {

@@ -1,9 +1,10 @@
-import {builder, customViews, i18nFactory} from "../../library/simplicity/simplicity.js";
+import {builder, customViews} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import MatInputHolder from "../../library/simplicity/hateoas/hateoas-input.js";
 import HateoasButton from "../../library/simplicity/hateoas/hateoas-button.js";
 import {loadRoot} from "../service.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
+import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
 export default class User extends HTMLElement {
 
@@ -290,35 +291,35 @@ customViews.define({
 
 const i18n = i18nFactory({
     Save : {
-        en : "Save",
-        de : "Speichern"
+        "en-DE" : "Save",
+        "de-DE" : "Speichern"
     },
     Update : {
-        en : "Update",
-        de : "Aktualisieren"
+        "en-DE" : "Update",
+        "de-DE" : "Aktualisieren"
     },
     Reset : {
-        en : "Reset",
-        de : "Zurücksetzen"
+        "en-DE" : "Reset",
+        "de-DE" : "Zurücksetzen"
     },
     Delete : {
-        en : "Delete",
-        de : "Löschen"
+        "en-DE" : "Delete",
+        "de-DE" : "Löschen"
     },
     "Run As" : {
-        en : "Run As",
-        de : "Ausführen"
+        "en-DE" : "Run As",
+        "de-DE" : "Ausführen"
     },
     User : {
-        en : "User",
-        de : "Benutzer"
+        "en-DE" : "User",
+        "de-DE" : "Benutzer"
     },
     Image : {
-        en : "Image",
-        de : "Bild"
+        "en-DE" : "Image",
+        "de-DE" : "Bild"
     },
     Roles : {
-        en : "Roles",
-        de : "Rollen"
+        "en-DE" : "Roles",
+        "de-DE" : "Rollen"
     }
 })

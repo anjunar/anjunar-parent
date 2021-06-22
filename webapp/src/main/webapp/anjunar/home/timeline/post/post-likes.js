@@ -1,5 +1,6 @@
-import {builder, customComponents, i18nFactory} from "../../../../library/simplicity/simplicity.js";
+import {builder, customComponents} from "../../../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../../../library/simplicity/services/client.js";
+import {i18nFactory} from "../../../../library/simplicity/services/i18nResolver.js";
 
 export default class PostLikes extends HTMLElement {
 
@@ -72,7 +73,7 @@ customComponents.define("timeline-post-likes", PostLikes)
 
 const i18n = i18nFactory({
     "Likes" : {
-        en : "Likes",
-        de : "Mag ich"
+        "en-DE" : "Likes",
+        "de-DE" : "Mag ich"
     }
 });

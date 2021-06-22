@@ -1,5 +1,6 @@
-import {builder, customComponents, i18nFactory} from "../../../../../library/simplicity/simplicity.js";
+import {builder, customComponents} from "../../../../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../../../../library/simplicity/services/client.js";
+import {i18nFactory} from "../../../../../library/simplicity/services/i18nResolver.js";
 
 export default class CommentLikes extends HTMLElement {
 
@@ -78,11 +79,11 @@ customComponents.define("post-comment-likes", CommentLikes)
 
 const i18n = i18nFactory({
     "Likes" : {
-        en : "Likes",
-        de : "Mag ich"
+        "en-DE" : "Likes",
+        "de-DE" : "Mag ich"
     },
     "I like it" : {
-        en : "I like it",
-        de : "Das mag ich"
+        "en-DE" : "I like it",
+        "de-DE" : "Das mag ich"
     }
 });

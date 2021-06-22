@@ -56,10 +56,7 @@ public class PagesLikeController implements ListController<PagesResource, PagesL
 
         List<PagesResource> result = new ArrayList<>();
         for (Page page : pages) {
-            PagesResource resource = new PagesResource();
-
-            resource.setId(page.getId());
-            resource.setTitle(page.getTitle());
+            PagesResource resource = PagesResource.factory(page);
 
             result.add(resource);
 
