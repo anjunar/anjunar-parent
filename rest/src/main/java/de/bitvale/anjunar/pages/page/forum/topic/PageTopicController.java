@@ -15,6 +15,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import java.time.Instant;
 import java.util.UUID;
@@ -74,7 +75,7 @@ public class PageTopicController implements FormController<PageTopicResource> {
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public PageTopicResource save(PageTopicResource form) {
+    public PageTopicResource save(@Valid PageTopicResource form) {
 
         UserResource owner = form.getOwner();
         if (! owner.getId().equals(identity.getUser().getId())) {
@@ -100,7 +101,7 @@ public class PageTopicController implements FormController<PageTopicResource> {
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public PageTopicResource update(UUID id, PageTopicResource form) {
+    public PageTopicResource update(UUID id, @Valid PageTopicResource form) {
 
         Topic topic = entityManager.find(Topic.class, id);
 

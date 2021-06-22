@@ -17,6 +17,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -79,7 +80,7 @@ public class UserPostController implements FormController<PostResource> {
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public PostResource save(PostResource resource) {
+    public PostResource save(@Valid PostResource resource) {
 
         UserPost post = new UserPost();
 
@@ -102,7 +103,7 @@ public class UserPostController implements FormController<PostResource> {
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public PostResource update(UUID id, PostResource resource) {
+    public PostResource update(UUID id, @Valid PostResource resource) {
 
         UserPost post = entityManager.find(UserPost.class, id);
 

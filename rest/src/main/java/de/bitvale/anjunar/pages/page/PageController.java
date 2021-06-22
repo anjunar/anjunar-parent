@@ -12,6 +12,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -81,7 +82,7 @@ public class PageController {
     @Produces("application/json")
     @POST
     @RolesAllowed({"Administrator", "User"})
-    public PageForm save(PageForm resource) throws UnsupportedEncodingException {
+    public PageForm save(@Valid PageForm resource) throws UnsupportedEncodingException {
 
         Page page = new Page();
 
@@ -103,7 +104,7 @@ public class PageController {
     @Produces("application/json")
     @PUT
     @RolesAllowed({"Administrator", "User"})
-    public PageForm update(@QueryParam("id") UUID id, PageForm resource) {
+    public PageForm update(@QueryParam("id") UUID id, @Valid PageForm resource) {
 
         Page page = entityManager.find(Page.class, id);
 

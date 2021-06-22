@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -60,7 +61,7 @@ public class RoleController implements FormController<RoleResource> {
     @Override
     @Transactional
     @RolesAllowed("Administrator")
-    public RoleResource save(RoleResource form) {
+    public RoleResource save(@Valid RoleResource form) {
 
         Role role = new Role();
 
@@ -76,7 +77,7 @@ public class RoleController implements FormController<RoleResource> {
     @Override
     @Transactional
     @RolesAllowed("Administrator")
-    public RoleResource update(UUID id, RoleResource form) {
+    public RoleResource update(UUID id, @Valid RoleResource form) {
 
         Role role = entityManager.find(Role.class, id);
 

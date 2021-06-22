@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 
 @Path("security/register")
@@ -42,7 +43,7 @@ public class RegisterController {
     @POST
     @Consumes("application/json")
     @Transactional
-    public void register(RegisterResource resource) {
+    public void register(@Valid RegisterResource resource) {
 
         User user = new User();
 
@@ -59,6 +60,8 @@ public class RegisterController {
                 .getSingleResult();
 
         user.getRoles().add(userRole);
+
+        identity.authenticate(user);
 
     }
 

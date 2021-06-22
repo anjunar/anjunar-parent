@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -134,7 +135,7 @@ public class UserController implements FormController<UserResource> {
     @Override
     @Transactional
     @RolesAllowed("Administrator")
-    public UserResource save(UserResource resource) {
+    public UserResource save(@Valid UserResource resource) {
 
         User user = new User();
 
@@ -153,7 +154,7 @@ public class UserController implements FormController<UserResource> {
     @Override
     @Transactional
     @RolesAllowed("Administrator")
-    public UserResource update(UUID id, UserResource resource) {
+    public UserResource update(UUID id, @Valid UserResource resource) {
         User user = entityManager.find(User.class, id);
 
         UserResource.updater(resource, user, entityManager);

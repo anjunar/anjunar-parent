@@ -15,6 +15,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -79,7 +80,7 @@ public class UserCommentController implements FormController<CommentResource> {
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public CommentResource save(CommentResource resource) {
+    public CommentResource save(@Valid CommentResource resource) {
 
         Comment comment = new Comment();
 
@@ -103,7 +104,7 @@ public class UserCommentController implements FormController<CommentResource> {
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User"})
-    public CommentResource update(UUID id, CommentResource resource) {
+    public CommentResource update(UUID id, @Valid CommentResource resource) {
         Comment comment = entityManager.find(Comment.class, id);
 
         CommentResource.updater(resource, comment, identity, entityManager);

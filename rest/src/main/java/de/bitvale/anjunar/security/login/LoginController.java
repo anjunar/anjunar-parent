@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.security.enterprise.SecurityContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -46,7 +47,7 @@ public class LoginController {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("login")
-    public Response login(LoginResource resource) {
+    public Response login(@Valid LoginResource resource) {
 
         User user = identity.findUser(resource.getFirstName(), resource.getLastName(), resource.getBirthdate());
 
