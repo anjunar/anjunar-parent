@@ -1,4 +1,4 @@
-import {builder, customViews} from "../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import {loadRoot} from "../service.js";
 import MatInputHolder from "../../library/simplicity/hateoas/hateoas-input.js";
@@ -6,7 +6,7 @@ import HateoasButton from "../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
-export default class Login extends HTMLElement {
+export default class Login extends HTMLWindow {
 
     #model;
 
@@ -22,13 +22,6 @@ export default class Login extends HTMLElement {
         builder(this, {
             element: HateoasForm,
             model : this.#model,
-            style: {
-                display: "block",
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)"
-            },
             children: [
                 {
                     element: MatInputHolder,
@@ -52,7 +45,6 @@ export default class Login extends HTMLElement {
                     text : i18n("Send"),
                     onAfterSubmit : () => {
                         loadRoot(true);
-                        document.location.hash = "#/anjunar/welcome";
                     }
                 }
             ]
@@ -64,6 +56,8 @@ export default class Login extends HTMLElement {
 customViews.define({
     name: "security-login",
     class: Login,
+    header : "Login",
+    resizable : false,
     guard(activeRoute) {
         return {
             model: jsonClient.get("service/security/login")

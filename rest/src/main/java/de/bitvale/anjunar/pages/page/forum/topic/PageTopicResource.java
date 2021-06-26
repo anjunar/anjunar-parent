@@ -8,6 +8,7 @@ import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.meta.Input;
 import de.bitvale.common.security.Identity;
+import de.bitvale.common.validators.Dom;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -22,6 +23,7 @@ public class PageTopicResource extends AbstractRestEntity<PageTopicResource> {
     private String topic;
 
     @Input(placeholder = "Text", type = "editor")
+    @Dom
     private Editor editor = new Editor();
 
     @Input(placeholder = "Owner", type = "lazyselect")

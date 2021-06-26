@@ -1,20 +1,14 @@
-import {builder, customViews} from "../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import {loadRoot} from "../service.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
+import {windowManager} from "../../library/simplicity/services/window-manager.js";
 
-export default class Logout extends HTMLElement {
+export default class Logout extends HTMLWindow {
 
     render() {
         builder(this, {
             element : "div",
-            style: {
-                display: "block",
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)"
-            },
             children : [
                 {
                     element : "p",
@@ -28,7 +22,7 @@ export default class Logout extends HTMLElement {
                         jsonClient.post("service/security/logout")
                             .then((response) => {
                                 loadRoot(true);
-                                document.location.hash = "#/anjunar/welcome";
+                                windowManager.closeAll();
                             })
                     }
                 }
@@ -40,7 +34,9 @@ export default class Logout extends HTMLElement {
 
 customViews.define({
     name : "security-logout",
-    class : Logout
+    class : Logout,
+    header : "Logout",
+    resizable : false
 })
 
 const i18n = i18nFactory({

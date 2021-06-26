@@ -5,6 +5,7 @@ import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.meta.Input;
 import de.bitvale.common.security.Identity;
+import de.bitvale.common.validators.Dom;
 
 import javax.persistence.EntityManager;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ public class PageForm extends AbstractRestEntity<PageForm> {
     private String title;
 
     @Input(placeholder = "de.bitvale.anjunar.pages.page.PageForm.content.message", type = "editor")
+    @Dom
     private Editor content = new Editor();
 
     @Input(placeholder = "de.bitvale.anjunar.pages.page.PageForm.language.message", type = "lazyselect")

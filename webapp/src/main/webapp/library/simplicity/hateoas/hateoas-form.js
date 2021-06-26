@@ -36,6 +36,9 @@ export default class HateoasForm extends HTMLElement {
 
         builder(this, {
             element : DomForm,
+            style : {
+                height : "100%"
+            },
             value : {
                 input : () => {
                     return this.#model

@@ -5,6 +5,7 @@ import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.meta.Input;
+import de.bitvale.common.validators.Dom;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 public class TopicReplyResource extends AbstractRestEntity<TopicReplyResource> {
 
     @Input(placeholder = "Text", type = "editor")
+    @Dom
     private Editor editor;
 
     @Input(placeholder = "Topic", type = "text")

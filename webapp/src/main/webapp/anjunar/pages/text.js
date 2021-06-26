@@ -1,7 +1,7 @@
-import {builder, customViews} from "../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../library/simplicity/simplicity.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
-export default class Text extends HTMLElement {
+export default class Text extends HTMLWindow {
 
     render() {
 
@@ -51,7 +51,8 @@ export default class Text extends HTMLElement {
 
 customViews.define({
     name: "page-text",
-    class: Text
+    class: Text,
+    header : "Text"
 })
 
 const i18n = i18nFactory({

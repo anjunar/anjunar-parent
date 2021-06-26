@@ -34,9 +34,7 @@ public class ApplicationController {
     @Path("language")
     public Response language(@QueryParam("lang") String locale) {
 
-        if (locale != null) {
-            identity.setLanguage(Locale.forLanguageTag(locale));
-        }
+        identity.setLanguage(Locale.forLanguageTag(locale));
 
         return Response.ok().build();
     }
@@ -44,46 +42,33 @@ public class ApplicationController {
     @GET
     @Produces("application/json")
     @Transactional
-    public ApplicationResource service() {
+    public UserResource service() {
 
         if (identity.isLoggedIn()) {
-            ApplicationResource resource = new ApplicationResource();
 
-            UserResource userResource = new UserResource();
-            userResource.setId(identity.getUser().getId());
-            userResource.setFirstName(identity.getUser().getFirstName());
-            userResource.setLastName(identity.getUser().getLastName());
-            userResource.setBirthDate(identity.getUser().getBirthDate());
-            userResource.setLanguage(identity.getLanguage());
-            resource.setUser(userResource);
+            UserResource userResource = UserResource.factory(identity.getUser());
 
-            Link logout = new Link("service/security/logout", "POST", "logout");
-            resource.addLink(logout);
-
-            identity.createLink("home/timeline", "GET", "timeline", resource::addLink);
-            identity.createLink("control/users", "GET", "users", resource::addLink);
-            identity.createLink("pages/search", "GET", "search", resource::addLink);
-            identity.createLink("pages/page/create", "GET", "editor", resource::addLink);
-            identity.createLink("control/roles", "GET", "admin", resource::addLink);
+            identity.createLink("security/logout", "POST", "logout", userResource::addLink);
+            identity.createLink("home/timeline", "GET", "timeline", userResource::addLink);
+            identity.createLink("control/users", "GET", "users", userResource::addLink);
+            identity.createLink("pages/search", "GET", "search", userResource::addLink);
+            identity.createLink("pages/page/create", "GET", "editor", userResource::addLink);
+            identity.createLink("control/roles", "GET", "admin", userResource::addLink);
             if (identity.hasRole("Administrator")) {
-                resource.addLink(new Link("navigator/navigator", "GET", "navigator"));
+                userResource.addLink(new Link("navigator/navigator", "GET", "navigator"));
             }
 
-            return resource;
+            return userResource;
         } else {
-            ApplicationResource resource = new ApplicationResource();
-
             UserResource userResource = new UserResource();
             userResource.setFirstName("Guest");
             userResource.setLastName("Guest");
-            resource.setUser(userResource);
+            userResource.setLanguage(Locale.forLanguageTag("en-DE"));
 
-            Link login = new Link("service/security/login", "POST", "login");
-            resource.addLink(login);
-            Link register = new Link("service/security/register", "POST", "register");
-            resource.addLink(register);
+            identity.createLink("security/login", "POST", "login", userResource::addLink);
+            identity.createLink("security/register", "POST", "register", userResource::addLink);
 
-            return resource;
+            return userResource;
         }
 
     }

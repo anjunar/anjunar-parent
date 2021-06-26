@@ -1,4 +1,4 @@
-import {builder, customViews} from "../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import MatEditor from "../../library/simplicity/components/form/mat-editor.js";
 import LinkDialog from "./editor/link-dialog.js";
@@ -7,9 +7,9 @@ import HateoasButton from "../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
 import LanguagesDialog from "./page/languages-dialog.js";
 import DomInput from "../../library/simplicity/directives/dom-input.js";
-import {getLanguage, i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
+import {resolver, i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
-export default class Editor extends HTMLElement {
+export default class Editor extends HTMLWindow {
 
     #html
 
@@ -37,11 +37,10 @@ export default class Editor extends HTMLElement {
     render() {
         builder(this, {
             element : HateoasForm,
-            model : this.#html,
             style : {
-                margin : "auto",
-                width : "800px"
+                height: "calc(100% - 60px)"
             },
+            model : this.#html,
             children : [
                 {
                     element: MatInputHolder,
@@ -50,7 +49,7 @@ export default class Editor extends HTMLElement {
                 {
                     element : MatEditor,
                     style : {
-                        height : "calc(100vh - 160px)"
+                        height : "100%"
                     },
                     name : "content",
                     linkDialog : {
@@ -67,7 +66,7 @@ export default class Editor extends HTMLElement {
                     name : "language",
                     value : {
                         input : () => {
-                            return getLanguage();
+                            return resolver.language;
                         }
                     }
                 },
@@ -121,6 +120,10 @@ export default class Editor extends HTMLElement {
 
 customViews.define({
     name : "pages-editor",
+    header : "Editor",
+    resizable : true,
+    width : 800,
+    height: 400,
     class : Editor,
     guard(activeRoute) {
         if (activeRoute.queryParams?.id) {

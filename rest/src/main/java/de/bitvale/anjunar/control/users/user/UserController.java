@@ -5,6 +5,7 @@ import de.bitvale.common.filedisk.Base64Resource;
 import de.bitvale.common.filedisk.FileDiskUtils;
 import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.FormController;
+import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.Role;
 import de.bitvale.common.security.User;
@@ -125,8 +126,10 @@ public class UserController implements FormController<UserResource> {
         identity.createLink("control/users/user?id=" + user.getId(), "DELETE", "delete", resource::addAction);
         identity.createLink("security/runas?id=" + user.getId(), "POST", "runas", resource::addAction);
 
+        Property roles = resource.getMeta().find("roles");
+
         identity.createLink("control/users/user/validate", "POST", "validate", resource::addSource);
-        identity.createLink("control/roles", "POST", "roles", resource::addSource);
+        identity.createLink("control/roles", "POST", "list", roles::addLink);
 
 
         return resource;

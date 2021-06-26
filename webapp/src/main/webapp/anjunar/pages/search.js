@@ -3,7 +3,7 @@ import MatInputContainer from "../../library/simplicity/components/form/containe
 import DomInput from "../../library/simplicity/directives/dom-input.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
-import {getLanguage, i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
+import {resolver, i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
 export default class Search extends HTMLElement {
 
@@ -63,7 +63,7 @@ export default class Search extends HTMLElement {
                             type : "button",
                             text : i18n("Like"),
                             onClick : () => {
-                                jsonClient.post(`service/pages/like?title=${this.#search.title}&index=0&limit=20&lang=${getLanguage()}`)
+                                jsonClient.post(`service/pages/like?title=${this.#search.title}&index=0&limit=20&lang=${resolver.language}`)
                                     .then((response) => {
                                         this.#results = response.rows;
                                     })
@@ -75,7 +75,7 @@ export default class Search extends HTMLElement {
                             type : "button",
                             text : i18n("Word"),
                             onClick : () => {
-                                jsonClient.post(`service/pages/word?title=${this.#search.title}&index=0&limit=20&lang=${getLanguage()}`)
+                                jsonClient.post(`service/pages/word?title=${this.#search.title}&index=0&limit=20&lang=${resolver.language}`)
                                     .then((response) => {
                                         this.#results = response.rows;
                                     })

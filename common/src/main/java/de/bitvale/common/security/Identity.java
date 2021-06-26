@@ -15,6 +15,7 @@ import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.credential.Password;
 import javax.transaction.Transactional;
 import java.io.Serializable;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Set;
@@ -61,7 +62,11 @@ public class Identity implements Serializable {
     }
 
     public User getUser() {
-        return findUser(UUID.fromString(authenticator.getUserPrincipal().getName()));
+        Principal principal = authenticator.getUserPrincipal();
+        if (principal == null) {
+            return null;
+        }
+        return findUser(UUID.fromString(principal.getName()));
     }
 
     public User findUser(UUID id) {
@@ -119,6 +124,7 @@ public class Identity implements Serializable {
                             if (hasRole(role)) {
                                 Link link = new Link("service/" + url, method, rel);
                                 loader.accept(link);
+                                break;
                             }
                         }
                     } else {

@@ -5,7 +5,9 @@ import {registerExceptionHandler} from "../library/simplicity/services/client.js
 import {hateoas} from "../library/simplicity/services/tools.js";
 import {loadRoot} from "./service.js";
 import DomSelect from "../library/simplicity/directives/dom-select.js";
-import {getLanguage, i18nFactory, setLanguage} from "../library/simplicity/services/i18nResolver.js";
+import {i18nFactory, resolver} from "../library/simplicity/services/i18nResolver.js";
+import Clock from "./system/clock.js";
+import TaskManager from "./system/taskmanager.js";
 
 export default class App extends HTMLElement {
 
@@ -48,7 +50,7 @@ export default class App extends HTMLElement {
                         {
                             element: "a",
                             text : () => {
-                                return this.service.user.firstName;
+                                return this.service.firstName;
                             },
                             href : `#/anjunar/home/timeline`,
                             style: {
@@ -112,10 +114,10 @@ export default class App extends HTMLElement {
                             },
                             value : {
                                 input : () => {
-                                    return getLanguage() || "en"
+                                    return resolver.language || "en"
                                 },
                                 output : (value) => {
-                                    setLanguage(value);
+                                    resolver.language = value;
                                 }
                             },
                             onChange(event) {
@@ -162,15 +164,58 @@ export default class App extends HTMLElement {
                     level: 0,
                     style: {
                         display: "block",
-                        height: "calc(100vh - 52px)",
+                        height: "calc(100vh - 102px)",
                         width: "100%",
                         overflow: "auto"
                     }
+                }, {
+                    element: MatToolbar,
+                    left : [
+                        {
+                            element: "button",
+                            type : "button",
+                            className : "material-icons",
+                            text : "login",
+                            style : {
+                                display : () => {
+                                    return hateoas(this.service.links, "login") ? "inline" : "none"
+                                }
+                            },
+                            onClick : () => {
+                                window.location.hash = "#/anjunar/security/login"
+                            }
+                        },
+                        {
+                            element: "button",
+                            type : "button",
+                            className : "material-icons",
+                            text : "logout",
+                            style : {
+                                display : () => {
+                                    return hateoas(this.service.links, "logout") ? "inline" : "none"
+                                }
+                            },
+                            onClick : () => {
+                                window.location.hash = "#/anjunar/security/logout"
+                            }
+                        }
+                    ],
+                    middle: [
+                        {
+                            element: TaskManager
+                        }
+                    ],
+                    right : [
+                        {
+                            element: Clock
+                        }
+                    ]
                 }
             ]
         })
-    }
 
+
+    }
 
 }
 

@@ -1,5 +1,7 @@
 import {get} from "../services/router.js"
-import {customComponents} from "../simplicity.js";
+import {customComponents, HTMLWindow} from "../simplicity.js";
+import MatWindow from "../components/modal/mat-window.js";
+import {windowManager} from "../services/window-manager.js";
 
 export default class DomRouter extends HTMLElement {
 
@@ -44,7 +46,7 @@ export default class DomRouter extends HTMLElement {
         import(newPath)
             .then((module) => {
 
-                let view, guard;
+                let view, configure;
                 /*
                                         if (cache.has(window.location.hash)) {
                                             view = cache.get(window.location.hash);
@@ -57,12 +59,13 @@ export default class DomRouter extends HTMLElement {
                 view = new module.default();
                 view.queryParams = result;
 
-                guard = get(view.localName);
+                configure = get(view.localName);
+                configure.url = segments[this.#level + 1];
 
-                if (guard) {
+                if (configure.guard) {
                     view.queryParams = result;
 
-                    let target = guard(view);
+                    let target = configure.guard(view);
 
                     let guardResult = Reflect.ownKeys(target);
 
@@ -78,22 +81,37 @@ export default class DomRouter extends HTMLElement {
                                 view[property] = results[index];
                             });
 
-                            let firstElementChild = this.firstElementChild;
-                            if (firstElementChild) {
-                                firstElementChild.remove();
+                            for (const child of Array.from(this.children)) {
+                                if (! (child instanceof MatWindow)) {
+                                    child.remove();
+                                }
                             }
+                            if (view instanceof HTMLWindow) {
+                                windowManager.register(view, configure, (matWindow) => {
+                                    this.appendChild(matWindow);
+                                });
 
-                            this.appendChild(view);
+                            } else {
+                                this.appendChild(view);
+                            }
 
                             console.timeEnd("load")
                         })
                 } else {
-                    let firstElementChild = this.firstElementChild;
-                    if (firstElementChild) {
-                        firstElementChild.remove();
+                    for (const child of Array.from(this.children)) {
+                        if (! (child instanceof MatWindow)) {
+                            child.remove();
+                        }
                     }
+                    if (view instanceof HTMLWindow) {
 
-                    this.appendChild(view);
+                        windowManager.register(view, configure, (matWindow) => {
+                            this.appendChild(matWindow);
+                        });
+
+                    } else {
+                        this.appendChild(view);
+                    }
 
                     console.timeEnd("load")
                 }

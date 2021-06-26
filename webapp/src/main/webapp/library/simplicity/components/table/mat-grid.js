@@ -111,8 +111,10 @@ export default class MatGrid extends HTMLElement {
                     item : (item) => {
                         return {
                             element: "div",
-                            onClick: () => {
+                            onClick: (event) => {
+                                event.stopPropagation();
                                 this.dispatchEvent(new CustomEvent("item", {detail : {item : item}}))
+                                return false;
                             },
                             initialize : (element) => {
                                 let m = this.#meta.item;

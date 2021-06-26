@@ -138,7 +138,7 @@ export default class MatSelect extends HTMLElement {
                         backgroundColor: "var(--main-background-color)",
                         width: "100%",
                         textAlign : "center",
-                        zIndex : "100",
+                        zIndex : "1000",
                         boxShadow: `0 3px 1px -2px rgba(255, 255, 255, .2),
                                             0 2px 2px 0 rgba(255, 255, 255, .14),
                                             0 1px 5px 0 rgba(255, 255, 255, .12)`

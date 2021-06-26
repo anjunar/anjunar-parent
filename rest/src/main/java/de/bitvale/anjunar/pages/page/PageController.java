@@ -45,7 +45,7 @@ public class PageController {
 
         PageForm pageForm = new PageForm();
 
-        identity.createLink("pages/page", "POST", "save", (pageForm::addAction));
+        identity.createLink("pages/page", "POST", "save", pageForm::addAction);
         identity.createLink("pages/page/topics", "GET", "topics", pageForm::addLink);
 
         return pageForm;

@@ -12,6 +12,7 @@ import de.bitvale.common.security.User;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -54,6 +55,7 @@ public class UsersControl implements ListMetaController<UserResource, UsersSearc
         return metaTable;
     }
 
+    @Transactional
     @RolesAllowed({"Administrator", "User"})
     public Container<UserResource> list(UsersSearch search) {
 
@@ -63,8 +65,10 @@ public class UsersControl implements ListMetaController<UserResource, UsersSearc
         List<UserResource> resources = new ArrayList<>();
         for (User user : users) {
             UserResource resource = UserResource.factory(user);
-            identity.createLink("control/users/user?id=" + user.getId(), "GET", "read", resource::addAction);
 
+            resources.add(resource);
+
+            identity.createLink("control/users/user?id=" + user.getId(), "GET", "read", resource::addAction);
         }
 
         Container<UserResource> container = new Container<>(resources, count);

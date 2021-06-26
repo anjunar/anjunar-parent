@@ -55,7 +55,7 @@ export default class Welcome extends HTMLElement {
                         {
                             element: "span",
                             text : () => {
-                                return `${i18n("Welcome")}, ${this.service.user.firstName} `
+                                return `${i18n("Welcome")}, ${this.service.firstName} `
                             }
                         },
                         {

@@ -1,4 +1,4 @@
-import {builder, customViews} from "../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../library/simplicity/simplicity.js";
 import MatInfiniteScroll from "../../library/simplicity/components/table/mat-infinite-scroll.js";
 import MatInputContainer from "../../library/simplicity/components/form/containers/mat-input-container.js";
 import DomInput from "../../library/simplicity/directives/dom-input.js";
@@ -7,7 +7,7 @@ import {jsonClient} from "../../library/simplicity/services/client.js";
 import Post from "./timeline/post/post.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
-export default class Timeline extends HTMLElement {
+export default class Timeline extends HTMLWindow {
 
     #user;
 
@@ -32,10 +32,6 @@ export default class Timeline extends HTMLElement {
     render() {
         builder(this, {
             element : "div",
-            style : {
-                width : "600px",
-                margin : "auto"
-            },
             children : [
                 {
                     element : MatInputContainer,
@@ -85,6 +81,7 @@ export default class Timeline extends HTMLElement {
 customViews.define({
     name : "home-timeline",
     class : Timeline,
+    header : "timeline",
     guard() {
         return {
             user : jsonClient.get("service/control/users/user/current")

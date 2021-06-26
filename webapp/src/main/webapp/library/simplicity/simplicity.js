@@ -2,6 +2,8 @@ import {register} from "./services/router.js"
 import {lifeCycle} from "./processors/lifecycle-processor.js";
 import registry from "./processors/processor-registry.js";
 
+export class HTMLWindow extends HTMLElement {}
+
 Node.prototype.queryUpwards = function (query) {
     if (this.localName && this.localName === query) {
         return this;
@@ -31,6 +33,7 @@ EventTarget.prototype.addEventListener = (function (_super) {
 Node.prototype.appendChild = (function (_super) {
     return function (child) {
         _super.apply(this, [child])
+        child.dispatchEvent(new CustomEvent("rendered", {detail : child}))
         if (child.isConnected) {
             lifeCycle();
         }
@@ -40,6 +43,7 @@ Node.prototype.appendChild = (function (_super) {
 HTMLElement.prototype.insertAdjacentElement = (function (_super) {
     return function (position, element) {
         _super.apply(this, [position, element]);
+        element.dispatchEvent(new CustomEvent("rendered", {detail : element}))
         if (element.isConnected) {
             lifeCycle();
         }
@@ -49,6 +53,7 @@ HTMLElement.prototype.insertAdjacentElement = (function (_super) {
 HTMLElement.prototype.insertBefore = (function (_super) {
     return function (newChild, refChild) {
         _super.apply(this, [newChild, refChild])
+        newChild.dispatchEvent(new CustomEvent("rendered", {detail : newChild}))
         if (newChild.isConnected) {
             lifeCycle();
         }
@@ -274,9 +279,7 @@ export const customComponents = new class CustomComponents {
 export const customViews = new class CustomViews {
     define(configure) {
 
-        if (configure.guard) {
-            register(configure.name, configure.guard)
-        }
+        register(configure.name, configure)
 
         configure.class.prototype.connectedCallback = function () {
             if (! this.rendered) {

@@ -124,6 +124,7 @@ public class UserResource extends AbstractRestEntity<UserResource> {
         resource.setBirthdate(user.getBirthDate());
         resource.setPassword(user.getPassword());
         resource.setEmail(user.getEmail());
+        resource.setEnabled(user.isEnabled());
         resource.setPicture(Blob.factory(user.getPicture()));
         Set<RoleResource> roleResources = new HashSet<>();
         for (Role role : user.getRoles()) {

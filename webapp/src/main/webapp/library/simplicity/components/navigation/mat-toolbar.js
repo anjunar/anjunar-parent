@@ -36,6 +36,7 @@ export default class MatToolbar extends HTMLElement {
         this.style.position = "sticky";
         this.style.top = "0";
         this.style.left = "0"
+        this.style.height = "50px";
 
         builder(this, {
             element : "table",

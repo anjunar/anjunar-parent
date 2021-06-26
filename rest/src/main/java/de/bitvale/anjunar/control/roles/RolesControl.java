@@ -60,6 +60,9 @@ public class RolesControl implements ListMetaController<RoleResource, RolesSearc
         List<RoleResource> resources = new ArrayList<>();
         for (Role role : roles) {
             RoleResource resource = RoleResource.factory(role);
+
+            resources.add(resource);
+
             identity.createLink("control/roles/role?id=" + role.getId(), "GET", "read", resource::addAction);
         }
 
