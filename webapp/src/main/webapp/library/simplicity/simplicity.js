@@ -2,6 +2,8 @@ import {register} from "./services/router.js"
 import {lifeCycle} from "./processors/lifecycle-processor.js";
 import registry from "./processors/processor-registry.js";
 
+let idCounter = 0;
+
 export class HTMLWindow extends HTMLElement {}
 
 Node.prototype.queryUpwards = function (query) {
@@ -292,6 +294,6 @@ export const customViews = new class CustomViews {
 
         customElements.define(configure.name, configure.class)
 
-        return configure.class
+        return configure.class;
     }
 }

@@ -6,7 +6,7 @@ import HateoasButton from "../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
-export default class Login extends HTMLWindow {
+class Login extends HTMLWindow {
 
     #model;
 
@@ -53,7 +53,7 @@ export default class Login extends HTMLWindow {
 
 }
 
-customViews.define({
+export default customViews.define({
     name: "security-login",
     class: Login,
     header : "Login",

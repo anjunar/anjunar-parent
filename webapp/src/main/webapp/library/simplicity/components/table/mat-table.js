@@ -1,7 +1,8 @@
 import {builder, customComponents} from "../../simplicity.js";
-import MatTableDialog from "./mat-table-dialog.js";
 import {hateoas} from "../../services/tools.js";
 import {i18nFactory} from "../../services/i18nResolver.js";
+import MatTableDialog from "./mat-table-dialog.js"
+import {windowManager} from "../../services/window-manager.js";
 
 export default class MatTable extends HTMLTableElement {
 
@@ -18,6 +19,7 @@ export default class MatTable extends HTMLTableElement {
     #links;
 
     #header = true;
+    #configuration = true;
 
     get limit() {
         return this.#limit;
@@ -49,6 +51,14 @@ export default class MatTable extends HTMLTableElement {
 
     set columns(value) {
         this.#columns = value;
+    }
+
+    get configuration() {
+        return this.#configuration;
+    }
+
+    set configuration(value) {
+        this.#configuration = value;
     }
 
     left(index) {
@@ -86,8 +96,8 @@ export default class MatTable extends HTMLTableElement {
         let query = {
             index: this.#index,
             limit: this.#limit,
-            sort : sort,
-            search : search
+            sort: sort,
+            search: search
         };
 
         this.#items(query, (_items, _size, _links) => {
@@ -112,11 +122,16 @@ export default class MatTable extends HTMLTableElement {
     render() {
 
         let open = () => {
-            let dialog = new MatTableDialog();
-
-            dialog.table = this;
-
-            document.body.appendChild(dialog);
+            let view = new MatTableDialog();
+            view.table = this;
+            let configure = {
+                header: "Table Setup",
+                resizable: false,
+            }
+            windowManager.register(view, configure, "/library/simplicity/components/table/mat-table-dialog", (matWindow) => {
+                let domRouter = document.querySelector("dom-router");
+                domRouter.appendChild(matWindow);
+            })
         }
 
         let skipPrevious = () => {
@@ -144,7 +159,7 @@ export default class MatTable extends HTMLTableElement {
 
         let skipNext = () => {
             let number = Math.round(this.#size / this.#limit);
-            this.#index = (number - 1) *this.#limit;
+            this.#index = (number - 1) * this.#limit;
             this.load();
         }
 
@@ -197,7 +212,7 @@ export default class MatTable extends HTMLTableElement {
                 index: i,
                 visible: visible(i),
                 sort: sort(i) ? undefined : "disabled",
-                search : sort(i)
+                search: sort(i)
             });
         }
 
@@ -209,31 +224,33 @@ export default class MatTable extends HTMLTableElement {
                     children: [
                         {
                             element: "tr",
-                            if : () => {
+                            if: () => {
                                 return this.#meta.header && this.#header;
                             },
                             children: {
-                                type : "json",
-                                items : () => {
+                                type: "json",
+                                items: () => {
                                     return this.#columns.filter((column) => column.visible);
                                 },
-                                item : (item, index) => {
+                                item: (item, index) => {
                                     return {
                                         element: "td",
                                         children: [
                                             {
-                                                element : "div",
-                                                style : {
+                                                element: "div",
+                                                style: {
                                                     display: "flex",
-                                                    alignItems : "center"
+                                                    alignItems: "center"
                                                 },
-                                                children : [
+                                                children: [
                                                     {
                                                         element: "div",
-                                                        onClick : () => {
+                                                        onClick: (event) => {
+                                                            event.stopPropagation();
                                                             open();
+                                                            return false;
                                                         },
-                                                        initialize : (element) => {
+                                                        initialize: (element) => {
                                                             if (this.#meta.header) {
                                                                 let m = this.#meta.header[item.index];
                                                                 builder(element, m.element());
@@ -241,36 +258,36 @@ export default class MatTable extends HTMLTableElement {
                                                         }
                                                     },
                                                     {
-                                                        element : "div",
-                                                        style : {
-                                                            marginLeft : "5px",
+                                                        element: "div",
+                                                        style: {
+                                                            marginLeft: "5px",
                                                         }
                                                     },
                                                     {
-                                                        element : "button",
-                                                        type : "button",
-                                                        className : "icon",
-                                                        text : "sort",
-                                                        style : {
-                                                            display : () => {
+                                                        element: "button",
+                                                        type: "button",
+                                                        className: "icon",
+                                                        text: "sort",
+                                                        style: {
+                                                            display: () => {
                                                                 return item.sort === undefined ? "block" : "none";
                                                             }
                                                         },
-                                                        onClick : () => {
+                                                        onClick: () => {
                                                             asc(item);
                                                         }
                                                     },
                                                     {
-                                                        element : "button",
-                                                        type : "button",
-                                                        className : "icon",
-                                                        text : "expand_more",
-                                                        style : {
-                                                            display : () => {
+                                                        element: "button",
+                                                        type: "button",
+                                                        className: "icon",
+                                                        text: "expand_more",
+                                                        style: {
+                                                            display: () => {
                                                                 return item.sort === "asc" ? "block" : "none";
                                                             }
                                                         },
-                                                        onClick : () => {
+                                                        onClick: () => {
                                                             desc(item);
                                                         }
                                                     },
@@ -279,12 +296,12 @@ export default class MatTable extends HTMLTableElement {
                                                         type: "button",
                                                         className: "icon",
                                                         text: "expand_less",
-                                                        style : {
-                                                            display : () => {
+                                                        style: {
+                                                            display: () => {
                                                                 return item.sort === "desc" ? "block" : "none";
                                                             }
                                                         },
-                                                        onClick : () => {
+                                                        onClick: () => {
                                                             none(item);
                                                         }
                                                     }
@@ -300,28 +317,30 @@ export default class MatTable extends HTMLTableElement {
                 {
                     element: "tbody",
                     children: {
-                        items : () => {
+                        items: () => {
                             return this.#data;
                         },
-                        item : (tr) => {
+                        item: (tr) => {
                             return {
                                 element: "tr",
-                                onClick : () => {
-                                    this.dispatchEvent(new CustomEvent("row", {detail : tr}))
+                                onClick: (event) => {
+                                    event.stopPropagation();
+                                    this.dispatchEvent(new CustomEvent("row", {detail: tr}))
+                                    return false;
                                 },
                                 children: {
-                                    type : "json",
-                                    items : () => {
+                                    type: "json",
+                                    items: () => {
                                         return this.#columns.filter((column) => column.visible);
                                     },
-                                    item : (td, index) => {
+                                    item: (td, index) => {
                                         return {
                                             element: "td",
-                                            className : "col-" + index,
+                                            className: "col-" + index,
                                             children: [
                                                 {
                                                     element: "div",
-                                                    initialize : (element) => {
+                                                    initialize: (element) => {
                                                         let m = this.#meta.body[td.index];
                                                         builder(element, m.element(tr));
                                                     }
@@ -336,96 +355,101 @@ export default class MatTable extends HTMLTableElement {
 
                 },
                 {
-                    element:  "tfoot",
+                    element: "tfoot",
                     children: [
                         {
                             element: "tr",
                             children: [
                                 {
-                                    element : "td",
-                                    colSpan : String(this.#meta.body.length),
-                                    children : [
+                                    element: "td",
+                                    colSpan: String(this.#meta.body.length),
+                                    children: [
                                         {
                                             element: "div",
-                                            style : {
-                                                display : "flex"
+                                            style: {
+                                                display: "flex"
                                             },
                                             children: [
                                                 {
-                                                    element : "div",
-                                                    style : {
+                                                    element: "div",
+                                                    style: {
                                                         lineHeight: "42px"
                                                     },
-                                                    text : () => {
+                                                    text: () => {
                                                         return `${this.#index} - ${this.#index + this.#limit} of ${this.#size}`
                                                     }
                                                 },
                                                 {
                                                     element: "button",
-                                                    type : "button",
-                                                    className : "material-icons",
-                                                    onClick : () => {
+                                                    type: "button",
+                                                    className: "material-icons",
+                                                    onClick: () => {
                                                         skipPrevious();
                                                     },
-                                                    text : "skip_previous"
+                                                    text: "skip_previous"
                                                 },
                                                 {
                                                     element: "button",
-                                                    type : "button",
-                                                    className : "material-icons",
-                                                    onClick : () => {
+                                                    type: "button",
+                                                    className: "material-icons",
+                                                    onClick: () => {
                                                         arrowLeft();
                                                     },
-                                                    disabled : () => {
-                                                        return ! canArrowLeft();
+                                                    disabled: () => {
+                                                        return !canArrowLeft();
                                                     },
-                                                    text : "keyboard_arrow_left"
+                                                    text: "keyboard_arrow_left"
                                                 },
                                                 {
                                                     element: "button",
-                                                    type : "button",
-                                                    className : "material-icons",
-                                                    onClick : () => {
+                                                    type: "button",
+                                                    className: "material-icons",
+                                                    onClick: () => {
                                                         arrowRight();
                                                     },
-                                                    disabled : () => {
-                                                        return ! canArrowRight();
+                                                    disabled: () => {
+                                                        return !canArrowRight();
                                                     },
-                                                    text : "keyboard_arrow_right"
+                                                    text: "keyboard_arrow_right"
                                                 },
                                                 {
                                                     element: "button",
-                                                    type : "button",
-                                                    className : "material-icons",
-                                                    onClick : () => {
+                                                    type: "button",
+                                                    className: "material-icons",
+                                                    onClick: () => {
                                                         skipNext();
                                                     },
-                                                    text : "skip_next"
-                                                },{
-                                                    element : "div",
-                                                    style : {
-                                                        flex : "1"
+                                                    text: "skip_next"
+                                                }, {
+                                                    element: "div",
+                                                    style: {
+                                                        flex: "1"
                                                     }
                                                 }, {
-                                                    element : "button",
-                                                    type : "button",
-                                                    text : i18n("Create"),
-                                                    style : {
-                                                        display : () => {
+                                                    element: "button",
+                                                    type: "button",
+                                                    text: i18n("Create"),
+                                                    style: {
+                                                        display: () => {
                                                             let link = hateoas(this.#links, "create");
                                                             return link ? "block" : "none"
                                                         }
                                                     },
-                                                    onClick : () => {
+                                                    onClick: () => {
                                                         let link = hateoas(this.#links, "create");
-                                                        this.dispatchEvent(new CustomEvent("create", {detail : link}));
+                                                        this.dispatchEvent(new CustomEvent("create", {detail: link}));
                                                     }
                                                 },
                                                 {
-                                                    element : "button",
-                                                    type : "button",
-                                                    text : i18n("Configuration"),
-                                                    onClick : () => {
+                                                    element: "button",
+                                                    type: "button",
+                                                    style: {
+                                                        display: () => {
+                                                            return this.#configuration ? "block" : "none"
+                                                        }
+                                                    },
+                                                    text: i18n("Configuration"),
+                                                    onClick: () => {
                                                         open();
                                                     }
                                                 }
@@ -448,12 +472,12 @@ export default class MatTable extends HTMLTableElement {
 customComponents.define("mat-table", MatTable, {extends: "table"})
 
 const i18n = i18nFactory({
-    "Create" : {
-        "en-DE" : "Create",
-        "de-DE" : "Erstellen"
+    "Create": {
+        "en-DE": "Create",
+        "de-DE": "Erstellen"
     },
-    "Configuration" : {
-        "en-DE" : "Configuration",
-        "de-DE" : "Konfiguration"
+    "Configuration": {
+        "en-DE": "Configuration",
+        "de-DE": "Konfiguration"
     }
 });

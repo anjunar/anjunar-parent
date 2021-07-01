@@ -1,6 +1,6 @@
 import {builder, customComponents} from "../../simplicity.js";
 
-export default class MatSpinner extends HTMLElement {
+class MatSpinner extends HTMLElement {
 
     render() {
         builder(this, {
@@ -30,4 +30,4 @@ export default class MatSpinner extends HTMLElement {
 
 }
 
-customComponents.define("mat-spinner", MatSpinner)
+export default customComponents.define("mat-spinner", MatSpinner)

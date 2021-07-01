@@ -1,7 +1,6 @@
 import MatWindow from "../components/modal/mat-window.js";
 
 const windowsRegistry = new Map();
-const configureRegistry = new Map();
 
 const request = indexedDB.open("anjunar", 2);
 
@@ -10,6 +9,7 @@ let db;
 request.onupgradeneeded = function () {
     const db = request.result;
     db.createObjectStore("windowManager", {keyPath: "id"});
+    db.createObjectStore("windowManager#maximized", {keyPath: "id"})
 };
 
 request.onsuccess = function () {
@@ -36,20 +36,72 @@ function zIndexSorted() {
     return windows.sort((lhs, rhs) => Number.parseInt(lhs.style.zIndex) - Number.parseInt(rhs.style.zIndex));
 }
 
+function saveWindow(url, matWindow, closed = false, minimized = false) {
+    let value = {
+        id: url,
+        width: matWindow.offsetWidth,
+        height: matWindow.offsetHeight,
+        top: matWindow.offsetTop,
+        left: matWindow.offsetLeft,
+        zIndex: Number.parseInt(matWindow.style.zIndex),
+        minimized : minimized,
+        closed : closed
+    }
+    const tx = db.transaction("windowManager", "readwrite");
+    const store = tx.objectStore("windowManager");
+    store.put(value);
+}
+
+function saveWindowMaximized(url, matWindow) {
+    let value = {
+        id: url,
+        width: matWindow.offsetWidth,
+        height: matWindow.offsetHeight,
+        top: matWindow.offsetTop,
+        left: matWindow.offsetLeft,
+        zIndex: Number.parseInt(matWindow.style.zIndex),
+    }
+    const tx = db.transaction("windowManager#maximized", "readwrite");
+    const store = tx.objectStore("windowManager#maximized");
+    store.put(value);
+}
+
+function loadWindow(url, callback) {
+    const tx = db.transaction("windowManager", "readwrite");
+    const store = tx.objectStore("windowManager");
+    let idbRequest = store.get(url);
+    idbRequest.onsuccess = callback;
+}
+
+function loadWindowMaximized(url, callback) {
+    const tx = db.transaction("windowManager#maximized", "readwrite");
+    const store = tx.objectStore("windowManager#maximized");
+    let idbRequest = store.get(url);
+    idbRequest.onsuccess = callback;
+    idbRequest.onerror = callback;
+}
+
+function deleteWindowMaximized(url) {
+    const tx = db.transaction("windowManager#maximized", "readwrite");
+    const store = tx.objectStore("windowManager#maximized");
+    let idbRequest = store.delete(url);
+    idbRequest.onsuccess = () => {
+        console.log(idbRequest);
+    }
+}
+
 export const windowManager = new class WindowManager {
 
-    register(view, configure, callback) {
-        if (!windowsRegistry.has(configure.url)) {
-            const tx = db.transaction("windowManager", "readwrite");
-            const store = tx.objectStore("windowManager");
-            let idbRequest = store.get(configure.url);
-            idbRequest.onsuccess = (event) => {
-                let result = idbRequest.result;
+    register(view, configure, url, callback) {
+        if (!windowsRegistry.has(url)) {
+            loadWindow(url, (event) => {
+                let result = event.target.result;
 
                 let matWindow = new MatWindow();
                 matWindow.content = view;
                 matWindow.header = configure.header;
                 matWindow.resizable = configure.resizable;
+                matWindow.url = url;
 
                 if (result) {
                     if (configure.resizable) {
@@ -66,29 +118,29 @@ export const windowManager = new class WindowManager {
                     }
                 }
 
-                windowsRegistry.set(configure.url, matWindow);
-                configureRegistry.set(matWindow, configure);
+                windowsRegistry.set(url, matWindow);
 
                 matWindow.addEventListener("rendered", () => {
                     if (result) {
                         matWindow.style.top = result.top + "px";
                         matWindow.style.left = result.left + "px";
                     } else {
-                        matWindow.style.top = matWindow.parentElement.offsetHeight / 2 - matWindow.offsetHeight / 2 + "px";
-                        matWindow.style.left = matWindow.parentElement.offsetWidth / 2 - matWindow.offsetWidth / 2 + "px";
+                        let top = matWindow.parentElement.offsetHeight / 2 - matWindow.offsetHeight / 2;
+                        let left = matWindow.parentElement.offsetWidth / 2 - matWindow.offsetWidth / 2;
+
+                        if (top < 0) {
+                            top = 0;
+                        }
+
+                        if (left < 0) {
+                            left = 0;
+                        }
+
+                        matWindow.style.top = top + "px";
+                        matWindow.style.left = left + "px";
                     }
 
-                    let value = {
-                        id: configure.url,
-                        width: matWindow.offsetWidth,
-                        height: matWindow.offsetHeight,
-                        top: matWindow.offsetTop,
-                        left: matWindow.offsetLeft,
-                        zIndex: Number.parseInt(matWindow.style.zIndex)
-                    }
-                    const tx = db.transaction("windowManager", "readwrite");
-                    const store = tx.objectStore("windowManager");
-                    store.put(value);
+                    saveWindow(url, matWindow)
 
                     if (result?.minimized) {
                         matWindow.style.display = "none"
@@ -96,36 +148,31 @@ export const windowManager = new class WindowManager {
                 })
 
                 matWindow.addEventListener("windowEndResize", (event) => {
-                    let value = {
-                        id: configure.url,
-                        width: matWindow.offsetWidth,
-                        height: matWindow.offsetHeight,
-                        top: matWindow.offsetTop,
-                        left: matWindow.offsetLeft,
-                        zIndex: Number.parseInt(matWindow.style.zIndex)
-                    }
-                    const tx = db.transaction("windowManager", "readwrite");
-                    const store = tx.objectStore("windowManager");
-                    store.put(value);
+                    saveWindow(url, matWindow);
                 })
 
                 matWindow.addEventListener("windowEndDrag", (event) => {
-                    let value = {
-                        id: configure.url,
-                        width: matWindow.offsetWidth,
-                        height: matWindow.offsetHeight,
-                        top: matWindow.offsetTop,
-                        left: matWindow.offsetLeft,
-                        zIndex: Number.parseInt(matWindow.style.zIndex)
-                    }
-                    const tx = db.transaction("windowManager", "readwrite");
-                    const store = tx.objectStore("windowManager");
-                    store.put(value);
+                    saveWindow(url, matWindow)
                 })
 
                 callback(matWindow);
+
+                this.clickWindow(matWindow);
+            })
+        }
+    }
+
+    findByView(view) {
+        for (const matWindow of windowsRegistry) {
+            if (matWindow.content === view) {
+                return matWindow;
             }
         }
+        return null;
+    }
+
+    findByUrl(host) {
+        return windowsRegistry.get(host);
     }
 
     clickWindow(matWindow) {
@@ -137,9 +184,7 @@ export const windowManager = new class WindowManager {
 
         sort.push(matWindow);
 
-        let configure = configureRegistry.get(matWindow);
-
-        window.location.hash = configure.url;
+        window.location.hash = matWindow.url;
 
         for (let i = 0; i < sort.length; i++) {
             const sortElement = sort[i];
@@ -147,17 +192,7 @@ export const windowManager = new class WindowManager {
 
             windowsRegistry.forEach((value, key) => {
                 if (value === sortElement) {
-                    let value = {
-                        id: key,
-                        width: sortElement.offsetWidth,
-                        height: sortElement.offsetHeight,
-                        top: sortElement.offsetTop,
-                        left: sortElement.offsetLeft,
-                        zIndex: Number.parseInt(sortElement.style.zIndex)
-                    }
-                    const tx = db.transaction("windowManager", "readwrite");
-                    const store = tx.objectStore("windowManager");
-                    store.put(value);
+                    saveWindow(key, sortElement);
                 }
             })
         }
@@ -167,34 +202,18 @@ export const windowManager = new class WindowManager {
         return Array.from(windowsRegistry.values());
     }
 
-    getConfigure(matWindow) {
-        return configureRegistry.get(matWindow);
-    }
-
     close(matWindow) {
-        let configure = configureRegistry.get(matWindow);
 
-        windowsRegistry.delete(configure.url);
-        configureRegistry.delete(matWindow);
+        windowsRegistry.delete(matWindow.url);
 
-        let value = {
-            id: configure.url,
-            width: matWindow.offsetWidth,
-            height: matWindow.offsetHeight,
-            top: matWindow.offsetTop,
-            left: matWindow.offsetLeft,
-            zIndex: Number.parseInt(matWindow.style.zIndex),
-            closed: true
-        }
-        const tx = db.transaction("windowManager", "readwrite");
-        const store = tx.objectStore("windowManager");
-        store.put(value);
+        saveWindow(matWindow.url, matWindow, true)
 
         let zIndexes = zIndexSorted();
         if (zIndexes.length > 0) {
             let focus = zIndexes[zIndexes.length - 1];
-            let zIndexConfigure = configureRegistry.get(focus);
-            window.location.hash = zIndexConfigure.url;
+            window.location.hash = focus.url;
+        } else {
+            window.location.hash = "#"
         }
 
         matWindow.remove();
@@ -202,37 +221,23 @@ export const windowManager = new class WindowManager {
 
     minimize(matWindow) {
 
-        let configure = configureRegistry.get(matWindow);
-
-        let value = {
-            id: configure.url,
-            width: matWindow.offsetWidth,
-            height: matWindow.offsetHeight,
-            top: matWindow.offsetTop,
-            left: matWindow.offsetLeft,
-            zIndex: Number.parseInt(matWindow.style.zIndex),
-            closed: false,
-            minimized: true
-        }
-        const tx = db.transaction("windowManager", "readwrite");
-        const store = tx.objectStore("windowManager");
-        store.put(value);
+        saveWindow(matWindow.url, matWindow, false, true);
 
         matWindow.style.display = "none";
+
     }
 
     show(matWindow) {
-        let configure = configureRegistry.get(matWindow);
-        const tx = db.transaction("windowManager", "readwrite");
-        const store = tx.objectStore("windowManager");
-        let idbRequest = store.get(configure.url);
-        idbRequest.onsuccess = (event) => {
-            let result = idbRequest.result;
+        loadWindow(matWindow.url, (event) => {
+            let result = event.target.result;
 
             matWindow.style.display = "block";
             matWindow.style.top = result.top + "px";
             matWindow.style.left = result.left + "px";
-        }
+        })
+
+        this.clickWindow(matWindow);
+
     }
 
     closeAll() {
@@ -240,4 +245,26 @@ export const windowManager = new class WindowManager {
             this.close(window);
         }
     }
+
+    maximize(matWindow) {
+        loadWindowMaximized(matWindow.url, (event) => {
+            let result = event.target.result;
+            if (result) {
+                matWindow.style.top = result.top + "px";
+                matWindow.style.left = result.left + "px";
+                matWindow.style.width = result.width + "px";
+                matWindow.style.height = result.height + "px";
+                deleteWindowMaximized(matWindow.url)
+            } else {
+                saveWindowMaximized(matWindow.url, matWindow);
+                matWindow.style.top = "0";
+                matWindow.style.left = "0"
+                matWindow.style.width = matWindow.parentElement.offsetWidth + "px";
+                matWindow.style.height = matWindow.parentElement.offsetHeight + "px";
+                saveWindow(matWindow.url, matWindow);
+            }
+        })
+
+    }
+
 }

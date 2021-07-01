@@ -10,7 +10,7 @@ export default class MatWindow extends HTMLElement {
     constructor() {
         super();
 
-        this.addEventListener("click", () => {
+        this.addEventListener("click", (event) => {
             windowManager.clickWindow(this);
         })
     }
@@ -55,8 +55,13 @@ export default class MatWindow extends HTMLElement {
                 deltaY = pointerY - e.clientY;
                 pointerX = e.clientX;
                 pointerY = e.clientY;
-                element.style.top = (element.offsetTop - deltaY) + "px";
-                element.style.left = (element.offsetLeft - deltaX) + "px";
+                let top = element.offsetTop - deltaY;
+                if (top < 0) {
+                    top = 0;
+                }
+                let left = element.offsetLeft - deltaX;
+                element.style.top = top + "px";
+                element.style.left = left + "px";
                 this.dispatchEvent(new CustomEvent("windowDrag", {detail: this}));
             }
 
@@ -369,7 +374,11 @@ export default class MatWindow extends HTMLElement {
                 style: {
                     height: "20px",
                     margin: "-10px",
-                    cursor: "n-resize"
+                    cursor : () => {
+                        if (this.#resizable) {
+                            return "n-resize"
+                        }
+                    }
                 },
                 onMousedown: nResizeTopMouseDown
             }, {
@@ -391,7 +400,11 @@ export default class MatWindow extends HTMLElement {
                                 style: {
                                     width: "20px",
                                     height: "20px",
-                                    cursor: "se-resize"
+                                    cursor: () => {
+                                        if (this.#resizable) {
+                                            return "se-resize"
+                                        }
+                                    }
                                 },
                                 onMousedown: seResizeMouseDown
                             },
@@ -400,7 +413,11 @@ export default class MatWindow extends HTMLElement {
                                 style: {
                                     width: "20px",
                                     height: "calc(100% - 40px)",
-                                    cursor: "e-resize"
+                                    cursor: () => {
+                                        if (this.#resizable) {
+                                            return "e-resize"
+                                        }
+                                    }
                                 },
                                 onMousedown: eResizeLeftMouseDown
                             },
@@ -409,7 +426,11 @@ export default class MatWindow extends HTMLElement {
                                 style: {
                                     width: "20px",
                                     height: "20px",
-                                    cursor: "ne-resize"
+                                    cursor: () => {
+                                        if (this.#resizable) {
+                                            return "ne-resize"
+                                        }
+                                    }
                                 },
                                 onMousedown: neResizeMouseDown
                             }
@@ -461,6 +482,17 @@ export default class MatWindow extends HTMLElement {
                                             {
                                                 element : "button",
                                                 type : "button",
+                                                text : "maximize",
+                                                className : "material-icons",
+                                                onClick : (event) => {
+                                                    event.stopPropagation();
+                                                    windowManager.maximize(this);
+                                                    return false;
+                                                }
+                                            },
+                                            {
+                                                element : "button",
+                                                type : "button",
                                                 text : "close",
                                                 className : "material-icons",
                                                 onClick : (event) => {
@@ -496,7 +528,11 @@ export default class MatWindow extends HTMLElement {
                                 style: {
                                     width: "20px",
                                     height: "20px",
-                                    cursor: "sw-resize"
+                                    cursor: () => {
+                                        if (this.#resizable) {
+                                            return "sw-resize"
+                                        }
+                                    }
                                 },
                                 onMousedown: swResizeMouseDown
                             },
@@ -505,7 +541,11 @@ export default class MatWindow extends HTMLElement {
                                 style: {
                                     width: "20px",
                                     height: "calc(100% - 40px)",
-                                    cursor: "e-resize"
+                                    cursor: () => {
+                                        if (this.#resizable) {
+                                            return "e-resize"
+                                        }
+                                    }
                                 },
                                 onMousedown: eResizeRightMouseDown
                             },
@@ -514,7 +554,11 @@ export default class MatWindow extends HTMLElement {
                                 style: {
                                     width: "20px",
                                     height: "20px",
-                                    cursor: "nw-resize"
+                                    cursor: () => {
+                                        if (this.#resizable) {
+                                            return "nw-resize"
+                                        }
+                                    }
                                 },
                                 onMousedown: nwResizeMouseDown
                             }
@@ -526,7 +570,11 @@ export default class MatWindow extends HTMLElement {
                 style: {
                     height: "20px",
                     margin: "-10px",
-                    cursor: "n-resize"
+                    cursor: () => {
+                        if (this.#resizable) {
+                            return "n-resize"
+                        }
+                    }
                 },
                 onMousedown: nResizeBottomMouseDown
             }

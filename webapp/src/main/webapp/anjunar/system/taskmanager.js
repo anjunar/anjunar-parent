@@ -24,7 +24,7 @@ export default class TaskManager extends HTMLElement {
                             border : "1px solid var(--main-grey-color)",
                             textAlign : "center"
                         },
-                        text : windowManager.getConfigure(item).header,
+                        text : item.header,
                         onClick : (event) => {
                             event.stopPropagation();
                             windowManager.show(item);

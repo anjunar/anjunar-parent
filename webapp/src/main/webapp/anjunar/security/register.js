@@ -4,7 +4,7 @@ import DomInput from "../../library/simplicity/directives/dom-input.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import DomForm from "../../library/simplicity/directives/dom-form.js";
 
-export default class Register extends HTMLElement {
+class Register extends HTMLElement {
 
     #user = {
         firstName: "",
@@ -117,7 +117,7 @@ export default class Register extends HTMLElement {
 
 }
 
-customViews.define({
+export default customViews.define({
     name: "security-register",
     class: Register
 })

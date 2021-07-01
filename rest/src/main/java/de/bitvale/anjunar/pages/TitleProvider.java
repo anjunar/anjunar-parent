@@ -17,7 +17,7 @@ public class TitleProvider extends AbstractRestPredicateProvider<String, Page> {
         }
         return builder.or(
                 builder.like(builder.lower(root.get(Page_.title)), value.toLowerCase() + "%"),
-                builder.gt(builder.function("levenshtein", Integer.class, root.get(Page_.title), builder.literal(value)), 3)
+                builder.lt(builder.function("levenshtein", Integer.class, root.get(Page_.title), builder.literal(value)), 3)
         );
     }
 }

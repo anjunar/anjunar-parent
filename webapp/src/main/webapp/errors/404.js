@@ -5,4 +5,4 @@ const {html, css} = validator([]);
 
 export const name = "errors-404";
 
-customComponents.define(name, class Error404 extends HTMLElement {}, {html: html, css: css});
+export default customComponents.define(name, class Error404 extends HTMLElement {}, {html: html, css: css});

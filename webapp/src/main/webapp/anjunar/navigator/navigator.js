@@ -1,4 +1,4 @@
-import {builder, customViews} from "../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import MatInputHolder from "../../library/simplicity/hateoas/hateoas-input.js";
 import HateoasButton from "../../library/simplicity/hateoas/hateoas-button.js";
@@ -6,7 +6,7 @@ import HateoasTable from "../../library/simplicity/hateoas/hateoas-table.js";
 import {hateoas} from "../../library/simplicity/services/tools.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
 
-export default class Navigator extends HTMLElement {
+class Navigator extends HTMLWindow {
 
     #service;
 
@@ -50,10 +50,6 @@ export default class Navigator extends HTMLElement {
             },
             {
                 element : "div",
-                style: {
-                    margin : "auto",
-                    width : "800px"
-                },
                 children: [
                     {
                         element: HateoasForm,
@@ -105,9 +101,11 @@ export default class Navigator extends HTMLElement {
 
 }
 
-customViews.define({
+export default customViews.define({
     name: "anjunar-navigator",
     class: Navigator,
+    header : "Navigator",
+    resizable : true,
     guard(activeRoute) {
         return {
             service: jsonClient.get(atob(activeRoute.queryParams.link))

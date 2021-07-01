@@ -1,9 +1,9 @@
-import {builder, customViews} from "../../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../../library/simplicity/services/client.js";
 import {dateFormat} from "../../../library/simplicity/services/tools.js";
 import HateoasTable from "../../../library/simplicity/hateoas/hateoas-table.js";
 
-export default class History extends HTMLElement {
+export default class History extends HTMLWindow {
 
     #history;
 
@@ -60,6 +60,9 @@ export default class History extends HTMLElement {
 customViews.define({
     name : "page-history",
     class : History,
+    width : 800,
+    height : 600,
+    resizable : true,
     guard(activeRoute) {
         return {
             history : jsonClient.get(`service/pages/page/history?id=${activeRoute.queryParams.id}`)

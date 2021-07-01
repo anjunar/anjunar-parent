@@ -4,7 +4,7 @@ import {loadRoot} from "../service.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 import {windowManager} from "../../library/simplicity/services/window-manager.js";
 
-export default class Logout extends HTMLWindow {
+class Logout extends HTMLWindow {
 
     render() {
         builder(this, {
@@ -32,7 +32,7 @@ export default class Logout extends HTMLWindow {
 
 }
 
-customViews.define({
+export default customViews.define({
     name : "security-logout",
     class : Logout,
     header : "Logout",

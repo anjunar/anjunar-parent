@@ -6,7 +6,6 @@ import {windowManager} from "../services/window-manager.js";
 export default class DomRouter extends HTMLElement {
 
     #level = 0
-    #cache = new Map();
 
     get level() {
         return this.#level;
@@ -47,20 +46,10 @@ export default class DomRouter extends HTMLElement {
             .then((module) => {
 
                 let view, configure;
-                /*
-                                        if (cache.has(window.location.hash)) {
-                                            view = cache.get(window.location.hash);
-                                        } else {
-                                            view = new module.default();
-                                            view.queryParams = result;
-                                            cache.set(window.location.hash, view);
-                                        }
-                */
                 view = new module.default();
                 view.queryParams = result;
 
                 configure = get(view.localName);
-                configure.url = segments[this.#level + 1];
 
                 if (configure.guard) {
                     view.queryParams = result;
@@ -87,7 +76,7 @@ export default class DomRouter extends HTMLElement {
                                 }
                             }
                             if (view instanceof HTMLWindow) {
-                                windowManager.register(view, configure, (matWindow) => {
+                                windowManager.register(view, configure, hash,(matWindow) => {
                                     this.appendChild(matWindow);
                                 });
 
@@ -105,7 +94,7 @@ export default class DomRouter extends HTMLElement {
                     }
                     if (view instanceof HTMLWindow) {
 
-                        windowManager.register(view, configure, (matWindow) => {
+                        windowManager.register(view, configure, hash,(matWindow) => {
                             this.appendChild(matWindow);
                         });
 

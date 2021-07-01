@@ -105,37 +105,6 @@ export default class App extends HTMLElement {
                                     return hateoas(this.service.links, "navigator") ? "inline" : "none"
                                 }
                             }
-
-                        }, {
-                            element: DomSelect,
-                            style: {
-                                marginLeft: "5px",
-                                backgroundColor : "var(--main-normal-color)"
-                            },
-                            value : {
-                                input : () => {
-                                    return resolver.language || "en"
-                                },
-                                output : (value) => {
-                                    resolver.language = value;
-                                }
-                            },
-                            onChange(event) {
-                                document.dispatchEvent(new CustomEvent("language", {detail : event.target.value}))
-                                location.reload();
-                            },
-                            children : [{
-                                element : "option",
-                                value : "en-DE",
-                                text : "English",
-                                attributes : {
-                                    selected : false
-                                }
-                            }, {
-                                element: "option",
-                                value: "de-DE",
-                                text : "Deutsch",
-                            }]
                         }
                     ],
                     right: [
@@ -164,12 +133,16 @@ export default class App extends HTMLElement {
                     level: 0,
                     style: {
                         display: "block",
+                        position : "relative",
                         height: "calc(100vh - 102px)",
                         width: "100%",
-                        overflow: "auto"
+                        backgroundImage: 'url("images/7044.jpg")'
                     }
                 }, {
                     element: MatToolbar,
+                    style : {
+                        zIndex : "9999"
+                    },
                     left : [
                         {
                             element: "button",
@@ -207,7 +180,56 @@ export default class App extends HTMLElement {
                     ],
                     right : [
                         {
-                            element: Clock
+                            element: "div",
+                            style : {
+                                display : "flex"
+                            },
+                            children: [
+                                {
+                                    element: "div",
+                                    style : {
+                                        flex : "1"
+                                    }
+                                },
+                                {
+                                    element: DomSelect,
+                                    style: {
+                                        marginLeft: "5px",
+                                        backgroundColor : "var(--main-normal-color)"
+                                    },
+                                    value : {
+                                        input : () => {
+                                            return resolver.language || "en"
+                                        },
+                                        output : (value) => {
+                                            resolver.language = value;
+                                        }
+                                    },
+                                    onChange(event) {
+                                        document.dispatchEvent(new CustomEvent("language", {detail : event.target.value}))
+                                        location.reload();
+                                    },
+                                    children : [{
+                                        element : "option",
+                                        value : "en-DE",
+                                        text : "English",
+                                        attributes : {
+                                            selected : false
+                                        }
+                                    }, {
+                                        element: "option",
+                                        value: "de-DE",
+                                        text : "Deutsch",
+                                    }]
+                                },
+                                {
+                                    element: Clock,
+                                    style: {
+                                        display : "block",
+                                        margin : "10px"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }

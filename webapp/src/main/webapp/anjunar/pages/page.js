@@ -1,13 +1,10 @@
-import {builder, customViews} from "../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
-import DomRouter from "../../library/simplicity/directives/dom-router.js";
-import HateoasTable from "../../library/simplicity/hateoas/hateoas-table.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
 
-export default class Page extends HTMLElement {
+export default class Page extends HTMLWindow {
 
     #html
-    #topics
 
     get html() {
         return this.#html;
@@ -17,28 +14,13 @@ export default class Page extends HTMLElement {
         this.#html = value;
     }
 
-    get topics() {
-        return this.#topics;
-    }
-
-    set topics(value) {
-        this.#topics = value;
-    }
-
     render() {
+
         builder(this, {
             element: "div",
-            style: {
-                display: "flex",
-                width: "1200px",
-                margin: "auto"
-            },
             children: [
                 {
                     element: "div",
-                    style: {
-                        width: "800px"
-                    },
                     children: [
                         {
                             element: "h3",
@@ -48,91 +30,43 @@ export default class Page extends HTMLElement {
                             element: "hr"
                         },
                         {
-                            element: DomRouter,
-                            level: 1
-                        }
-                    ]
-                },
-                {
-                    element: "div",
-                    style: {
-                        flex: "1",
-                        marginLeft: "12px"
-                    },
-                    children: [
-                        {
-                            element: "h3",
-                            text: i18n("Questions")
-                        },
-                        {
-                            element: "hr"
-                        },
-                        {
                             element: "div",
-                            className: "question",
-                            style : {
-                                padding : "5px"
-                            },
                             children: [
                                 {
-                                    element: HateoasTable,
-                                    header: false,
-                                    model: this.#topics,
-                                    onCreate : (event) => {
-                                        window.location.hash = `#/anjunar/pages/page?id=${this.#html.id}#/anjunar/pages/page/topic?page=${this.#html.id}`
+                                    element: "div",
+                                    style: {
+                                        marginTop: "12px"
                                     },
-                                    onRow : (event) => {
-                                        window.location.hash = `#/anjunar/pages/page?id=${this.#html.id}#/anjunar/pages/page/topic/replies?id=${event.detail.id}`
-                                    },
-                                    meta: {
-                                        body : this.#topics.columns.map((column) => {
-                                            return {
-                                                element(topic) {
-                                                    switch (column.name) {
-                                                        case "owner" : return {
-                                                            element: "img",
-                                                            src: topic.owner.image.data,
-                                                            style: {
-                                                                marginRight: "5px",
-                                                                height: "80px",
-                                                                width: "80px",
-                                                                objectFit: "cover"
-                                                            }
-                                                        }
-                                                        case "topic" : return {
-                                                            element: "div",
-                                                            children: [
-                                                                {
-                                                                    element: "h3",
-                                                                    style: {
-                                                                        color: "var(--main-blue-color)"
-                                                                    },
-                                                                    text: topic.topic
-                                                                }, {
-                                                                    element: "div",
-                                                                    innerHTML: topic.editor.text,
-                                                                    style: {
-                                                                        height: "48px",
-                                                                        width: "300px",
-                                                                        overflow: "hidden"
-                                                                    }
-                                                                }
-                                                            ]
-                                                        }
-                                                        default : return {
-                                                            element : "div",
-                                                            text : topic[column.name]
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        })
+                                    initialize: (element) => {
+                                        element.innerHTML = this.#html.content.html;
+                                    }
+                                },
+                                {
+                                    element: "button",
+                                    type: "button",
+                                    className: "button",
+                                    text: i18n("History"),
+                                    onClick: (event) => {
+                                        event.stopPropagation();
+                                        window.location.hash = `#/anjunar/pages/page/history?id=${this.#html.id}`
+                                        return false;
+                                    }
+                                },
+                                {
+                                    element: "button",
+                                    type: "button",
+                                    className: "button",
+                                    text: i18n("Edit"),
+                                    onClick: (event) => {
+                                        event.stopPropagation();
+                                        window.location.hash = `#/anjunar/pages/editor?id=${this.#html.id}`
+                                        return false;
                                     }
                                 }
                             ]
                         }
                     ]
-                },
+                }
             ]
         })
     }
@@ -141,6 +75,10 @@ export default class Page extends HTMLElement {
 customViews.define({
     name: "pages-page",
     class: Page,
+    header : "Page",
+    resizable : true,
+    width : 800,
+    height : 600,
     guard(activeRoute) {
         let url = `service/pages/page?id=${activeRoute.queryParams.id}`;
         if (activeRoute.queryParams.revision) {
@@ -154,8 +92,12 @@ customViews.define({
 })
 
 const i18n = i18nFactory({
-    "Questions" : {
-        "en-DE" : "Questions",
-        "de-DE" : "Fragen"
+    History: {
+        "en-DE": "History",
+        "de-DE": "Historie"
+    },
+    Edit: {
+        "en-DE": "Edit",
+        "de-DE": "Bearbeiten"
     }
 });

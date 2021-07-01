@@ -1,6 +1,6 @@
 import {builder, customComponents} from "../../simplicity.js";
 
-export default class MatProgress extends HTMLElement {
+class MatProgress extends HTMLElement {
 
     render() {
 
@@ -32,4 +32,4 @@ export default class MatProgress extends HTMLElement {
 
 }
 
-customComponents.define("mat-progress", MatProgress)
+export default customComponents.define("mat-progress", MatProgress)
