@@ -128,10 +128,9 @@ export default class MatTable extends HTMLTableElement {
                 header: "Table Setup",
                 resizable: false,
             }
-            windowManager.register(view, configure, "/library/simplicity/components/table/mat-table-dialog", (matWindow) => {
-                let domRouter = document.querySelector("dom-router");
-                domRouter.appendChild(matWindow);
-            })
+            let url = `/library/simplicity/components/table/mat-table-dialog`;
+
+            windowManager.openWindow(url, view, this, configure)
         }
 
         let skipPrevious = () => {

@@ -6,6 +6,7 @@ import PostDialog from "./timeline/post/post-dialog.js";
 import {jsonClient} from "../../library/simplicity/services/client.js";
 import Post from "./timeline/post/post.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
+import {windowManager} from "../../library/simplicity/services/window-manager.js";
 
 export default class Timeline extends HTMLWindow {
 
@@ -45,7 +46,15 @@ export default class Timeline extends HTMLWindow {
                                     let dialog = new PostDialog();
                                     dialog.matTimeline = this;
                                     dialog.post = response;
-                                    document.body.appendChild(dialog);
+
+                                    let configure = {
+                                        header : "Post",
+                                        resizable : false
+                                    }
+
+                                    let url = "/anjunar/home/timeline/post/post-dialog";
+
+                                    windowManager.openWindow(url, dialog, this, configure);
                                 })
                         }
                     }
@@ -81,7 +90,10 @@ export default class Timeline extends HTMLWindow {
 customViews.define({
     name : "home-timeline",
     class : Timeline,
-    header : "timeline",
+    header : "Timeline",
+    resizable : true,
+    width : 600,
+    height : 600,
     guard() {
         return {
             user : jsonClient.get("service/control/users/user/current")

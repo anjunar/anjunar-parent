@@ -4,6 +4,7 @@ import Comments from "./comments/comments.js";
 import PostLikes from "./post-likes.js";
 import PostCreateDialog from "./post-dialog.js";
 import {dateFormat} from "../../../../library/simplicity/services/tools.js";
+import {windowManager} from "../../../../library/simplicity/services/window-manager.js";
 
 export default class Post extends HTMLElement {
 
@@ -19,7 +20,9 @@ export default class Post extends HTMLElement {
 
     render() {
 
-        let matTimeline = this.queryUpwards("home-timeline")
+        let matTimeline = this.queryUpwards((element) => {
+            return element.localName === "home-timeline"
+        })
 
         builder(this, {
             element: "div",
@@ -85,7 +88,15 @@ export default class Post extends HTMLElement {
                                 dialog.addEventListener("afterSubmit", () => {
                                     matTimeline.dispatchEvent(new CustomEvent("afterSubmit"));
                                 })
-                                document.body.appendChild(dialog);
+
+                                let configure = {
+                                    header : "Post",
+                                    resizable : false
+                                }
+
+                                let url = "/anjunar/home/timeline/post/post-dialog";
+
+                                windowManager.openWindow(url, dialog, this, configure);
                             }
                         }
                     ]

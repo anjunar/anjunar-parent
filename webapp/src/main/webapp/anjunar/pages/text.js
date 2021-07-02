@@ -5,7 +5,9 @@ export default class Text extends HTMLWindow {
 
     render() {
 
-        let page = this.queryUpwards("pages-page");
+        let page = this.queryUpwards((element) => {
+            return element.localName === "pages-page"
+        });
         let html = page.html;
 
         document.addEventListener("language", (event) => {

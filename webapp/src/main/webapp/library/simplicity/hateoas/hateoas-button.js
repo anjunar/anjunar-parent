@@ -41,23 +41,27 @@ export default class HateoasButton extends HTMLElement {
                 className : "button",
                 text : this.#text,
                 update : () => {
-                    let form = this.queryUpwards("hateoas-form");
-                    let link = form.model.actions.find((link) => link.rel === this.#hateoas);
-                    if (link) {
-                        this.style.display = "inline"
-                    } else {
-                        this.style.display = "none"
+                    let form = this.queryUpwards((element) => {return element.localName === "hateoas-form"});
+                    if (form.model) {
+                        let link = form.model.actions.find((link) => link.rel === this.#hateoas);
+                        if (link) {
+                            this.style.display = "inline"
+                        } else {
+                            this.style.display = "none"
+                        }
                     }
                 },
-                onClick : () => {
-                    let hateoasForm = this.queryUpwards("hateoas-form");
-                    let domForm = this.queryUpwards("form")
+                onClick : (event) => {
+                    event.stopPropagation();
+                    let hateoasForm = this.queryUpwards((element) => {return element.localName === "hateoas-form"});
+                    let domForm = this.queryUpwards((element) => { return element.localName === "form"})
                     domForm.updateValue();
                     let link = hateoasForm.model.actions.find((link) => link.rel === this.#hateoas);
                     jsonClient.action(link.method, link.url, {body : domForm.value})
                         .then((response) => {
                             this.dispatchEvent(new CustomEvent("afterSubmit", {detail : response}))
                         })
+                    return false;
                 }
             })
 

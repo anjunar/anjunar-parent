@@ -6,14 +6,14 @@ let idCounter = 0;
 
 export class HTMLWindow extends HTMLElement {}
 
-Node.prototype.queryUpwards = function (query) {
-    if (this.localName && this.localName === query) {
+Node.prototype.queryUpwards = function (callback) {
+    if (callback(this)) {
         return this;
     } else {
         if (this.parentElement === null) {
             return null;
         }
-        return this.parentElement.queryUpwards(query);
+        return this.parentElement.queryUpwards(callback);
     }
 }
 

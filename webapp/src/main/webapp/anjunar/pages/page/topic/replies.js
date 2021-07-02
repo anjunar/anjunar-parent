@@ -30,7 +30,9 @@ export default class Replies extends HTMLElement {
 
     render() {
 
-        let page = this.queryUpwards("anjunar-pages-page");
+        let page = this.queryUpwards((element) => {
+            return element.localName === "anjunar-pages-page";
+        });
         let html = page.html;
 
         builder(this, {

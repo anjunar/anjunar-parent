@@ -25,7 +25,7 @@ export default class HateoasInput extends HTMLElement {
 
     render() {
 
-        let form = this.queryUpwards("hateoas-form");
+        let form = this.queryUpwards((element) => {return element.localName === "hateoas-form"});
         let field = form.field(this.name);
 
         function map(validators) {

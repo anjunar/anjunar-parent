@@ -116,13 +116,19 @@ export default class EditorTableElement extends HTMLTableElement {
             let endContainer = rangeAt.endContainer;
 
             let tds = element.querySelectorAll("td");
-            let parentElement = endContainer.queryUpwards("td");
+            let parentElement = endContainer.queryUpwards((element) => {
+                return element.localName === "td"
+            });
             if (parentElement) {
                 if (tds.item(tds.length - 1).isEqualNode(parentElement)) {
                     let length = endContainer.textContent.length;
                     if (length === endOffset) {
                         if (event.keyCode === 13 && event.ctrlKey) {
-                            endContainer.queryUpwards("td").innerHTML = endContainer.queryUpwards("td").innerHTML + "<br/>"
+                            endContainer.queryUpwards((element) => {
+                                return element.localName === "td"
+                            }).innerHTML = endContainer.queryUpwards((element) => {
+                                return element.localName === "td"
+                            }).innerHTML + "<br/>"
                         } else {
                             if (event.keyCode === 13 && ! event.ctrlKey ) {
                                 event.preventDefault();

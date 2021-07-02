@@ -6,6 +6,7 @@ export default class MatWindow extends HTMLElement {
     #content;
     #header;
     #resizable;
+    #url;
 
     constructor() {
         super();
@@ -37,6 +38,14 @@ export default class MatWindow extends HTMLElement {
 
     set resizable(value) {
         this.#resizable = value;
+    }
+
+    get url() {
+        return this.#url;
+    }
+
+    set url(value) {
+        this.#url = value;
     }
 
     render() {

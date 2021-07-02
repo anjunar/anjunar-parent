@@ -20,14 +20,16 @@ public class Blob {
     private String data = "";
 
     public static HarddiskFile updater(Blob blob, HarddiskFile harddiskFile) {
-        Base64Resource process = FileDiskUtils.extractBase64(blob.getData());
+        if (harddiskFile != null) {
+            Base64Resource process = FileDiskUtils.extractBase64(blob.getData());
 
-        harddiskFile.setData(process.getData());
-        harddiskFile.setType(process.getType());
-        harddiskFile.setSubType(process.getSubType());
+            harddiskFile.setData(process.getData());
+            harddiskFile.setType(process.getType());
+            harddiskFile.setSubType(process.getSubType());
 
-        harddiskFile.setName(blob.getName());
-        harddiskFile.setLastModified(blob.getLastModified());
+            harddiskFile.setName(blob.getName());
+            harddiskFile.setLastModified(blob.getLastModified());
+        }
         return harddiskFile;
     }
 

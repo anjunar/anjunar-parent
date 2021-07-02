@@ -19,7 +19,9 @@ export default class Topic extends HTMLElement {
     }
 
     render() {
-        let page = this.queryUpwards("pages-page");
+        let page = this.queryUpwards((element) => {
+            return element.localName === "pages-page"
+        });
         let html = page.html;
 
         builder(this, {

@@ -1,6 +1,7 @@
 import {builder, customComponents} from "../../../../../library/simplicity/simplicity.js";
 import CommentEditDialog from "./comment-dialog.js";
 import CommentLikes from "./comment-likes.js";
+import {windowManager} from "../../../../../library/simplicity/services/window-manager.js";
 
 export default class Comment extends HTMLElement {
 
@@ -80,7 +81,15 @@ export default class Comment extends HTMLElement {
                                                 dialog.addEventListener("delete", () => {
                                                     this.dispatchEvent(new CustomEvent("delete"));
                                                 })
-                                                document.body.appendChild(dialog);
+
+                                                let configuration = {
+                                                    header : "Comment",
+                                                    resizable : false
+                                                }
+
+                                                let url = "/anjunar/home/timeline/post/comments/comment-dialog"
+
+                                                windowManager.openWindow(url, dialog, this, configuration);
                                             }
                                         }
                                     ]

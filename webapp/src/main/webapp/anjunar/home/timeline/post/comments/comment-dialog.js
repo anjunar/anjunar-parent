@@ -1,10 +1,10 @@
-import {builder, customComponents} from "../../../../../library/simplicity/simplicity.js";
-import MatDialog from "../../../../../library/simplicity/components/modal/mat-dialog.js";
+import {builder, customViews, HTMLWindow} from "../../../../../library/simplicity/simplicity.js";
 import HateoasButton from "../../../../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasForm from "../../../../../library/simplicity/hateoas/hateoas-form.js";
 import DomTextarea from "../../../../../library/simplicity/directives/dom-textarea.js";
+import {windowManager} from "../../../../../library/simplicity/services/window-manager.js";
 
-export default class CommentDialog extends HTMLElement {
+export default class CommentDialog extends HTMLWindow {
 
     #comment;
 
@@ -18,52 +18,56 @@ export default class CommentDialog extends HTMLElement {
 
     render() {
         builder(this, {
-            element : HateoasForm,
-            model : this.#comment,
-            children : [{
-                element : MatDialog,
-                enclosing: this,
-                header : "Comment",
-                content : {
-                    element : "div",
-                    children : [
+            element: HateoasForm,
+            model: this.#comment,
+            children: [
+                {
+                    element: "div",
+                    children: [
                         {
-                            element : DomTextarea,
-                            cols : "10",
-                            rows : "10",
-                            name : "text",
-                            style : {
-                                width : "400px"
+                            element: DomTextarea,
+                            cols: "10",
+                            rows: "10",
+                            name: "text",
+                            style: {
+                                width: "400px"
                             }
                         }
                     ]
                 },
-                footer : {
-                    element : "div",
-                    children : [
+                {
+                    element: "div",
+                    children: [
                         {
                             element: HateoasButton,
-                            hateoas : "update",
-                            text : "Send",
-                            onAfterSubmit : () => {
+                            hateoas: "update",
+                            text: "Send",
+                            onAfterSubmit: () => {
                                 this.dispatchEvent(new CustomEvent("update"))
-                                this.remove();
+                                let matWindow = windowManager.findByView(this);
+                                windowManager.close(matWindow);
                             }
                         },
                         {
                             element: HateoasButton,
-                            hateoas : "delete",
-                            text : "Delete",
-                            onAfterSubmit : () => {
+                            hateoas: "delete",
+                            text: "Delete",
+                            onAfterSubmit: () => {
                                 this.dispatchEvent(new CustomEvent("update"))
-                                this.remove();
+                                let matWindow = windowManager.findByView(this);
+                                windowManager.close(matWindow);
                             }
                         }
                     ]
                 }
-            }]
+            ]
         })
     }
 }
 
-customComponents.define("post-comment-dialog", CommentDialog)
+customViews.define({
+    name: "comment-dialog",
+    header: "Comment",
+    resizable: false,
+    class: CommentDialog,
+})

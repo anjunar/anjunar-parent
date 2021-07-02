@@ -162,10 +162,20 @@ export const windowManager = new class WindowManager {
         }
     }
 
+    openWindow(url, view, host, configure) {
+        let matWindow = host.queryUpwards((element) => element.url);
+        let urlWithHost = `${url}?host=${btoa(matWindow.url)}`;
+
+        windowManager.register(view, configure, urlWithHost, (matWindow) => {
+            let domRouter = document.querySelector("dom-router");
+            domRouter.appendChild(matWindow);
+        })
+    }
+
     findByView(view) {
         for (const matWindow of windowsRegistry) {
-            if (matWindow.content === view) {
-                return matWindow;
+            if (matWindow[1].content === view) {
+                return matWindow[1];
             }
         }
         return null;

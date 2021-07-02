@@ -79,6 +79,8 @@ public class UserCommentsController implements ListController<CommentResource, U
         for (Comment comment : comments) {
             CommentResource resource = CommentResource.factory(comment);
 
+            resources.add(resource);
+
             if (identity.getUser().equals(comment.getOwner())) {
                 identity.createLink("home/timeline/post/comments/comment?id=" + comment.getId(), "GET", "read", resource::addAction);
                 identity.createLink("home/timeline/post/comments/comment?id=" + comment.getId(), "PUT", "update", resource::addAction);
