@@ -1,5 +1,6 @@
 package de.bitvale.anjunar.pages.page.history;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import de.bitvale.anjunar.pages.Page;
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.rest.api.meta.Input;
@@ -26,6 +27,7 @@ public class PageHistoryResource extends AbstractRestEntity<PageHistoryResource>
     private UserResource modifier;
 
     @Input(placeholder = "Modified", type = "date")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     private Instant modified;
 
     public String getTitle() {

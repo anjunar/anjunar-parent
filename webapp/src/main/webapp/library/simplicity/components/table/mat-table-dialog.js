@@ -1,6 +1,7 @@
 import {builder, customViews, HTMLWindow} from "../../simplicity.js";
 import MatCheckboxContainer from "../form/containers/mat-checkbox-container.js";
 import DomInput from "../../directives/dom-input.js";
+import {windowManager} from "../../services/window-manager.js";
 
 export default class MatTableDialog extends HTMLWindow {
 

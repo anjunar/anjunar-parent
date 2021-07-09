@@ -76,7 +76,7 @@ export default class Comment extends HTMLElement {
                                                 let dialog = new CommentEditDialog();
                                                 dialog.comment = this.#comment;
                                                 dialog.addEventListener("update", () => {
-                                                    this.dispatchEvent(new CustomEvent("update"))
+                                                    this.dispatchEvent(new CustomEvent("update"));
                                                 })
                                                 dialog.addEventListener("delete", () => {
                                                     this.dispatchEvent(new CustomEvent("delete"));

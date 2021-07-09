@@ -1,8 +1,7 @@
 package de.bitvale.anjunar.pages.page;
 
 import de.bitvale.anjunar.pages.Page;
-import de.bitvale.anjunar.pages.page.forum.Topic;
-import de.bitvale.common.rest.api.Editor;
+import de.bitvale.anjunar.pages.page.forum.Question;
 import de.bitvale.common.security.Identity;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
@@ -46,7 +45,7 @@ public class PageController {
         PageForm pageForm = new PageForm();
 
         identity.createLink("pages/page", "POST", "save", pageForm::addAction);
-        identity.createLink("pages/page/topics", "GET", "topics", pageForm::addLink);
+        identity.createLink("pages/page/questions", "GET", "questions", pageForm::addLink);
 
         return pageForm;
     }
@@ -72,7 +71,7 @@ public class PageController {
 
         identity.createLink("pages/page/images", "GET", "images", pageForm::addSource);
         identity.createLink("pages/page/images/image", "GET", "upload", pageForm::addSource);
-        identity.createLink("pages/page/topics?page=" + page.getId(), "GET", "topics", pageForm::addLink);
+        identity.createLink("pages/page/questions?page=" + page.getId(), "GET", "questions", pageForm::addLink);
 
         return pageForm;
     }
@@ -123,12 +122,12 @@ public class PageController {
     public void delete(@QueryParam("id") UUID id) {
         Page page = entityManager.find(Page.class, id);
 
-        List<Topic> topics = entityManager.createQuery("select t from Topic t where t.page = :page", Topic.class)
+        List<Question> questions = entityManager.createQuery("select t from Question t where t.page = :page", Question.class)
                 .setParameter("page", page.getId())
                 .getResultList();
 
-        for (Topic topic : topics) {
-            entityManager.remove(topic);
+        for (Question question : questions) {
+            entityManager.remove(question);
         }
 
         entityManager.remove(page);

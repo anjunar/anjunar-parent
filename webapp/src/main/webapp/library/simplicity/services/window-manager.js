@@ -6,6 +6,8 @@ const request = indexedDB.open("anjunar", 2);
 
 let db;
 
+let priority = 0;
+
 request.onupgradeneeded = function () {
     const db = request.result;
     db.createObjectStore("windowManager", {keyPath: "id"});
@@ -23,9 +25,12 @@ window.addEventListener("load", () => {
 
     idbRequest.onsuccess = (event) => {
         let result = idbRequest.result;
-        for (const item of result) {
+        let sortedByPriority = result.sort((lhs, rhs) => lhs.priority - rhs.priority)
+        for (const item of sortedByPriority) {
             if (!windowsRegistry.has(item.id) && !item.closed) {
-                window.location.hash = item.id;
+                setTimeout(() => {
+                    window.location.hash = item.id;
+                }, 100 * (result.indexOf(item) + 1))
             }
         }
     }
@@ -36,7 +41,7 @@ function zIndexSorted() {
     return windows.sort((lhs, rhs) => Number.parseInt(lhs.style.zIndex) - Number.parseInt(rhs.style.zIndex));
 }
 
-function saveWindow(url, matWindow, closed = false, minimized = false) {
+function saveWindow(url, matWindow) {
     let value = {
         id: url,
         width: matWindow.offsetWidth,
@@ -44,12 +49,37 @@ function saveWindow(url, matWindow, closed = false, minimized = false) {
         top: matWindow.offsetTop,
         left: matWindow.offsetLeft,
         zIndex: Number.parseInt(matWindow.style.zIndex),
-        minimized : minimized,
-        closed : closed
+        minimized : false,
+        closed : false,
+        priority : matWindow.priority
     }
     const tx = db.transaction("windowManager", "readwrite");
     const store = tx.objectStore("windowManager");
-    store.put(value);
+    let keyIDBRequest = store.put(value);
+}
+
+function updateWindow(url, record) {
+    const tx = db.transaction("windowManager", "readwrite");
+    const store = tx.objectStore("windowManager");
+    let idbRequest = store.openCursor(url);
+    idbRequest.onsuccess = (event) => {
+
+        let cursor = idbRequest.result;
+
+        let value = cursor.value;
+
+        Object.assign(value, record);
+
+        cursor.update(value);
+    }
+
+}
+
+function loadWindow(url, callback) {
+    const tx = db.transaction("windowManager", "readwrite");
+    const store = tx.objectStore("windowManager");
+    let idbRequest = store.get(url);
+    idbRequest.onsuccess = callback;
 }
 
 function saveWindowMaximized(url, matWindow) {
@@ -64,13 +94,6 @@ function saveWindowMaximized(url, matWindow) {
     const tx = db.transaction("windowManager#maximized", "readwrite");
     const store = tx.objectStore("windowManager#maximized");
     store.put(value);
-}
-
-function loadWindow(url, callback) {
-    const tx = db.transaction("windowManager", "readwrite");
-    const store = tx.objectStore("windowManager");
-    let idbRequest = store.get(url);
-    idbRequest.onsuccess = callback;
 }
 
 function loadWindowMaximized(url, callback) {
@@ -90,6 +113,76 @@ function deleteWindowMaximized(url) {
     }
 }
 
+function registerHelper(view, configure, url, result, callback) {
+    let matWindow = new MatWindow();
+    matWindow.content = view;
+    matWindow.header = configure.header;
+    matWindow.resizable = configure.resizable;
+    matWindow.url = url;
+    matWindow.priority = priority++;
+    view.window = matWindow;
+
+    if (result) {
+        if (configure.resizable) {
+            matWindow.style.width = result.width + "px";
+            matWindow.style.height = result.height + "px";
+        }
+        matWindow.style.left = result.left + "px";
+        matWindow.style.top = result.top + "px";
+        matWindow.style.zIndex = result.zIndex;
+    } else {
+        if (configure.resizable) {
+            matWindow.style.width = configure.width + "px";
+            matWindow.style.height = configure.height + "px";
+        }
+    }
+
+    windowsRegistry.set(url, matWindow);
+
+    matWindow.addEventListener("rendered", () => {
+        if (result) {
+            matWindow.style.top = result.top + "px";
+            matWindow.style.left = result.left + "px";
+        } else {
+            let top = matWindow.parentElement.offsetHeight / 2 - matWindow.offsetHeight / 2;
+            let left = matWindow.parentElement.offsetWidth / 2 - matWindow.offsetWidth / 2;
+
+            if (top < 0) {
+                top = 0;
+            }
+
+            if (left < 0) {
+                left = 0;
+            }
+
+            matWindow.style.top = top + "px";
+            matWindow.style.left = left + "px";
+        }
+
+        if (result?.minimized) {
+            matWindow.style.display = "none"
+        } else {
+            saveWindow(url, matWindow)
+        }
+    })
+
+    matWindow.addEventListener("windowEndResize", (event) => {
+        saveWindow(url, matWindow);
+    })
+
+    matWindow.addEventListener("windowEndDrag", (event) => {
+        saveWindow(url, matWindow)
+    })
+
+    callback(matWindow);
+
+    if (result?.minimized) {
+
+    } else {
+        this.clickWindow(matWindow);
+    }
+}
+
 export const windowManager = new class WindowManager {
 
     register(view, configure, url, callback) {
@@ -97,67 +190,19 @@ export const windowManager = new class WindowManager {
             loadWindow(url, (event) => {
                 let result = event.target.result;
 
-                let matWindow = new MatWindow();
-                matWindow.content = view;
-                matWindow.header = configure.header;
-                matWindow.resizable = configure.resizable;
-                matWindow.url = url;
+                let regex = /host=([\w\d]+)&?/
+                let exec = regex.exec(url);
 
-                if (result) {
-                    if (configure.resizable) {
-                        matWindow.style.width = result.width + "px";
-                        matWindow.style.height = result.height + "px";
-                    }
-                    matWindow.style.left = result.left + "px";
-                    matWindow.style.top = result.top + "px";
-                    matWindow.style.zIndex = result.zIndex;
-                } else {
-                    if (configure.resizable) {
-                        matWindow.style.width = configure.width + "px";
-                        matWindow.style.height = configure.height + "px";
-                    }
-                }
-
-                windowsRegistry.set(url, matWindow);
-
-                matWindow.addEventListener("rendered", () => {
-                    if (result) {
-                        matWindow.style.top = result.top + "px";
-                        matWindow.style.left = result.left + "px";
+                if (exec) {
+                    let host = atob(exec[1]);
+                    if (windowsRegistry.has(host)) {
+                        registerHelper.call(this, view, configure, url, result, callback);
                     } else {
-                        let top = matWindow.parentElement.offsetHeight / 2 - matWindow.offsetHeight / 2;
-                        let left = matWindow.parentElement.offsetWidth / 2 - matWindow.offsetWidth / 2;
-
-                        if (top < 0) {
-                            top = 0;
-                        }
-
-                        if (left < 0) {
-                            left = 0;
-                        }
-
-                        matWindow.style.top = top + "px";
-                        matWindow.style.left = left + "px";
+                        // Do nothing because it has no Host. The Host and others must be loaded in the right order
                     }
-
-                    saveWindow(url, matWindow)
-
-                    if (result?.minimized) {
-                        matWindow.style.display = "none"
-                    }
-                })
-
-                matWindow.addEventListener("windowEndResize", (event) => {
-                    saveWindow(url, matWindow);
-                })
-
-                matWindow.addEventListener("windowEndDrag", (event) => {
-                    saveWindow(url, matWindow)
-                })
-
-                callback(matWindow);
-
-                this.clickWindow(matWindow);
+                } else {
+                    registerHelper.call(this, view, configure, url, result, callback);
+                }
             })
         }
     }
@@ -202,7 +247,10 @@ export const windowManager = new class WindowManager {
 
             windowsRegistry.forEach((value, key) => {
                 if (value === sortElement) {
-                    saveWindow(key, sortElement);
+                    updateWindow(key, {
+                        zIndex : (i + 1) * 10,
+                        minimized: false
+                    })
                 }
             })
         }
@@ -216,7 +264,7 @@ export const windowManager = new class WindowManager {
 
         windowsRegistry.delete(matWindow.url);
 
-        saveWindow(matWindow.url, matWindow, true)
+        updateWindow(matWindow.url, {closed: true})
 
         let zIndexes = zIndexSorted();
         if (zIndexes.length > 0) {
@@ -231,10 +279,9 @@ export const windowManager = new class WindowManager {
 
     minimize(matWindow) {
 
-        saveWindow(matWindow.url, matWindow, false, true);
+        updateWindow(matWindow.url, { minimized: true })
 
         matWindow.style.display = "none";
-
     }
 
     show(matWindow) {
@@ -244,9 +291,9 @@ export const windowManager = new class WindowManager {
             matWindow.style.display = "block";
             matWindow.style.top = result.top + "px";
             matWindow.style.left = result.left + "px";
-        })
 
-        this.clickWindow(matWindow);
+            this.clickWindow(matWindow);
+        })
 
     }
 

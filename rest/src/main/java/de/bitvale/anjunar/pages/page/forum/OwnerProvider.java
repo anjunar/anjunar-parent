@@ -11,12 +11,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.UUID;
 
-public class OwnerProvider extends AbstractRestPredicateProvider<UUID, Topic> {
+public class OwnerProvider extends AbstractRestPredicateProvider<UUID, Question> {
     @Override
-    public Predicate build(UUID value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Topic> root, CriteriaQuery<?> query) {
+    public Predicate build(UUID value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Question> root, CriteriaQuery<?> query) {
         if (value == null) {
             return builder.conjunction();
         }
-        return builder.equal(root.get(Topic_.owner).get(User_.id), value);
+        return builder.equal(root.get(Question_.owner).get(User_.id), value);
     }
 }

@@ -87,6 +87,10 @@ export default class MatImageUpload extends HTMLElement {
                             return this.#value.data
                         }
                         return "#"
+                    },
+                    onClick : () => {
+                        let input = this.querySelector("input[type=file]");
+                        input.click();
                     }
                 },
                 {
@@ -98,20 +102,6 @@ export default class MatImageUpload extends HTMLElement {
                         this.#value = event.detail.load;
                         this.dispatchEvent(new Event("change"));
                         this.dispatchEvent(new CustomEvent("load", {detail : event.detail}));
-                    }
-                },{
-                    element : "button",
-                    type : "button",
-                    text : "Upload",
-                    className : "button",
-                    style : {
-                        display : () => {
-                            return ! this.hasAttribute("disabled") && this.#showButton ? "block" : "none";
-                        }
-                    },
-                    onClick : () => {
-                        let input = this.querySelector("input[type=file]");
-                        input.click();
                     }
                 }
             ]

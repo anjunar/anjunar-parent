@@ -121,16 +121,16 @@ export default class MatTable extends HTMLTableElement {
 
     render() {
 
-        let open = () => {
-            let view = new MatTableDialog();
-            view.table = this;
-            let configure = {
-                header: "Table Setup",
-                resizable: false,
-            }
-            let url = `/library/simplicity/components/table/mat-table-dialog`;
+        let url = `/library/simplicity/components/table/mat-table-dialog`;
+        let matWindow = this.queryUpwards((element) => element.url);
+        let urlWithHost = `${url}?host=${btoa(matWindow.url)}`;
 
-            windowManager.openWindow(url, view, this, configure)
+        window.addEventListener(urlWithHost, (event) => {
+            event.detail.table = this;
+        })
+
+        let open = () => {
+            window.location.hash = "#" + urlWithHost;
         }
 
         let skipPrevious = () => {
@@ -434,9 +434,11 @@ export default class MatTable extends HTMLTableElement {
                                                             return link ? "block" : "none"
                                                         }
                                                     },
-                                                    onClick: () => {
+                                                    onClick: (event) => {
+                                                        event.stopPropagation();
                                                         let link = hateoas(this.#links, "create");
                                                         this.dispatchEvent(new CustomEvent("create", {detail: link}));
+                                                        return false;
                                                     }
                                                 },
                                                 {

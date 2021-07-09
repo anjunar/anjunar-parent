@@ -8,6 +8,6 @@ import java.time.format.DateTimeFormatter;
 public class UTCInstantDeserializer extends InstantDeserializer<Instant> {
 
     public UTCInstantDeserializer() {
-        super(INSTANT, DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss"));
+        super(INSTANT, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
     }
 }

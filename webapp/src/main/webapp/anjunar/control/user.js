@@ -5,6 +5,7 @@ import HateoasButton from "../../library/simplicity/hateoas/hateoas-button.js";
 import {loadRoot} from "../service.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
+import {windowManager} from "../../library/simplicity/services/window-manager.js";
 
 export default class User extends HTMLWindow {
 
@@ -16,6 +17,10 @@ export default class User extends HTMLWindow {
 
     set user(value) {
         this.#user = value;
+    }
+
+    get description() {
+        return this.#user.firstName + " " + this.#user.lastName;
     }
 
     render() {
@@ -201,6 +206,8 @@ export default class User extends HTMLWindow {
                             onAfterSubmit : () => {
                                 loadRoot(true);
                                 document.location.hash = "#/anjunar/control/users";
+                                document.reloadAll();
+                                windowManager.close(this.window);
                             }
                         },
                         {
@@ -209,6 +216,8 @@ export default class User extends HTMLWindow {
                             text: i18n("Delete"),
                             onAfterSubmit : () => {
                                 document.location.hash = "#/anjunar/control/users";
+                                document.reloadAll();
+                                windowManager.close(this.window);
                             }
                         },
                         {
@@ -227,6 +236,8 @@ export default class User extends HTMLWindow {
                                     text: i18n("Save"),
                                     onAfterSubmit : () => {
                                         document.location.hash = "#/anjunar/control/users";
+                                        document.reloadAll();
+                                        windowManager.close(this.window);
                                     }
                                 },
                                 {
@@ -235,6 +246,8 @@ export default class User extends HTMLWindow {
                                     text: i18n("Update"),
                                     onAfterSubmit : () => {
                                         document.location.hash = "#/anjunar/control/users";
+                                        document.reloadAll();
+                                        windowManager.close(this.window);
                                     }
                                 },
                                 {

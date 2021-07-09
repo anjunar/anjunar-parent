@@ -2,7 +2,7 @@ import {builder, customViews, HTMLWindow} from "../../../library/simplicity/simp
 import HateoasTable from "../../../library/simplicity/hateoas/hateoas-table.js";
 import {jsonClient} from "../../../library/simplicity/services/client.js";
 
-export default class Topics extends HTMLWindow {
+export default class Questions extends HTMLWindow {
 
     #topics;
 
@@ -20,10 +20,10 @@ export default class Topics extends HTMLWindow {
                 header: false,
                 model: this.#topics,
                 onCreate: (event) => {
-                    // window.location.hash = `#/anjunar/pages/page?id=${this.#html.id}#/anjunar/pages/page/topic?page=${this.#html.id}`
+                    window.location.hash = `#/anjunar/pages/page/question?page=${this.queryParams.page}`
                 },
                 onRow: (event) => {
-                    // window.location.hash = `#/anjunar/pages/page?id=${this.#html.id}#/anjunar/pages/page/topic/replies?id=${event.detail.id}`
+                    window.location.hash = `#/anjunar/pages/page/question/replies?id=${event.detail.id}`
                 },
                 meta: {
                     body: this.#topics.columns.map((column) => {
@@ -78,13 +78,13 @@ export default class Topics extends HTMLWindow {
 }
 
 customViews.define({
-    name: "page-topics",
-    class: Topics,
-    header: "Topics",
+    name: "page-questions",
+    class: Questions,
+    header: "Questions",
     resizable: true,
     guard(activeRoute) {
         return {
-            topics: jsonClient.get(`service/pages/page/topics?page=${activeRoute.queryParams.id}`)
+            topics: jsonClient.get(`service/pages/page/topics?page=${activeRoute.queryParams.page}`)
         }
     }
 })

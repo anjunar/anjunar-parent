@@ -43,8 +43,8 @@ export default class Search extends HTMLWindow {
                     onRow : (event) => {
                         window.location.hash = `#/anjunar/pages/page?id=${event.detail.id}`;
                         setTimeout(() => {
-                            window.location.hash = `#/anjunar/pages/page/topics?id=${event.detail.id}`;
-                        }, 1000)
+                            window.location.hash = `#/anjunar/pages/page/questions?page=${event.detail.id}`;
+                        }, 10)
                     },
                     meta : {
                         body : [

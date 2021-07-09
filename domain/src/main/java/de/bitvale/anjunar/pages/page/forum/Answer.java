@@ -9,8 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "do_reply")
-public class Reply extends AbstractEntity {
+@Table(name = "do_answer")
+public class Answer extends AbstractEntity {
 
     @Lob
     private String text;
@@ -22,7 +22,7 @@ public class Reply extends AbstractEntity {
     private User owner;
 
     @ManyToOne
-    private Topic topic;
+    private Question question;
 
     public String getHtml() {
         return html;
@@ -48,11 +48,11 @@ public class Reply extends AbstractEntity {
         this.owner = owner;
     }
 
-    public Topic getTopic() {
-        return topic;
+    public Question getTopic() {
+        return question;
     }
 
-    public void setTopic(Topic topic) {
-        this.topic = topic;
+    public void setTopic(Question question) {
+        this.question = question;
     }
 }

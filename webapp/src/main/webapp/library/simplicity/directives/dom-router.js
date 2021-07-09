@@ -52,40 +52,45 @@ export default class DomRouter extends HTMLElement {
                 configure = get(view.localName);
 
                 if (configure.guard) {
-                    view.queryParams = result;
 
-                    let target = configure.guard(view);
+                    view.reload = () => {
+                        view.queryParams = result;
 
-                    let guardResult = Reflect.ownKeys(target);
+                        let target = configure.guard(view);
 
-                    let promises = [];
-                    for (const property of guardResult) {
-                        let guardResultElement = target[property];
-                        promises.push(guardResultElement);
-                    }
+                        let guardResult = Reflect.ownKeys(target);
 
-                    Promise.all(promises)
-                        .then((results) => {
+                        let promises = [];
+                        for (const property of guardResult) {
+                            let guardResultElement = target[property];
+                            promises.push(guardResultElement);
+                        }
+
+                        return Promise.all(promises).then((results) => {
                             guardResult.forEach((property, index) => {
                                 view[property] = results[index];
                             });
-
-                            for (const child of Array.from(this.children)) {
-                                if (! (child instanceof MatWindow)) {
-                                    child.remove();
-                                }
-                            }
-                            if (view instanceof HTMLWindow) {
-                                windowManager.register(view, configure, hash,(matWindow) => {
-                                    this.appendChild(matWindow);
-                                });
-
-                            } else {
-                                this.appendChild(view);
-                            }
-
-                            console.timeEnd("load")
                         })
+                    }
+
+                    view.reload().then(() => {
+                        for (const child of Array.from(this.children)) {
+                            if (! (child instanceof MatWindow)) {
+                                child.remove();
+                            }
+                        }
+                        if (view instanceof HTMLWindow) {
+                            windowManager.register(view, configure, hash,(matWindow) => {
+                                this.appendChild(matWindow);
+                            });
+
+                        } else {
+                            this.appendChild(view);
+                        }
+
+                        console.timeEnd("load")
+                    })
+
                 } else {
                     for (const child of Array.from(this.children)) {
                         if (! (child instanceof MatWindow)) {

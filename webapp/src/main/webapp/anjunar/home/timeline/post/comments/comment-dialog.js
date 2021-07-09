@@ -44,8 +44,8 @@ export default class CommentDialog extends HTMLWindow {
                             text: "Send",
                             onAfterSubmit: () => {
                                 this.dispatchEvent(new CustomEvent("update"))
-                                let matWindow = windowManager.findByView(this);
-                                windowManager.close(matWindow);
+                                document.reloadAll();
+                                windowManager.close(this.window);
                             }
                         },
                         {
@@ -54,8 +54,8 @@ export default class CommentDialog extends HTMLWindow {
                             text: "Delete",
                             onAfterSubmit: () => {
                                 this.dispatchEvent(new CustomEvent("update"))
-                                let matWindow = windowManager.findByView(this);
-                                windowManager.close(matWindow);
+                                document.reloadAll();
+                                windowManager.close(this.window);
                             }
                         }
                     ]

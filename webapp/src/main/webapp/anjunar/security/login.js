@@ -5,6 +5,7 @@ import MatInputHolder from "../../library/simplicity/hateoas/hateoas-input.js";
 import HateoasButton from "../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasForm from "../../library/simplicity/hateoas/hateoas-form.js";
 import {i18nFactory} from "../../library/simplicity/services/i18nResolver.js";
+import {windowManager} from "../../library/simplicity/services/window-manager.js";
 
 class Login extends HTMLWindow {
 
@@ -45,6 +46,8 @@ class Login extends HTMLWindow {
                     text : i18n("Send"),
                     onAfterSubmit : () => {
                         loadRoot(true);
+                        document.reloadAll();
+                        windowManager.close(this.window);
                     }
                 }
             ]

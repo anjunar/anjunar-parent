@@ -9,12 +9,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class TopicProvider extends AbstractRestPredicateProvider<String, Topic> {
+public class TopicProvider extends AbstractRestPredicateProvider<String, Question> {
     @Override
-    public Predicate build(String value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Topic> root, CriteriaQuery<?> query) {
+    public Predicate build(String value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Question> root, CriteriaQuery<?> query) {
         if (value == null || value.equals("")) {
             return builder.conjunction();
         }
-        return builder.gt(builder.function("contains", Integer.class, root.get(Topic_.topic), builder.literal(value), builder.literal(1)), 0);
+        return builder.gt(builder.function("contains", Integer.class, root.get(Question_.topic), builder.literal(value), builder.literal(1)), 0);
     }
 }

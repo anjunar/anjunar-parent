@@ -6,14 +6,14 @@ import de.bitvale.common.ddd.AbstractCriteriaSearchService;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-public class PageTopicsService extends AbstractCriteriaSearchService<Topic, PageTopicsSearch> {
+public class QuestionsService extends AbstractCriteriaSearchService<Question, QuestionsSearch> {
 
     @Inject
-    public PageTopicsService(EntityManager entityManager, Identity identity) {
+    public QuestionsService(EntityManager entityManager, Identity identity) {
         super(entityManager, identity);
     }
 
-    public PageTopicsService() {
+    public QuestionsService() {
         this(null, null);
     }
 

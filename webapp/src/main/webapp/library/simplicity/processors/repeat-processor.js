@@ -23,12 +23,12 @@ export default function repeatProcessorFactory(property, leaf, value) {
             return value?.item && value?.items
         }
 
-        update(element) {
+        update(element, force) {
             let items = value.items();
             if (items) {
                 let newVar = renderedItems.get(value.parentElement());
 
-                if (! isEqual(newVar,items)) {
+                if (! isEqual(newVar,items) || force) {
                     for (const child of Array.from(value.parentElement().children)) {
                         child.remove();
                     }

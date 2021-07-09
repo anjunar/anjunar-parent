@@ -40,7 +40,8 @@ export default class Timeline extends HTMLWindow {
                     content : {
                         element : DomInput,
                         type : "text",
-                        onFocus : () => {
+                        onClick : (event) => {
+                            event.stopPropagation();
                             jsonClient.get("service/home/timeline/post/create")
                                 .then((response) => {
                                     let dialog = new PostDialog();
@@ -56,6 +57,7 @@ export default class Timeline extends HTMLWindow {
 
                                     windowManager.openWindow(url, dialog, this, configure);
                                 })
+                            return false;
                         }
                     }
                 },

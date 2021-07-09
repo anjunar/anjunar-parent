@@ -87,8 +87,8 @@ export default class PostDialog extends HTMLWindow {
                             text: "Save",
                             onAfterSubmit: () => {
                                 this.dispatchEvent(new CustomEvent("afterSubmit"))
-                                let matWindow = windowManager.findByView(this);
-                                windowManager.close(matWindow);
+                                document.reloadAll();
+                                windowManager.close(this.window);
                             }
                         },
                         {
@@ -97,8 +97,8 @@ export default class PostDialog extends HTMLWindow {
                             text: "Update",
                             onAfterSubmit: () => {
                                 this.dispatchEvent(new CustomEvent("afterSubmit"))
-                                let matWindow = windowManager.findByView(this);
-                                windowManager.close(matWindow);
+                                document.reloadAll();
+                                windowManager.close(this.window);
                             }
                         },
                         {
@@ -107,7 +107,8 @@ export default class PostDialog extends HTMLWindow {
                             text: "Delete",
                             onAfterSubmit: () => {
                                 this.dispatchEvent(new CustomEvent("afterSubmit"))
-                                this.remove();
+                                document.reloadAll();
+                                windowManager.close(this.window);
                             }
                         }
                     ]

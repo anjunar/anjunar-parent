@@ -1,18 +1,12 @@
 package de.bitvale.anjunar.pages.page.forum;
 
-import de.bitvale.anjunar.pages.page.forum.topic.PageTopicResource;
-import de.bitvale.anjunar.shared.users.user.UserResource;
-import de.bitvale.common.filedisk.FileDiskUtils;
-import de.bitvale.common.rest.api.Blob;
+import de.bitvale.anjunar.pages.page.forum.topic.QuestionResource;
 import de.bitvale.common.rest.api.Container;
-import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.ListController;
 import de.bitvale.common.rest.api.meta.MetaTable;
 import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.rest.api.meta.Sortable;
 import de.bitvale.common.security.Identity;
-import de.bitvale.common.security.User;
-import de.bitvale.common.security.UserImage;
 
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
@@ -28,27 +22,27 @@ import java.util.UUID;
 
 @ApplicationScoped
 @Path("pages/page/topics")
-public class PageTopicsController implements ListController<PageTopicResource, PageTopicsSearch> {
+public class QuestionsController implements ListController<QuestionResource, QuestionsSearch> {
 
-    private final PageTopicsService service;
+    private final QuestionsService service;
 
     private final Identity identity;
 
     @Inject
-    public PageTopicsController(PageTopicsService service, Identity identity) {
+    public QuestionsController(QuestionsService service, Identity identity) {
         this.service = service;
         this.identity = identity;
     }
 
-    public PageTopicsController() {
+    public QuestionsController() {
         this(null, null);
     }
 
     @GET
     @Produces("application/json")
     @RolesAllowed({"Administrator", "User", "Guest"})
-    public MetaTable<PageTopicResource> list(@QueryParam("page") UUID page) {
-        MetaTable<PageTopicResource> metaTable = new MetaTable<>(PageTopicResource.class, identity.getLanguage());
+    public MetaTable<QuestionResource> list(@QueryParam("page") UUID page) {
+        MetaTable<QuestionResource> metaTable = new MetaTable<>(QuestionResource.class, identity.getLanguage());
 
         Property owner = metaTable.find("owner");
         identity.createLink("control/users", "POST", "list", owner::addLink);
@@ -70,26 +64,26 @@ public class PageTopicsController implements ListController<PageTopicResource, P
     @Override
     @Transactional
     @RolesAllowed({"Administrator", "User", "Guest"})
-    public Container<PageTopicResource> list(PageTopicsSearch search) {
+    public Container<QuestionResource> list(QuestionsSearch search) {
 
         long count = service.count(search);
-        List<Topic> topics = service.find(search);
+        List<Question> questions = service.find(search);
 
-        List<PageTopicResource> resources = new ArrayList<>();
+        List<QuestionResource> resources = new ArrayList<>();
 
-        for (Topic topic : topics) {
-            PageTopicResource resource = PageTopicResource.factory(topic);
-
-            identity.createLink("pages/page/topics/topic?id=" + topic.getId(), "GET", "read", resource::addAction);
-            identity.createLink("pages/page/topics/topic?id=" + topic.getId(), "PUT", "update", resource::addAction);
-            identity.createLink("pages/page/topics/topic?id=" + topic.getId(), "DELETE", "delete", resource::addAction);
-
-            identity.createLink("pages/page/topics/topic/replies", "GET", "replies", resource::addLink);
+        for (Question question : questions) {
+            QuestionResource resource = QuestionResource.factory(question);
 
             resources.add(resource);
+
+            identity.createLink("pages/page/topics/topic?id=" + question.getId(), "GET", "read", resource::addAction);
+            identity.createLink("pages/page/topics/topic?id=" + question.getId(), "PUT", "update", resource::addAction);
+            identity.createLink("pages/page/topics/topic?id=" + question.getId(), "DELETE", "delete", resource::addAction);
+
+            identity.createLink("pages/page/topics/topic/replies", "GET", "replies", resource::addLink);
         }
 
-        Container<PageTopicResource> container = new Container<>(resources, count);
+        Container<QuestionResource> container = new Container<>(resources, count);
 
         identity.createLink("pages/page/topics/topic/create?page=" + search.getPage(), "GET", "create", container::addLink);
 

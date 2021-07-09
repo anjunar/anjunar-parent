@@ -9,7 +9,7 @@ import javax.ws.rs.QueryParam;
 import java.util.List;
 import java.util.UUID;
 
-public class TopicRepliesSearch extends AbstractRestSearch {
+public class AnswersSearch extends AbstractRestSearch {
 
     @QueryParam("sort")
     @RestSort(GenericSortProvider.class)

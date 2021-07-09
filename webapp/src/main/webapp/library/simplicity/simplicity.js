@@ -2,9 +2,29 @@ import {register} from "./services/router.js"
 import {lifeCycle} from "./processors/lifecycle-processor.js";
 import registry from "./processors/processor-registry.js";
 
-let idCounter = 0;
+export class HTMLWindow extends HTMLElement {
 
-export class HTMLWindow extends HTMLElement {}
+    #window
+
+    get window() {
+        return this.#window;
+    }
+
+    set window(value) {
+        this.#window = value;
+    }
+}
+
+document.reloadAll = () => {
+    let traversal = document.createNodeIterator(document.body, NodeFilter.SHOW_ELEMENT);
+
+    let currentNode;
+    while (currentNode = traversal.nextNode()) {
+        if (currentNode.reload) {
+            currentNode.reload();
+        }
+    }
+}
 
 Node.prototype.queryUpwards = function (callback) {
     if (callback(this)) {
@@ -127,15 +147,15 @@ function elementFactory(property, array, tree) {
             }
         }
 
-        update() {
+        update(force) {
             for (const processor of processors) {
                 if (processor.update) {
-                    processor.update(instance);
+                    processor.update(instance, force);
                 }
             }
 
             for (const element of properties) {
-                element.update();
+                element.update(force);
             }
         }
 
@@ -286,6 +306,9 @@ export const customViews = new class CustomViews {
         configure.class.prototype.connectedCallback = function () {
             if (! this.rendered) {
                 if (this.render) {
+                    if (this instanceof HTMLWindow) {
+                        window.dispatchEvent(new CustomEvent(this.window.url, {detail : this}))
+                    }
                     this.render();
                     this.rendered = true;
                 }

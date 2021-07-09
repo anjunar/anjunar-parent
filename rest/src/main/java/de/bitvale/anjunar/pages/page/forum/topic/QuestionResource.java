@@ -1,8 +1,7 @@
 package de.bitvale.anjunar.pages.page.forum.topic;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import de.bitvale.anjunar.pages.Page;
-import de.bitvale.anjunar.pages.page.forum.Topic;
+import de.bitvale.anjunar.pages.page.forum.Question;
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Editor;
@@ -11,10 +10,11 @@ import de.bitvale.common.security.Identity;
 import de.bitvale.common.validators.Dom;
 
 import javax.persistence.EntityManager;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 
-public class PageTopicResource extends AbstractRestEntity<PageTopicResource> {
+public class QuestionResource extends AbstractRestEntity<QuestionResource> {
 
     @Input(placeholder = "Page", type = "text")
     private UUID page;
@@ -33,8 +33,7 @@ public class PageTopicResource extends AbstractRestEntity<PageTopicResource> {
     private int views;
 
     @Input(placeholder = "Created", type = "datetime-local")
-    @JsonFormat(pattern = "YYYY-MM-dd'T'HH:mm",  timezone = "UTC")
-    private Instant created;
+    private LocalDateTime created;
 
     public UUID getPage() {
         return page;
@@ -76,35 +75,35 @@ public class PageTopicResource extends AbstractRestEntity<PageTopicResource> {
         this.views = views;
     }
 
-    public Instant getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(Instant created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
-    public static PageTopicResource factory(Topic topic) {
-        PageTopicResource resource = new PageTopicResource();
+    public static QuestionResource factory(Question question) {
+        QuestionResource resource = new QuestionResource();
 
-        resource.setId(topic.getId());
-        resource.setCreated(topic.getCreated());
-        resource.setTopic(topic.getTopic());
-        resource.setEditor(Editor.factory(topic.getHtml(), topic.getText()));
-        resource.setPage(topic.getPage().getId());
-        resource.setOwner(UserResource.factory(topic.getOwner()));
-        resource.setViews(topic.getViews());
+        resource.setId(question.getId());
+        resource.setCreated(LocalDateTime.ofInstant(question.getCreated(), ZoneId.systemDefault()));
+        resource.setTopic(question.getTopic());
+        resource.setEditor(Editor.factory(question.getHtml(), question.getText()));
+        resource.setPage(question.getPage().getId());
+        resource.setOwner(UserResource.factory(question.getOwner()));
+        resource.setViews(question.getViews());
 
         return resource;
     }
 
-    public static Topic updater(PageTopicResource resource, Topic topic, Identity identity, EntityManager entityManager) {
-        topic.setTopic(resource.getTopic());
-        topic.setPage(entityManager.find(Page.class, resource.getPage()));
-        topic.setHtml(resource.getEditor().getHtml());
-        topic.setText(resource.getEditor().getText());
-        topic.setViews(resource.getViews());
-        topic.setOwner(identity.getUser());
-        return topic;
+    public static Question updater(QuestionResource resource, Question question, Identity identity, EntityManager entityManager) {
+        question.setTopic(resource.getTopic());
+        question.setPage(entityManager.find(Page.class, resource.getPage()));
+        question.setHtml(resource.getEditor().getHtml());
+        question.setText(resource.getEditor().getText());
+        question.setViews(resource.getViews());
+        question.setOwner(identity.getUser());
+        return question;
     }
 }

@@ -11,9 +11,9 @@ import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-public class CreatedProvider extends AbstractRestPredicateProvider<String, Topic> {
+public class CreatedProvider extends AbstractRestPredicateProvider<String, Question> {
     @Override
-    public Predicate build(String value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Topic> root, CriteriaQuery<?> query) {
+    public Predicate build(String value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Question> root, CriteriaQuery<?> query) {
         if (value == null) {
             return builder.conjunction();
         }

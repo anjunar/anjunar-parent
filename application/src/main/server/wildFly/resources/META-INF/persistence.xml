@@ -14,8 +14,8 @@
 
         <class>de.bitvale.anjunar.pages.Page</class>
         <class>de.bitvale.anjunar.pages.PageImage</class>
-        <class>de.bitvale.anjunar.pages.page.forum.Topic</class>
-        <class>de.bitvale.anjunar.pages.page.forum.Reply</class>
+        <class>de.bitvale.anjunar.pages.page.forum.Question</class>
+        <class>de.bitvale.anjunar.pages.page.forum.Answer</class>
 
         <class>de.bitvale.anjunar.timeline.TimelineImage</class>
         <class>de.bitvale.anjunar.timeline.Comment</class>

@@ -9,12 +9,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class ViewsProvider extends AbstractRestPredicateProvider<Integer, Topic> {
+public class ViewsProvider extends AbstractRestPredicateProvider<Integer, Question> {
     @Override
-    public Predicate build(Integer value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Topic> root, CriteriaQuery<?> query) {
+    public Predicate build(Integer value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Question> root, CriteriaQuery<?> query) {
         if (value == null) {
             return builder.conjunction();
         }
-        return builder.greaterThan(root.get(Topic_.views), value);
+        return builder.greaterThanOrEqualTo(root.get(Question_.views), value);
     }
 }

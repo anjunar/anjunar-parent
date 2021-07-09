@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "do_topic")
-public class Topic extends AbstractAggregate {
+@Table(name = "do_answer")
+public class Question extends AbstractAggregate {
 
     @Lob
     private String topic;
@@ -27,8 +27,8 @@ public class Topic extends AbstractAggregate {
     @ManyToOne
     private Page page;
 
-    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL)
-    private final List<Reply> replies = new ArrayList<>();
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private final List<Answer> replies = new ArrayList<>();
 
     @Column(name = "pa_views")
     private int views = 0;
@@ -65,7 +65,7 @@ public class Topic extends AbstractAggregate {
         this.owner = owner;
     }
 
-    public List<Reply> getReplies() {
+    public List<Answer> getReplies() {
         return replies;
     }
 

@@ -1,5 +1,6 @@
 package de.bitvale.anjunar.home.timeline.post;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import de.bitvale.anjunar.control.user.timeline.UserPost;
 import de.bitvale.anjunar.shared.users.user.UserResource;
 import de.bitvale.anjunar.timeline.Post;
@@ -28,6 +29,7 @@ public class PostResource extends AbstractRestEntity<PostResource> {
     private UserResource owner;
 
     @Input(placeholder = "Created", type = "datetime-local")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     private Instant created;
 
     @Input(placeholder = "Likes", type = "lazymultiselect")

@@ -1,13 +1,11 @@
-import {builder, customViews} from "../../../../library/simplicity/simplicity.js";
+import {builder, customViews, HTMLWindow} from "../../../../library/simplicity/simplicity.js";
 import {jsonClient} from "../../../../library/simplicity/services/client.js";
-import HateoasButton from "../../../../library/simplicity/hateoas/hateoas-button.js";
 import HateoasTable from "../../../../library/simplicity/hateoas/hateoas-table.js";
-import ReplyDialog from "./reply-dialog.js";
-import {dateFormat, hateoas} from "../../../../library/simplicity/services/tools.js";
+import {dateFormat} from "../../../../library/simplicity/services/tools.js";
 import HateoasForm from "../../../../library/simplicity/hateoas/hateoas-form.js";
 import {i18nFactory} from "../../../../library/simplicity/services/i18nResolver.js";
 
-export default class Replies extends HTMLElement {
+export default class Replies extends HTMLWindow {
 
     #topic;
     #replies;
@@ -29,12 +27,6 @@ export default class Replies extends HTMLElement {
     }
 
     render() {
-
-        let page = this.queryUpwards((element) => {
-            return element.localName === "anjunar-pages-page";
-        });
-        let html = page.html;
-
         builder(this, {
             element: HateoasForm,
             model: this.#topic,
@@ -102,11 +94,14 @@ export default class Replies extends HTMLElement {
                                             text: `${i18n("Views")}: ${this.#topic.views}`
                                         },
                                         {
-                                            element: HateoasButton,
-                                            hateoas: "update",
+                                            element: "button",
+                                            type: "button",
+                                            className: "button",
                                             text: i18n("Edit"),
-                                            onClick: () => {
-                                                window.location.hash = `#/anjunar/pages/page?id=${html.id}#/anjunar/pages/page/topic?id=${this.#topic.id}`
+                                            onClick: (event) => {
+                                                event.stopPropagation();
+                                                window.location.hash = `#/anjunar/pages/page/question?id=${this.#topic.id}`
+                                                return false;
                                             }
                                         },
                                         {
@@ -152,26 +147,10 @@ export default class Replies extends HTMLElement {
                             },
                             className: "replies",
                             onRow: (event) => {
-                                let link = hateoas(event.detail.links, "read")
-                                if (link) {
-                                    jsonClient.get(link.url)
-                                        .then((response) => {
-                                            let dialog = new ReplyDialog();
-                                            dialog.reply = response;
-                                            dialog.addEventListener("afterSubmit", () => {
-                                                event.target.reload();
-                                            })
-                                            document.body.appendChild(dialog);
-                                        });
-                                }
+                                window.location.hash = `#/anjunar/pages/page/question/reply-dialog?id=${event.detail.id}`
                             },
                             onCreate: (event) => {
-                                jsonClient.get(`service/pages/page/topics/topic/replies/reply/create?topic=${this.#topic.id}`)
-                                    .then((response) => {
-                                        let dialog = new ReplyDialog();
-                                        dialog.reply = response;
-                                        document.body.appendChild(dialog);
-                                    });
+                                window.location.hash = `#/anjunar/pages/page/question/reply-dialog?topic=${this.#topic.id}`
                             },
                             meta: {
                                 body: this.#replies.columns.map((column) => {
@@ -243,6 +222,8 @@ export default class Replies extends HTMLElement {
 customViews.define({
     name: "topic-replies",
     class: Replies,
+    header: "Replies",
+    resizable: true,
     guard(activeRoute) {
         return {
             topic: jsonClient.get(`service/pages/page/topics/topic?id=${activeRoute.queryParams.id}`),
@@ -252,16 +233,16 @@ customViews.define({
 })
 
 const i18n = i18nFactory({
-    Replies : {
-        "en-DE" : "Replies",
-        "de-DE" : "Antworten"
+    Replies: {
+        "en-DE": "Replies",
+        "de-DE": "Antworten"
     },
-    Views : {
-        "en-DE" : "Views",
-        "de-DE" : "Sichten"
+    Views: {
+        "en-DE": "Views",
+        "de-DE": "Sichten"
     },
-    "Edit" : {
-        "en-DE" : "Edit",
-        "de-DE" : "Bearbeiten"
+    "Edit": {
+        "en-DE": "Edit",
+        "de-DE": "Bearbeiten"
     }
 });
