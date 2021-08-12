@@ -61,7 +61,7 @@ Node.prototype.queryUpwards = function (callback) {
     }
 }
 
-const blackList = ["mousemove", "mouseover"]
+const blackList = ["mousemove", "mouseover", ""]
 
 EventTarget.prototype.addEventListener = (function (_super) {
     return function (name, callback) {

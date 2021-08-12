@@ -30,6 +30,17 @@ export default class MatTableDialog extends HTMLWindow {
                             return this.table.columns;
                         }
                     },
+                    page : {
+                        input: () => {
+                            return this.#page;
+                        }
+                    },
+                    onPage: (event) => {
+                        let index = event.detail.page;
+                        let column = this.table.columns[index];
+                        let newIndex = column.index
+                        this.#page = newIndex
+                    },
                     meta : {
                         item : {
                             element: (tr) => {
@@ -45,11 +56,6 @@ export default class MatTableDialog extends HTMLWindow {
                                 }
                             }
                         }
-                    },
-                    onPage: (event) => {
-                        let page = event.detail.page;
-                        let column = this.table.columns[page];
-                        this.#page = column.index
                     }
                 },
                 {
@@ -66,84 +72,134 @@ export default class MatTableDialog extends HTMLWindow {
                                 {
                                     element: "div",
                                     style : {
-                                        display : "flex"
+                                        position : "relative",
+                                        height : "300px",
+                                        width:  "100%"
                                     },
                                     children : [
                                         {
-                                            element: MatCheckboxContainer,
-                                            placeholder: "Visible",
-                                            content: {
-                                                element: DomInput,
-                                                type: "checkbox",
-                                                value: {
-                                                    input: () => {
-                                                        return tr.visible;
+                                            element : "div",
+                                            style : {
+                                                position: "absolute",
+                                                top: "50%",
+                                                left : "50%",
+                                                transform: "translate(-50%, -50%)",
+                                            },
+                                            children : [
+                                                {
+                                                    element : "div",
+                                                    style : {
+                                                        width : "200px"
                                                     },
-                                                    output: (value) => {
-                                                        tr.visible = value;
-                                                    }
-                                                }
-                                            }
-                                        }, {
-                                            element: "div",
-                                            initialize: (element) => {
-                                                if (this.table.meta.filter) {
-                                                    let meta = this.table.meta.filter[tr.index].element(tr);
-                                                    builder(element, meta);
-                                                } else {
-                                                    builder(element, {
-                                                        element: DomInput,
-                                                        style: {
-                                                            marginLeft: "5px",
-                                                            width: "80px"
+                                                    children : [
+                                                        {
+                                                            element: "div",
+                                                            initialize: (element) => {
+                                                                if (this.table.meta.filter) {
+                                                                    let meta = this.table.meta.filter[tr.index].element(tr);
+                                                                    builder(element, meta);
+                                                                } else {
+                                                                    builder(element, {
+                                                                        element: DomInput,
+                                                                        style: {
+                                                                            marginLeft: "5px",
+                                                                            width: "80px"
+                                                                        },
+                                                                        placeholder: "search",
+                                                                        type: "text",
+                                                                        onKeyup: (event) => {
+                                                                            let value = event.target.value;
+                                                                            this.table.search({property: tr.search, value: value});
+                                                                        }
+                                                                    })
+                                                                }
+                                                            }
                                                         },
-                                                        placeholder: "search",
-                                                        type: "text",
-                                                        onKeyup: (event) => {
-                                                            let value = event.target.value;
-                                                            this.table.search({property: tr.search, value: value});
+                                                        {
+                                                            element: "div",
+                                                            style : {
+                                                                display : "flex"
+                                                            },
+                                                            children : [
+                                                                {
+                                                                    element: "div",
+                                                                    children: [
+                                                                        {
+                                                                            element: "button",
+                                                                            type: "button",
+                                                                            onClick: () => {
+                                                                                let column = this.table.columns.find(col => col.index === index)
+                                                                                let newIndex = this.table.columns.indexOf(column);
+                                                                                this.table.left(newIndex);
+                                                                                // this.#page = newIndex - 1
+                                                                                window.setTimeout(() => {
+                                                                                    let element = this.querySelector("mat-tabs")
+                                                                                    element.dispatchEvent(new CustomEvent("page", {detail : {page : newIndex - 1}}))
+                                                                                }, 100)
+                                                                            },
+                                                                            disabled: () => {
+                                                                                let column = this.table.columns.find(col => col.index === index)
+                                                                                let newIndex = this.table.columns.indexOf(column);
+                                                                                return newIndex === 0;
+                                                                            },
+                                                                            className: "material-icons",
+                                                                            text: "chevron_left"
+                                                                        },
+                                                                        {
+                                                                            element: "button",
+                                                                            type: "button",
+                                                                            onClick: () => {
+                                                                                let column = this.table.columns.find(col => col.index === index)
+                                                                                let newIndex = this.table.columns.indexOf(column);
+                                                                                this.table.right(newIndex);
+                                                                                // this.#page = newIndex + 1;
+                                                                                window.setTimeout(() => {
+                                                                                    let element = this.querySelector("mat-tabs")
+                                                                                    element.dispatchEvent(new CustomEvent("page", {detail : {page : newIndex +1 }}))
+                                                                                }, 100)
+                                                                            },
+                                                                            disabled: () => {
+                                                                                let column = this.table.columns.find(col => col.index === index)
+                                                                                let newIndex = this.table.columns.indexOf(column);
+                                                                                return newIndex === array.length - 1;
+                                                                            },
+                                                                            className: "material-icons",
+                                                                            text: "chevron_right"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    element: "div",
+                                                                    style : {
+                                                                        flex : "1"
+                                                                    }
+                                                                },
+                                                                {
+                                                                    element: MatCheckboxContainer,
+                                                                    placeholder: "Visible",
+                                                                    style : {
+                                                                        marginTop : "5px"
+                                                                    },
+                                                                    content: {
+                                                                        element: DomInput,
+                                                                        type: "checkbox",
+                                                                        value: {
+                                                                            input: () => {
+                                                                                return tr.visible;
+                                                                            },
+                                                                            output: (value) => {
+                                                                                tr.visible = value;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
                                                         }
-                                                    })
-                                                }
-                                            }
-                                        }, {
-                                            element: "div",
-                                            children: [
-                                                {
-                                                    element: "button",
-                                                    type: "button",
-                                                    onClick: () => {
-                                                        let column = this.table.columns.find(col => col.index === index)
-                                                        let newIndex = this.table.columns.indexOf(column);
-                                                        this.table.left(newIndex);
-                                                    },
-                                                    disabled: () => {
-                                                        let column = this.table.columns.find(col => col.index === index)
-                                                        let newIndex = this.table.columns.indexOf(column);
-                                                        return newIndex === 0;
-                                                    },
-                                                    className: "material-icons",
-                                                    text: "chevron_left"
-                                                },
-                                                {
-                                                    element: "button",
-                                                    type: "button",
-                                                    onClick: () => {
-                                                        let column = this.table.columns.find(col => col.index === index)
-                                                        let newIndex = this.table.columns.indexOf(column);
-                                                        this.table.right(newIndex);
-                                                    },
-                                                    disabled: () => {
-                                                        let column = this.table.columns.find(col => col.index === index)
-                                                        let newIndex = this.table.columns.indexOf(column);
-                                                        return newIndex === array.length - 1;
-                                                    },
-                                                    className: "material-icons",
-                                                    text: "chevron_right"
+
+                                                    ]
                                                 }
                                             ]
                                         }
-
                                     ]
                                 }
                             ]

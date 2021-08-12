@@ -4,6 +4,7 @@ export default class MatTabs extends HTMLElement {
 
     #meta;
     #items;
+    #page;
 
     get meta() {
         return this.#meta;
@@ -21,6 +22,14 @@ export default class MatTabs extends HTMLElement {
         this.#items = value;
     }
 
+    get page() {
+        return this.#page;
+    }
+
+    set page(value) {
+        this.#page = value;
+    }
+
     render() {
         let deSelectAll = () => {
             let tabs = this.querySelectorAll("mat-tab");
@@ -28,6 +37,13 @@ export default class MatTabs extends HTMLElement {
                 content.selected = false;
             }
         }
+
+        this.addEventListener("page", (event) => {
+            deSelectAll();
+            let tabs = this.querySelectorAll("mat-tab");
+            let element = tabs.item(event.detail.page);
+            element.selected = true;
+        })
 
         builder(this, {
             element: "div",
@@ -49,16 +65,19 @@ export default class MatTabs extends HTMLElement {
                                 element: "div",
                                 initialize: (element) => {
                                     element.addEventListener("click", () => {
+/*
                                         deSelectAll();
                                         let matTab = element.querySelector("mat-tab");
                                         matTab.selected = true
+
+*/
                                         this.dispatchEvent(new CustomEvent("page", {detail: {page: index}}))
                                     })
 
                                     let tree = this.#meta.item.element;
-                                    builder(element, tree(item))
+                                    builder(element, tree(item));
 
-                                    if (index === 0) {
+                                    if (index === this.#page) {
                                         let matTab = element.querySelector("mat-tab");
                                         matTab.selected = true
                                     }

@@ -43,7 +43,10 @@ export default class EditorContextmenuDialog extends HTMLWindow {
                         }
                     },
                     onPage: (event) => {
-                        this.#page = event.detail.page;
+                        let index = event.detail.page;
+                        let column = this.table.columns.find(col => col.index === index)
+                        let newIndex = this.table.columns.indexOf(column);
+                        this.#page = newIndex
                     }
                 },
                 {

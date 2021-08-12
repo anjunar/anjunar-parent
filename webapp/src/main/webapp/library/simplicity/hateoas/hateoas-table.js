@@ -5,6 +5,7 @@ import {hateoas} from "../services/tools.js";
 import DomInput from "../directives/dom-input.js";
 import DomLazySelect from "../directives/dom-lazy-select.js";
 import {QueryBuilder} from "../services/querybuilder.js";
+import MatInputContainer from "../components/form/containers/mat-input-container.js";
 
 export default class HateoasTable extends HTMLElement {
 
@@ -134,22 +135,21 @@ export default class HateoasTable extends HTMLElement {
                                         }
                                     default :
                                         return {
-                                            element: DomInput,
-                                            style: {
-                                                marginLeft: "5px",
-                                                // width : "80px"
-                                            },
+                                            element: MatInputContainer,
                                             placeholder: "search",
-                                            type: column.type,
-                                            onKeyup : (event) => {
-                                                let table = this.querySelector("table");
-                                                let value = event.target.value;
-                                                table.search({property: tr.search, value: value});
-                                            },
-                                            onChange : (event) => {
-                                                let table = this.querySelector("table");
-                                                let value = event.target.value;
-                                                table.search({property: tr.search, value: value});
+                                            content : {
+                                                element : DomInput,
+                                                type: column.type,
+                                                onKeyup : (event) => {
+                                                    let table = this.querySelector("table");
+                                                    let value = event.target.value;
+                                                    table.search({property: tr.search, value: value});
+                                                },
+                                                onChange : (event) => {
+                                                    let table = this.querySelector("table");
+                                                    let value = event.target.value;
+                                                    table.search({property: tr.search, value: value});
+                                                }
                                             }
                                         }
                                 }

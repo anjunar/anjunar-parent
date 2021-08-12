@@ -23,6 +23,10 @@ export default function repeatProcessorFactory(property, leaf, value) {
             return value?.item && value?.items
         }
 
+        initialize(element) {
+            this.update(element)
+        }
+
         update(element, force) {
             let items = value.items();
             if (items) {
