@@ -1,0 +1,14 @@
+div.question .col-0 {
+    width: 80px;
+    vertical-align: top;
+}
+
+.replies .col-0 {
+    width: 80px;
+    vertical-align: top;
+}
+
+
+control-role table .col-0 {
+    width: 12px;
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anjunar</title>
+    <script type="module" src="anjunar/app.js"></script>
+    <link rel="stylesheet" href="simplicity.css">
+    <link rel="stylesheet" href="elements.css">
+    <link rel="stylesheet" href="app.css">
+    <script>
+        let request = new XMLHttpRequest();
+
+        request.addEventListener("loadend", (response) => {
+            window.user = JSON.parse(response.target.responseText);
+            let app = document.createElement("app-anjunar");
+            document.body.appendChild(app)
+        })
+
+        let url = "service";
+        request.open("GET", url);
+        request.send();
+    </script>
+</head>
+<body style="overflow: hidden"></body>
+</html>

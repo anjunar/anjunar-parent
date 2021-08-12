@@ -1,0 +1,198 @@
+mat-progress .indeterminate:before {
+    content: '';
+    position: absolute;
+    background-color: inherit;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    will-change: left, right;
+    -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+    animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+}
+
+mat-progress .indeterminate:after {
+    content: '';
+    position: absolute;
+    background-color: inherit;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    will-change: left, right;
+    -webkit-animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    animation: indeterminate-short 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    -webkit-animation-delay: 1.15s;
+    animation-delay: 1.15s;
+}
+
+@-webkit-keyframes indeterminate {
+    0% {
+        left: -35%;
+        right: 100%;
+    }
+    60% {
+        left: 100%;
+        right: -90%;
+    }
+    100% {
+        left: 100%;
+        right: -90%;
+    }
+}
+
+@keyframes indeterminate {
+    0% {
+        left: -35%;
+        right: 100%;
+    }
+    60% {
+        left: 100%;
+        right: -90%;
+    }
+    100% {
+        left: 100%;
+        right: -90%;
+    }
+}
+
+@-webkit-keyframes indeterminate-short {
+    0% {
+        left: -200%;
+        right: 100%;
+    }
+    60% {
+        left: 107%;
+        right: -8%;
+    }
+    100% {
+        left: 107%;
+        right: -8%;
+    }
+}
+
+@keyframes indeterminate-short {
+    0% {
+        left: -200%;
+        right: 100%;
+    }
+    60% {
+        left: 107%;
+        right: -8%;
+    }
+    100% {
+        left: 107%;
+        right: -8%;
+    }
+}
+
+
+mat-spinner .spinner {
+    animation: rotator 1.4s linear infinite;
+}
+
+mat-spinner .path {
+    stroke-dasharray: 187;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    animation: dash 1.4s ease-in-out infinite,
+    colors calc(1.4s * 4) ease-in-out infinite;
+}
+
+@keyframes rotator {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(270deg); }
+}
+
+@keyframes colors {
+    0% { stroke: #4285F4; }
+    25% { stroke: #DE3E35; }
+    50% { stroke: #F7C223; }
+    75% { stroke: #1B9A59; }
+    100% { stroke: #4285F4; }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dashoffset: 187;
+        transform:rotate(0deg);
+    }
+    50% {
+        stroke-dashoffset: 40;
+        transform:rotate(135deg);
+    }
+    100% {
+        stroke-dashoffset: 187;
+        transform:rotate(450deg);
+    }
+}
+
+mat-rating input[type=radio] {
+    -webkit-appearance: none;
+    -webkit-font-smoothing: antialiased;
+    font-family: 'Material Icons', fantasy;
+    font-size: large;
+    margin: 0;
+    display: inline;
+    outline: 0;
+}
+
+
+mat-rating input[type=radio]::before {
+    content: "star_border";
+    color: var(--main-font-color);
+}
+
+mat-rating input[type=radio]:checked::before {
+    content: "star";
+    color: var(--main-selected-color);
+}
+
+mat-rating input[type=radio].selected::before {
+    content: "star";
+    color: var(--main-selected-color);
+}
+
+mat-menu .item:hover {
+    background-color: var(--main-selected-color);
+    color: var(--main-background-color);
+}
+
+mat-menu-item:hover {
+    background-color: var(--main-selected-color);
+    color: var(--main-background-color);
+}
+
+anjunar-pages-page a {
+    color: var(--main-selected-color) !important;
+}
+
+mat-editor a {
+    color: var(--main-selected-color) !important;
+}
+
+mat-editor editor-toolbar * {
+    background-color: var(--main-background-color);
+    color: var(--main-font-color);
+    font-size: 14px;
+}
+
+mat-editor div[contenteditable=true] * {
+    border: var(--main-dark1-color) solid 1px;
+}
+
+mat-editor div[contenteditable=true] *:hover {
+    border: var(--main-selected-color) solid 1px;
+}
+
+mat-editor [contenteditable] {
+    outline: 0 solid transparent;
+}
+
+editor-toolbar div.row {
+    margin: 2px;
+    display: flex;
+    border: var(--main-dark1-color) solid 1px;
+    align-items: stretch;
+    vertical-align: top;
+    flex-grow: 1;
+}
+

@@ -1,0 +1,5 @@
+SYS AS SYSDBA
+
+alter session set "_ORACLE_SCRIPT"=true;
+CREATE USER anjunar IDENTIFIED BY anjunar;
+GRANT ALL PRIVILEGES TO anjunar;

@@ -1,0 +1,25 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.1">
+
+    <deployment>
+        <module-alias name="deployment.net.intense.meld"/>
+
+        <dependencies>
+            <module name="com.mysql.jdbc"/>
+            <module name="javax.jms.api"/>
+            <module name="org.javassist"/>
+            <module name="com.google.guava"/>
+            <module name="org.apache.commons.lang"/>
+            <module name="org.apache.commons.io"/>
+            <module name="com.fasterxml.jackson.core.jackson-annotations"/>
+            <module name="com.fasterxml.jackson.core.jackson-core"/>
+            <module name="com.fasterxml.jackson.core.jackson-databind"/>
+            <module name="org.hibernate.infinispan" services="export"/>
+        </dependencies>
+
+        <exclusions>
+            <module name="org.hibernate.search.orm" />
+        </exclusions>
+
+    </deployment>
+
+</jboss-deployment-structure>

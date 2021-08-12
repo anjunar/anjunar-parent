@@ -1,0 +1,37 @@
+<hibernate-configuration xmlns="http://www.hibernate.org/xsd/orm/cfg">
+    <session-factory name="main">
+<!--
+        <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@localhost:1521:xe</property>
+        <property name="hibernate.connection.username">anjunar</property>
+        <property name="hibernate.connection.password">anjunar</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.Oracle12cDialect</property>
+-->
+
+        <mapping class="de.bitvale.common.ddd.AbstractAggregate"/>
+        <mapping class="de.bitvale.common.ddd.AbstractEntity"/>
+
+        <mapping class="de.bitvale.common.filedisk.HarddiskFile"/>
+
+        <mapping class="de.bitvale.common.mail.Template"/>
+
+        <mapping class="de.bitvale.common.security.Permission"/>
+        <mapping class="de.bitvale.common.security.Role"/>
+        <mapping class="de.bitvale.common.security.Relationship"/>
+        <mapping class="de.bitvale.common.security.User"/>
+        <mapping class="de.bitvale.common.security.Image"/>
+
+        <mapping class="de.bitvale.anjunar.pages.Page"/>
+        <mapping class="de.bitvale.anjunar.pages.page.Answer"/>
+        <mapping class="de.bitvale.anjunar.pages.page.Question"/>
+
+        <mapping class="de.bitvale.anjunar.timeline.Image"/>
+        <mapping class="de.bitvale.anjunar.timeline.Comment"/>
+        <mapping class="de.bitvale.anjunar.timeline.AbstractPost"/>
+        <mapping class="de.bitvale.anjunar.timeline.TextPost"/>
+        <mapping class="de.bitvale.anjunar.timeline.ImagePost"/>
+        <mapping class="de.bitvale.anjunar.timeline.LinkPost"/>
+        <mapping class="de.bitvale.anjunar.timeline.SystemPost"/>
+
+    </session-factory>
+</hibernate-configuration>
