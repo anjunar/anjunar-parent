@@ -146,12 +146,12 @@ export default class HateoasInput extends HTMLElement {
                     items: {
                         direct: (query, callback) => {
                             let link = field.links.find((link) => link.rel === "list");
-                            let queryBuilder = new QueryBuilder(link.url)
-                                .queryParam("index", query.index)
-                                .queryParam("limit", query.limit)
-                                .queryParam("naming", query.value)
 
-                            jsonClient.action(link.method, queryBuilder.build())
+                            link.body.index = query.index;
+                            link.body.limit = query.limit;
+                            link.body.naming = query.value;
+
+                            jsonClient.action(link.method, link.url, {body : link.body})
                                 .then((response) => {
                                     callback(response.rows, response.size)
                                 })
@@ -183,12 +183,12 @@ export default class HateoasInput extends HTMLElement {
                     items: {
                         direct: (query, callback) => {
                             let link = field.links.find((link) => link.rel === "list");
-                            let queryBuilder = new QueryBuilder(link.url)
-                                .queryParam("index", query.index)
-                                .queryParam("limit", query.limit)
-                                .queryParam("naming", query.value)
 
-                            jsonClient.action(link.method, queryBuilder.build())
+                            link.body.index = query.index;
+                            link.body.limit = query.limit;
+                            link.body.naming = query.value;
+
+                            jsonClient.action(link.method, link.url, {body : link.body})
                                 .then((response) => {
                                     callback(response.rows, response.size)
                                 })

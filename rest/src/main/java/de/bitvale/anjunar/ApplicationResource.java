@@ -151,7 +151,7 @@ public class ApplicationResource {
                     .build(userSelect::addLink);
 
             if (identity.hasRole("Administrator")) {
-                userSelect.addLink(new Link("navigator/navigator", "GET", "navigator"));
+                userSelect.addLink(new Link("navigator/navigator", "GET", "navigator", null));
             }
 
             return userSelect;

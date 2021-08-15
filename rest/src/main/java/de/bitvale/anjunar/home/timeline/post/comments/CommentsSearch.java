@@ -1,23 +1,31 @@
 package de.bitvale.anjunar.home.timeline.post.comments;
 
+import de.bitvale.anjunar.shared.users.user.UserSelect;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestSearch;
 import de.bitvale.common.rest.api.jaxrs.RestPredicate;
 import de.bitvale.common.rest.api.jaxrs.RestSort;
 import de.bitvale.common.rest.api.jaxrs.provider.GenericSortProvider;
 
-import javax.ws.rs.QueryParam;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class CommentsSearch extends AbstractRestSearch {
 
     @RestSort(GenericSortProvider.class)
-    @QueryParam("sort")
     private List<String> sort;
 
-    @QueryParam("post")
     @RestPredicate(UserPostProvider.class)
     private UUID post;
+
+    @RestPredicate(TextProvider.class)
+    private String text;
+
+    @RestPredicate(OwnerProvider.class)
+    private UserSelect owner;
+
+    @RestPredicate(LikesProvider.class)
+    private Set<UserSelect> likes;
 
     public List<String> getSort() {
         return sort;
@@ -33,5 +41,29 @@ public class CommentsSearch extends AbstractRestSearch {
 
     public void setPost(UUID post) {
         this.post = post;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public UserSelect getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserSelect owner) {
+        this.owner = owner;
+    }
+
+    public Set<UserSelect> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<UserSelect> likes) {
+        this.likes = likes;
     }
 }

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
@@ -55,6 +56,8 @@ public class URLBuilder<B> {
     private String httpMethod;
 
     private String rel;
+
+    private Object body;
 
     private Map<String, Object> params = new HashMap<>();
 
@@ -105,6 +108,7 @@ public class URLBuilder<B> {
                 readParameter(arg, parameter);
 
                 BeanParam beanParam = parameter.getAnnotation(BeanParam.class);
+                Context contextParam = parameter.getAnnotation(Context.class);
                 if (beanParam != null && arg != null) {
 
                     BeanModel<?> beanModel = BeanIntrospector.create(parameter.getType());
@@ -112,9 +116,11 @@ public class URLBuilder<B> {
                     for (BeanProperty<?, ?> beanProperty : beanModel.getProperties()) {
 
                         readParameter(((BeanProperty<Object, ?>) beanProperty).apply(arg), beanProperty);
-
                     }
-
+                } else if (contextParam != null && arg != null){
+                   // No OP
+                } else {
+                    body = arg;
                 }
 
             }
@@ -196,7 +202,7 @@ public class URLBuilder<B> {
 
         if (rolesAllowed == null) {
 
-            consumer.accept(new Link("service" + url.toASCIIString(), buildMethod(), rel));
+            consumer.accept(new Link("service" + url.toASCIIString(), buildMethod(), rel, body));
 
         } else {
             if (hasRoles(rolesAllowed.value())) {
@@ -204,7 +210,7 @@ public class URLBuilder<B> {
                 MethodPredicate methodPredicate = method.getAnnotation(MethodPredicate.class);
 
                 if (methodPredicate == null) {
-                    consumer.accept(new Link("service" + url.toASCIIString(), buildMethod(), rel));
+                    consumer.accept(new Link("service" + url.toASCIIString(), buildMethod(), rel, body));
                 } else {
 
                     Class<?> resolverCLass = methodPredicate.value();
@@ -219,7 +225,7 @@ public class URLBuilder<B> {
                         boolean result = (boolean) resolvedMethod.invoke(resolverInstance, args[0]);
 
                         if (result) {
-                            consumer.accept(new Link("service" + url.toASCIIString(), buildMethod(), rel));
+                            consumer.accept(new Link("service" + url.toASCIIString(), buildMethod(), rel, body));
                         }
 
                     } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {

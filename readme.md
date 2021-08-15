@@ -6,6 +6,13 @@ Login as SYS AS SYSDBA
 alter session set "_ORACLE_SCRIPT"=true;
 CREATE USER anjunar IDENTIFIED BY anjunar;
 GRANT ALL PRIVILEGES TO anjunar;
+
+CREATE INDEX post_idx ON DO_POST(TEXT) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX comment_idx ON DO_COMMENT(TEXT) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX page_idx ON DO_PAGE(TEXT) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX question1_idx ON DO_QUESTION(TOPIC) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX question2_idx ON DO_QUESTION(TEXT) INDEXTYPE IS CTXSYS.CONTEXT;
+CREATE INDEX answer_idx ON DO_ANSWER(TEXT) INDEXTYPE IS CTXSYS.CONTEXT;
 ```
 
 ### Wildfly standalone.xml
@@ -49,6 +56,8 @@ GRANT ALL PRIVILEGES TO anjunar;
             </datasources>
         </subsystem>
 ```
+
+
 
 ### WildFly Modules containing the Database Drivers
 

@@ -1,27 +1,30 @@
 package de.bitvale.anjunar.pages.page.questions.question.answers;
 
+import de.bitvale.anjunar.shared.users.user.UserSelect;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestSearch;
 import de.bitvale.common.rest.api.jaxrs.RestPredicate;
 import de.bitvale.common.rest.api.jaxrs.RestSort;
 import de.bitvale.common.rest.api.jaxrs.provider.GenericSortProvider;
 
-import javax.ws.rs.QueryParam;
 import java.util.List;
 import java.util.UUID;
 
 public class AnswersSearch extends AbstractRestSearch {
 
-    @QueryParam("sort")
     @RestSort(GenericSortProvider.class)
     private List<String> sort;
 
-    @QueryParam("topic")
     @RestPredicate(TopicProvider.class)
     private UUID topic;
 
-    @QueryParam("owner")
+    @RestPredicate(EditorProvider.class)
+    private String editor;
+
     @RestPredicate(UserProvider.class)
-    private UUID owner;
+    private UserSelect owner;
+
+    @RestPredicate(ViewsProvider.class)
+    private int views;
 
     public List<String> getSort() {
         return sort;
@@ -39,11 +42,27 @@ public class AnswersSearch extends AbstractRestSearch {
         this.topic = topic;
     }
 
-    public UUID getOwner() {
+    public String getEditor() {
+        return editor;
+    }
+
+    public void setEditor(String editor) {
+        this.editor = editor;
+    }
+
+    public UserSelect getOwner() {
         return owner;
     }
 
-    public void setOwner(UUID owner) {
+    public void setOwner(UserSelect owner) {
         this.owner = owner;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

@@ -99,6 +99,8 @@ export default class DomForm extends HTMLFormElement {
                     } else {
                         this.#value[name] = element.value;
                     }
+
+                    this.dispatchEvent(new Event("change"));
                 }
 
                 element.addEventListener("keyup", inputHandler);
@@ -115,7 +117,7 @@ export default class DomForm extends HTMLFormElement {
                     element.value = this.#value[element.name];
                 }
 
-                element.dispatchEvent(new Event("change"))
+                element.dispatchEvent(new Event("change"));
             }
 
             function walk(element) {

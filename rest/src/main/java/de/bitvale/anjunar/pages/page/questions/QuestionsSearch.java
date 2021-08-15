@@ -1,43 +1,42 @@
 package de.bitvale.anjunar.pages.page.questions;
 
+import de.bitvale.anjunar.shared.system.CreatedForm;
+import de.bitvale.anjunar.shared.system.CreatedProvider;
+import de.bitvale.anjunar.shared.users.user.UserSelect;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestSearch;
 import de.bitvale.common.rest.api.jaxrs.RestPredicate;
 import de.bitvale.common.rest.api.jaxrs.RestSort;
 import de.bitvale.common.rest.api.jaxrs.provider.GenericSortProvider;
 
-import javax.ws.rs.QueryParam;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class QuestionsSearch extends AbstractRestSearch {
 
-    @QueryParam("sort")
     @RestSort(GenericSortProvider.class)
     private List<String> sort;
 
-    @QueryParam("page")
     @RestPredicate(PageProvider.class)
     private UUID page;
 
-    @QueryParam("topic")
     @RestPredicate(TopicProvider.class)
     private String topic;
 
-    @QueryParam("text")
     @RestPredicate(TextProvider.class)
-    private String text;
+    private String editor;
 
-    @QueryParam("owner")
     @RestPredicate(OwnerProvider.class)
-    private UUID owner;
+    private UserSelect owner;
 
-    @QueryParam("views")
     @RestPredicate(ViewsProvider.class)
     private int views;
 
-    @QueryParam("created")
     @RestPredicate(CreatedProvider.class)
-    private String created;
+    private CreatedForm created;
+
+    @RestPredicate(LikesProvider.class)
+    private Set<UserSelect> likes;
 
     public List<String> getSort() {
         return sort;
@@ -63,19 +62,19 @@ public class QuestionsSearch extends AbstractRestSearch {
         this.topic = topic;
     }
 
-    public String getText() {
-        return text;
+    public String getEditor() {
+        return editor;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setEditor(String editor) {
+        this.editor = editor;
     }
 
-    public UUID getOwner() {
+    public UserSelect getOwner() {
         return owner;
     }
 
-    public void setOwner(UUID owner) {
+    public void setOwner(UserSelect owner) {
         this.owner = owner;
     }
 
@@ -87,11 +86,19 @@ public class QuestionsSearch extends AbstractRestSearch {
         this.views = views;
     }
 
-    public String getCreated() {
+    public CreatedForm getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(CreatedForm created) {
         this.created = created;
+    }
+
+    public Set<UserSelect> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<UserSelect> likes) {
+        this.likes = likes;
     }
 }

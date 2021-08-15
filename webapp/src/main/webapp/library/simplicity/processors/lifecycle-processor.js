@@ -7,7 +7,7 @@ export function lifeCycle(force = false) {
             if (element.instance.isConnected) {
                 element.update(force);
             } else {
-                metaCache.delete(meta);
+                // metaCache.delete(meta);
             }
         }
     }

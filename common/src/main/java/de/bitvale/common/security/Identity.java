@@ -122,13 +122,13 @@ public class Identity implements Serializable {
                     if (rolesAllowed != null) {
                         for (String role : rolesAllowed.value()) {
                             if (hasRole(role)) {
-                                Link link = new Link("service/" + url, method, rel);
+                                Link link = new Link("service/" + url, method, rel, null);
                                 loader.accept(link);
                                 break;
                             }
                         }
                     } else {
-                        Link link = new Link("service/" + url, method, rel);
+                        Link link = new Link("service/" + url, method, rel, null);
                         loader.accept(link);
                     }
                 }

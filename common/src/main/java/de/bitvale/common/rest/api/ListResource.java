@@ -6,6 +6,7 @@ public interface ListResource<R extends AbstractRestEntity, S> {
 
     @POST
     @Produces("application/json")
-    Container<R> list(@BeanParam S search);
+    @Consumes("application/json")
+    Container<R> list(S search);
 
 }

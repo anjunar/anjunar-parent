@@ -14,13 +14,17 @@ public class Link {
 
     private final String rel;
 
+    private final Object body;
+
     @JsonCreator
     public Link(@JsonProperty("url") String url,
                 @JsonProperty("method") String method,
-                @JsonProperty("rel") String rel) {
+                @JsonProperty("rel") String rel,
+                @JsonProperty("body") Object body) {
         this.url = url;
         this.method = method;
         this.rel = rel;
+        this.body = body;
     }
 
     public String getUrl() {
@@ -33,5 +37,9 @@ public class Link {
 
     public String getRel() {
         return rel;
+    }
+
+    public Object getBody() {
+        return body;
     }
 }

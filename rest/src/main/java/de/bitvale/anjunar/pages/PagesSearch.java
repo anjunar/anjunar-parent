@@ -1,5 +1,6 @@
 package de.bitvale.anjunar.pages;
 
+import de.bitvale.anjunar.shared.system.Language;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestSearch;
 import de.bitvale.common.rest.api.jaxrs.RestPredicate;
 import de.bitvale.common.rest.api.jaxrs.RestSort;
@@ -11,21 +12,17 @@ import java.util.Locale;
 
 public class PagesSearch extends AbstractRestSearch {
 
-    @QueryParam("sort")
     @RestSort(GenericSortProvider.class)
     private List<String> sort;
 
-    @QueryParam("title")
     @RestPredicate(TitleProvider.class)
     private String title;
 
-    @QueryParam("text")
     @RestPredicate(WordProvider.class)
     private String text;
 
-    @QueryParam("lang")
     @RestPredicate(LanguageProvider.class)
-    private Locale language;
+    private Language language;
 
     public List<String> getSort() {
         return sort;
@@ -51,11 +48,11 @@ public class PagesSearch extends AbstractRestSearch {
         this.text = text;
     }
 
-    public Locale getLanguage() {
+    public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(Locale language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
 }

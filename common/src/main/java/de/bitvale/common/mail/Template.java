@@ -18,6 +18,9 @@ public class Template extends AbstractAggregate {
     @Lob
     private String html;
 
+    @Lob
+    private String text;
+
     public String getName() {
         return name;
     }
@@ -40,5 +43,13 @@ public class Template extends AbstractAggregate {
 
     public void setHtml(String html) {
         this.html = html;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

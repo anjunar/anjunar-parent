@@ -6,6 +6,9 @@ import DomInput from "../directives/dom-input.js";
 import DomLazySelect from "../directives/dom-lazy-select.js";
 import {QueryBuilder} from "../services/querybuilder.js";
 import MatInputContainer from "../components/form/containers/mat-input-container.js";
+import DomForm from "../directives/dom-form.js";
+import MatSelect from "../components/form/mat-select.js";
+import MatMultiSelect from "../components/form/mat-multi-select.js";
 
 export default class HateoasTable extends HTMLElement {
 
@@ -63,56 +66,53 @@ export default class HateoasTable extends HTMLElement {
                 limit: this.#limit,
                 header: this.#header,
                 items: {
-                    direct : (query, callback) => {
-                        let sort = query.sort.map((sort => "&sort=" + sort));
-                        let search = "";
+                    direct: (query, callback) => {
+
+                        link.body = link.body || {};
+
                         if (query.search) {
-                            search = "&" + query.search.property + "=" + query.search.value
+                            link.body[query.search.property] = query.search.value
                         }
 
-                        let url;
-                        if (link.url.indexOf("?") > -1) {
-                            url = `${link.url}&index=${query.index}&limit=${query.limit}${sort.join("")}${search}`
-                        } else {
-                            url = `${link.url}?index=${query.index}&limit=${query.limit}${sort.join("")}${search}`
-                        }
-                        jsonClient.post(url)
+                        link.body.sort = query.sort;
+                        link.body.index = query.index;
+                        link.body.limit = query.limit;
+
+                        jsonClient.post(link.url, {body: link.body})
                             .then(response => {
                                 callback(response.rows, response.size, response.links)
                             })
                     }
                 },
-                onRow : (event) => {
+                onRow: (event) => {
                     this.dispatchEvent(new CustomEvent("row", {detail: event.detail}))
                 },
-                onCreate : (event) => {
+                onCreate: (event) => {
                     this.dispatchEvent(new CustomEvent("create", {detail: event.detail}))
                 },
                 meta: {
                     filter: this.#meta.filter || this.#model.columns.map((column) => {
                         return {
-                            element : (tr) => {
+                            element: (tr) => {
                                 switch (column.type) {
                                     case "lazyselect" :
                                         return {
-                                            element: DomLazySelect,
+                                            element: MatSelect,
                                             placeholder: "search",
-                                            style: {
-                                                marginLeft: "5px"
-                                            },
-                                            onChange : (event) => {
+                                            onChange: (event) => {
                                                 let value = event.target.value;
                                                 let table = this.querySelector("table");
-                                                table.search({property: tr.search, value: value.id});
+                                                table.search({property: tr.search, value: value});
                                             },
                                             items: {
-                                                direct : (query, callback) => {
+                                                direct: (query, callback) => {
                                                     let link = hateoas(column.links, "list");
-                                                    let queryBuilder = new QueryBuilder(link.url)
-                                                        .queryParam("index", query.index)
-                                                        .queryParam("limit", query.limit)
 
-                                                    jsonClient.action(link.method, queryBuilder.build())
+                                                    link.body = link.body || {};
+                                                    link.body.index = query.index;
+                                                    link.body.limit = query.limit;
+
+                                                    jsonClient.action(link.method, link.url, {body : link.body})
                                                         .then((response) => {
                                                             callback(response.rows, response.size)
                                                         })
@@ -120,7 +120,7 @@ export default class HateoasTable extends HTMLElement {
                                             },
                                             meta: {
                                                 option: {
-                                                    element : (element) => {
+                                                    element: (element) => {
                                                         let namingProperties = element.meta.properties
                                                             .filter((element) => element.naming)
                                                             .map((elem) => element[elem.name])
@@ -133,19 +133,126 @@ export default class HateoasTable extends HTMLElement {
                                                 }
                                             }
                                         }
+                                    case "lazymultiselect" :
+                                        return {
+                                            element: MatMultiSelect,
+                                            placeholder: "search",
+                                            onChange: (event) => {
+                                                let value = event.target.value;
+                                                let table = this.querySelector("table");
+                                                table.search({property: tr.search, value: value});
+                                            },
+                                            items: {
+                                                direct: (query, callback) => {
+                                                    let link = hateoas(column.links, "list");
+                                                    link.body = link.body || {};
+                                                    link.body.index = query.index;
+                                                    link.body.limit = query.limit;
+
+                                                    jsonClient.action(link.method, link.url, {body : link.body})
+                                                        .then((response) => {
+                                                            callback(response.rows, response.size)
+                                                        })
+                                                }
+                                            },
+                                            meta: {
+                                                option: {
+                                                    element: (element) => {
+                                                        let namingProperties = element.meta.properties
+                                                            .filter((element) => element.naming)
+                                                            .map((elem) => element[elem.name])
+                                                            .join(" ")
+                                                        return {
+                                                            element: "div",
+                                                            text: namingProperties
+                                                        }
+                                                    }
+                                                },
+                                                selection: {
+                                                    element: (element) => {
+                                                        let namingProperties = element.meta.properties
+                                                            .filter((element) => element.naming)
+                                                            .map((elem) => element[elem.name])
+                                                            .join(" ")
+                                                        return {
+                                                            element: "div",
+                                                            text: namingProperties
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    case "datetime-local" :
+                                    case "date" : {
+                                        let date = {
+                                            start : null,
+                                            end : null
+                                        };
+
+                                        return {
+                                            element: DomForm,
+                                            value : {
+                                                input : () => {
+                                                    return date;
+                                                },
+                                                output : (value) => {
+                                                    date = value;
+                                                }
+                                            },
+                                            onChange: (event) => {
+                                                let table = this.querySelector("table");
+                                                table.search({property: tr.search, value: date});
+                                            },
+                                            children : [
+                                                {
+                                                    element: MatInputContainer,
+                                                    placeholder: "start",
+                                                    content: {
+                                                        element: DomInput,
+                                                        type: column.type,
+                                                        name : "start",
+                                                        attributes: {
+                                                            disabled: () => {
+                                                                return (!tr.sortable);
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    element: MatInputContainer,
+                                                    placeholder: "end",
+                                                    content: {
+                                                        element: DomInput,
+                                                        type: column.type,
+                                                        name : "end",
+                                                        attributes: {
+                                                            disabled: () => {
+                                                                return (!tr.sortable);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
                                     default :
                                         return {
                                             element: MatInputContainer,
                                             placeholder: "search",
-                                            content : {
-                                                element : DomInput,
+                                            content: {
+                                                element: DomInput,
                                                 type: column.type,
-                                                onKeyup : (event) => {
+                                                attributes: {
+                                                    disabled: () => {
+                                                        return (!tr.sortable);
+                                                    }
+                                                },
+                                                onKeyup: (event) => {
                                                     let table = this.querySelector("table");
                                                     let value = event.target.value;
                                                     table.search({property: tr.search, value: value});
                                                 },
-                                                onChange : (event) => {
+                                                onChange: (event) => {
                                                     let table = this.querySelector("table");
                                                     let value = event.target.value;
                                                     table.search({property: tr.search, value: value});
@@ -158,15 +265,18 @@ export default class HateoasTable extends HTMLElement {
                     }),
                     colgroup: this.#meta.colgroup || this.#model.sortable.map((segment) => {
                         return {
-                            element : () => {
+                            element: () => {
                                 return {
                                     element: "div",
                                     attributes: {
-                                        path() {
+                                        path: () => {
                                             return segment.property;
                                         },
-                                        visible() {
+                                        visible: () => {
                                             return segment.visible
+                                        },
+                                        sortable: () => {
+                                            return segment.sortable;
                                         }
                                     }
                                 }
@@ -175,7 +285,7 @@ export default class HateoasTable extends HTMLElement {
                     }),
                     header: this.#meta.header || this.#model.columns.map((column) => {
                         return {
-                            element : () => {
+                            element: () => {
                                 return {
                                     element: "strong",
                                     text: column.name
@@ -185,68 +295,66 @@ export default class HateoasTable extends HTMLElement {
                     }),
                     body: this.#meta.body || this.#model.columns.map((column) => {
                         return {
-                            element : (c) => {
+                            element: (c) => {
                                 switch (column.type) {
-                                    case "lazyselect" :
-                                        return {
-                                            element: DomLazySelect,
-                                            placeholder: "search",
-                                            value : {
-                                                input : () => {
-                                                    if (c.form) {
-                                                        return c.form[column.name]
-                                                    }
-                                                    return c[column.name]
-                                                },
-                                                output : (value) => {
-                                                    c[column.name] = value
-                                                }
-                                            },
-                                            items: {
-                                                direct : (query, callback) => {
-                                                    let link = hateoas(column.links, "list");
-                                                    let queryBuilder = new QueryBuilder(link.url)
-                                                        .queryParam("index", query.index)
-                                                        .queryParam("limit", query.limit)
-
-                                                    jsonClient.action(link.method, queryBuilder.build())
-                                                        .then((response) => {
-                                                            callback(response.rows, response.size)
-                                                        })
-                                                }
-                                            },
-                                            meta: {
-                                                option: {
-                                                    element : (element) => {
-                                                        let namingProperties = element.meta.properties
-                                                            .filter((element) => element.naming)
-                                                            .map((elem) => element[elem.name])
-                                                            .join(" ")
-                                                        return {
-                                                            element: "div",
-                                                            text: namingProperties
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                    case "lazymultiselect" : {
+                                        let elements = c[column.name];
+                                        let names = [];
+                                        for (const element of elements) {
+                                            let namingProperties = element.meta.properties
+                                                .filter((element) => element.naming)
+                                                .map((elem) => element[elem.name])
+                                                .join(" ")
+                                            names.push(namingProperties);
                                         }
+                                        return {
+                                            element: "div",
+                                            text : names.join(", ")
+                                        }
+                                    }
+                                    case "lazyselect" : {
+                                        let element = c[column.name];
+                                        let namingProperties = element.meta.properties
+                                            .filter((element) => element.naming)
+                                            .map((elem) => element[elem.name])
+                                            .join(" ")
+                                        return {
+                                            element: "div",
+                                            text : namingProperties
+                                        }
+                                    }
                                     case "image" : {
                                         return {
                                             element: "img",
                                             style: {
                                                 height: "100px"
                                             },
-                                            src : () => {
+                                            src: () => {
                                                 if (c.picture) {
                                                     return c.picture.data
                                                 }
                                             }
                                         }
                                     }
+                                    case "textarea" : {
+                                        return {
+                                            element: "div",
+                                            style : {
+                                                height: "14px",
+                                                textOverflow: "clip",
+                                                overflow : "hidden"
+                                            },
+                                            text: c[column.name]
+                                        }
+                                    }
                                     case "editor" : {
                                         return {
                                             element: "div",
-                                            text : c[column.name].text
+                                            style : {
+                                                height: "24px",
+                                                textOverflow: "clip"
+                                            },
+                                            text: c[column.name].text
                                         }
                                     }
                                     default :

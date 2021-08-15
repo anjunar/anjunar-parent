@@ -5,7 +5,6 @@ import de.bitvale.anjunar.control.users.UsersSearch;
 import de.bitvale.anjunar.pages.page.Answer;
 import de.bitvale.anjunar.shared.users.user.UserSelect;
 import de.bitvale.anjunar.system.SystemNotificationService;
-import de.bitvale.anjunar.timeline.SystemPost;
 import de.bitvale.common.rest.MethodPredicate;
 import de.bitvale.common.rest.URLBuilderFactory;
 import de.bitvale.common.rest.api.Editor;
@@ -18,7 +17,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -56,6 +58,16 @@ public class AnswerResource implements FormResource<AnswerForm> {
         resource.setOwner(new UserSelect());
         resource.setEditor(new Editor());
         resource.setViews(0);
+
+        Property owner = resource.getMeta().find("owner");
+        factory.from(UsersResource.class)
+                .record(usersResource -> usersResource.list(new UsersSearch()))
+                .build(owner::addLink);
+
+        Property likes = resource.getMeta().find("likes");
+        factory.from(UsersResource.class)
+                .record(usersResource -> usersResource.list(new UsersSearch()))
+                .build(likes::addLink);
 
         factory.from(AnswerResource.class)
                 .record(answerResource -> answerResource.save(new AnswerForm()))

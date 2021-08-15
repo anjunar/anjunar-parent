@@ -1,6 +1,7 @@
 package de.bitvale.anjunar.home.timeline.post.comments;
 
 import de.bitvale.anjunar.control.users.UsersResource;
+import de.bitvale.anjunar.control.users.UsersSearch;
 import de.bitvale.anjunar.home.timeline.post.comments.comment.CommentForm;
 import de.bitvale.anjunar.home.timeline.post.comments.comment.CommentResource;
 import de.bitvale.anjunar.timeline.Comment;
@@ -53,19 +54,26 @@ public class CommentsResource implements ListResource<CommentForm, CommentsSearc
 
         metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
-                new Sortable("text", false, true),
+                new Sortable("text", true, true),
                 new Sortable("post", false, false),
                 new Sortable("owner", false, true),
                 new Sortable("likes", false, false)
         });
 
-        Property property = metaTable.find("owner");
+        Property owner = metaTable.find("owner");
         factory.from(UsersResource.class)
-                .record(UsersResource::users)
-                .build(property::addLink);
+                .record(usersResource -> usersResource.list(new UsersSearch()))
+                .build(owner::addLink);
 
+        Property likes = metaTable.find("likes");
+        factory.from(UsersResource.class)
+                .record(usersResource -> usersResource.list(new UsersSearch()))
+                .build(likes::addLink);
+
+        CommentsSearch search = new CommentsSearch();
+        search.setPost(id);
         factory.from(CommentsResource.class)
-                .record(commentsResource -> commentsResource.list(new CommentsSearch()))
+                .record(commentsResource -> commentsResource.list(search))
                 .build(metaTable::addSource);
 
         return metaTable;

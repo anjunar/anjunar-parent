@@ -1,10 +1,13 @@
 package de.bitvale.anjunar.pages;
 
+import de.bitvale.anjunar.ApplicationResource;
 import de.bitvale.anjunar.pages.page.PageResource;
+import de.bitvale.anjunar.shared.system.Language;
 import de.bitvale.common.rest.URLBuilderFactory;
 import de.bitvale.common.rest.api.Container;
 import de.bitvale.common.rest.api.ListResource;
 import de.bitvale.common.rest.api.meta.MetaTable;
+import de.bitvale.common.rest.api.meta.Property;
 import de.bitvale.common.rest.api.meta.Sortable;
 import de.bitvale.common.security.Identity;
 
@@ -44,13 +47,20 @@ public class PagesResource implements ListResource<PagesForm, PagesSearch> {
     public MetaTable search(@QueryParam("lang") Locale lang) {
         MetaTable metaTable = new MetaTable(PagesForm.class);
 
-        metaTable.addSortable(new Sortable[] {
+        metaTable.addSortable(new Sortable[]{
                 new Sortable("title", true, true),
-                new Sortable("text", false, true)
+                new Sortable("language", true, true),
+                new Sortable("text", true, true)
         });
 
         PagesSearch search = new PagesSearch();
-        search.setLanguage(lang);
+        search.setLanguage(Language.factory(lang));
+
+        Property language = metaTable.find("language");
+        factory.from(ApplicationResource.class)
+                .rel("list")
+                .record(ApplicationResource::language)
+                .build(language::addLink);
 
         factory.from(PagesResource.class)
                 .record(pagesResource -> pagesResource.list(search))

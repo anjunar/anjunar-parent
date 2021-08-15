@@ -52,17 +52,18 @@ public class AnswersResource implements ListResource<AnswerForm, AnswersSearch> 
     public MetaTable answers(@QueryParam("topic") UUID topic) {
         MetaTable metaTable = new MetaTable(AnswerForm.class);
 
+        metaTable.addSortable(new Sortable[]{
+                new Sortable("id", false, false),
+                new Sortable("owner", false, true),
+                new Sortable("editor", true, true),
+                new Sortable("views", true, true),
+        });
+
+
         Property owner = metaTable.find("owner");
         factory.from(UsersResource.class)
                 .record(usersController -> usersController.list(new UsersSearch()))
                 .build(owner::addLink);
-
-        metaTable.addSortable(new Sortable[]{
-                new Sortable("id", false, false),
-                new Sortable("owner", false, true),
-                new Sortable("editor", true, true)
-        });
-
 
         AnswersSearch search = new AnswersSearch();
         search.setTopic(topic);

@@ -46,7 +46,7 @@ public class TemplateForm extends AbstractRestEntity {
         resource.setId(template.getId());
         resource.setName(template.getName());
         resource.setLanguage(Language.factory(template.getLanguage()));
-        resource.setContent(Editor.factory(template.getHtml(), null));
+        resource.setContent(Editor.factory(template.getHtml(), template.getText()));
         return resource;
     }
 
@@ -54,6 +54,7 @@ public class TemplateForm extends AbstractRestEntity {
         template.setName(form.getName());
         template.setLanguage(Language.updater(form.getLanguage()));
         template.setHtml(form.getContent().getHtml());
+        template.setText(form.getContent().getText());
     }
 
 }

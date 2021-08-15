@@ -51,7 +51,7 @@ public class UsersResource implements ListResource<UserForm, UsersSearch> {
                 new Sortable("id", false, false),
                 new Sortable("firstName", true, true),
                 new Sortable("lastName", true, true),
-                new Sortable("birthdate", true, true),
+                new Sortable("birthDate", true, true),
                 new Sortable("email", true, true),
                 new Sortable("enabled", false, true)
         });

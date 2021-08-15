@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public abstract class AbstractRestEntity implements RestEntity, ActionsContainer, LinksContainer, SourcesContainer {
 
-    @Input(type = "text", primaryKey = true)
+    @Input(type = "id", primaryKey = true)
     private UUID id;
 
     @Input(ignore = true)

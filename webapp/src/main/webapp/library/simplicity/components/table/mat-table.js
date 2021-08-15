@@ -203,11 +203,25 @@ export default class MatTable extends HTMLTableElement {
             }
         }
 
+        let sortable = (index) => {
+            if (this.#meta.colgroup) {
+                if (this.#meta.colgroup.length > index) {
+                    let element = this.#meta.colgroup[index].element();
+                    let sortable = element.attributes.sortable;
+                    return sortable();
+                }
+                return false;
+            } else {
+                return false;
+            }
+        }
+
         for (let i = 0; i < this.#meta.body.length; i++) {
             this.#columns.push({
                 index: i,
                 visible: visible(i),
                 sort: sort(i) ? undefined : "disabled",
+                sortable : sortable(i),
                 search: sort(i)
             });
         }

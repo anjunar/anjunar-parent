@@ -52,7 +52,6 @@ public class TimelineResource implements ListResource<AbstractPostForm, Timeline
         metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
                 new Sortable("text", true, true),
-                new Sortable("image", false, false),
                 new Sortable("owner", true, true),
                 new Sortable("created", true, true),
                 new Sortable("likes", false, false)
@@ -66,6 +65,11 @@ public class TimelineResource implements ListResource<AbstractPostForm, Timeline
         factory.from(UsersResource.class)
                 .record(usersControl -> usersControl.list(new UsersSearch()))
                 .build(owner::addLink);
+
+        Property likes = metaTable.find("likes");
+        factory.from(UsersResource.class)
+                .record(usersControl -> usersControl.list(new UsersSearch()))
+                .build(likes::addLink);
 
         return metaTable;
     }

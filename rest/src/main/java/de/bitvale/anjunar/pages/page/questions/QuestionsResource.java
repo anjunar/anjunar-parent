@@ -1,6 +1,7 @@
 package de.bitvale.anjunar.pages.page.questions;
 
 import de.bitvale.anjunar.control.users.UsersResource;
+import de.bitvale.anjunar.control.users.UsersSearch;
 import de.bitvale.anjunar.pages.page.Question;
 import de.bitvale.anjunar.pages.page.questions.question.QuestionResource;
 import de.bitvale.anjunar.pages.page.questions.question.QuestionForm;
@@ -52,22 +53,28 @@ public class QuestionsResource implements ListResource<QuestionForm, QuestionsSe
     public MetaTable questions(@QueryParam("page") UUID page) {
         MetaTable metaTable = new MetaTable(QuestionForm.class);
 
-        Property owner = metaTable.find("owner");
-        factory.from(UsersResource.class)
-                .record(usersControl -> usersControl.users())
-                .build(owner::addLink);
-
         metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
                 new Sortable("owner", false, true),
                 new Sortable("topic", true, true),
-                new Sortable("text", false, false),
-                new Sortable("views", false, false),
-                new Sortable("created", true, false)
+                new Sortable("editor", true, true),
+                new Sortable("views", true, false),
+                new Sortable("created", true, false),
+                new Sortable("likes", false, true),
         });
 
         QuestionsSearch search = new QuestionsSearch();
         search.setPage(page);
+
+        Property owner = metaTable.find("owner");
+        factory.from(UsersResource.class)
+                .record(usersControl -> usersControl.list(new UsersSearch()))
+                .build(owner::addLink);
+
+        Property likes = metaTable.find("likes");
+        factory.from(UsersResource.class)
+                .record(usersControl -> usersControl.list(new UsersSearch()))
+                .build(likes::addLink);
 
         factory.from(QuestionsResource.class)
                 .record(questionsResource -> questionsResource.list(search))

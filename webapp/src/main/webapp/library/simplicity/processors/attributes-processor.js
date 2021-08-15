@@ -6,8 +6,13 @@ export default function attributesProcessorFactory(property, leaf, value) {
         }
 
         initialize(element) {
+            this.update(element);
+
             for (const name of Object.keys(value)) {
-                element.setAttribute(name, value[name]);
+                let valueElement = value[name];
+                if (! (valueElement instanceof Function)) {
+                    element.setAttribute(name, valueElement);
+                }
             }
         }
 
@@ -17,7 +22,7 @@ export default function attributesProcessorFactory(property, leaf, value) {
                 if (currentAttribute instanceof Function) {
                     if (attribute === "disabled") {
                         let state = currentAttribute();
-                        if (JSON.parse(state)) {
+                        if (state) {
                             element.setAttribute("disabled", "true")
                         } else {
                             element.removeAttribute("disabled")
