@@ -3,19 +3,15 @@ package de.bitvale.anjunar.home.timeline.post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableRestEntity;
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableRestEntityConverter;
 import de.bitvale.anjunar.shared.users.user.UserSelect;
 import de.bitvale.anjunar.timeline.AbstractPost;
-import de.bitvale.anjunar.timeline.Image;
-import de.bitvale.common.rest.api.AbstractRestEntity;
-import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.meta.Input;
 import de.bitvale.common.security.Identity;
-import de.bitvale.common.security.User;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
@@ -24,7 +20,7 @@ import java.util.Set;
         @JsonSubTypes.Type(value = TextPostForm.class, name = "Text"),
         @JsonSubTypes.Type(value = SystemPostForm.class, name = "System")}
 )
-public abstract class AbstractPostForm extends AbstractRestEntity {
+public abstract class AbstractPostForm extends AbstractLikeableRestEntity {
 
     @Input(type = "textarea")
     private String text;
@@ -35,9 +31,6 @@ public abstract class AbstractPostForm extends AbstractRestEntity {
     @Input(type = "datetime-local")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     private Instant created;
-
-    @Input(type = "lazymultiselect")
-    private final Set<UserSelect> likes = new HashSet<>();
 
     public abstract <E> E accept(AbstractPostFormVisitor<E> visitor);
 
@@ -65,30 +58,20 @@ public abstract class AbstractPostForm extends AbstractRestEntity {
         this.created = created;
     }
 
-    public Set<UserSelect> getLikes() {
-        return likes;
-    }
-
-    public static AbstractPostForm abstractFactory(AbstractPostForm resource, AbstractPost post) {
-        resource.setId(post.getId());
-        resource.setText(post.getText());
-        resource.setCreated(post.getCreated());
-        resource.setOwner(UserSelect.factory(post.getOwner()));
-
-        for (User user : post.getLikes()) {
-            resource.getLikes().add(UserSelect.factory(user));
+    public static class AbstractPostFormConverter<E extends AbstractPost, R extends AbstractPostForm> extends AbstractLikeableRestEntityConverter<E, R> {
+        public R factory(R resource, E post) {
+            resource.setId(post.getId());
+            resource.setText(post.getText());
+            resource.setOwner(UserSelect.factory(post.getOwner()));
+            return super.factory(resource, post);
         }
 
-        return resource;
+        public E updater(R resource, E post, EntityManager entityManager, Identity identity) {
+            post.setOwner(identity.getUser());
+            post.setText(resource.getText());
+            return super.updater(resource, post, entityManager, identity);
+
+        }
     }
 
-    public static AbstractPost abstractUpdater(AbstractPostForm resource, AbstractPost post, Identity identity, EntityManager entityManager) {
-        post.setOwner(identity.getUser());
-        post.setText(resource.getText());
-        post.getLikes().clear();
-        for (UserSelect like : resource.getLikes()) {
-            post.getLikes().add(entityManager.find(User.class, like.getId()));
-        }
-        return post;
-    }
 }

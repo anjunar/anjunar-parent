@@ -1,5 +1,6 @@
 package de.bitvale.anjunar.home.timeline.post.comments;
 
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableSearch;
 import de.bitvale.anjunar.shared.users.user.UserSelect;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestSearch;
 import de.bitvale.common.rest.api.jaxrs.RestPredicate;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class CommentsSearch extends AbstractRestSearch {
+public class CommentsSearch extends AbstractLikeableSearch {
 
     @RestSort(GenericSortProvider.class)
     private List<String> sort;
@@ -23,9 +24,6 @@ public class CommentsSearch extends AbstractRestSearch {
 
     @RestPredicate(OwnerProvider.class)
     private UserSelect owner;
-
-    @RestPredicate(LikesProvider.class)
-    private Set<UserSelect> likes;
 
     public List<String> getSort() {
         return sort;
@@ -59,11 +57,4 @@ public class CommentsSearch extends AbstractRestSearch {
         this.owner = owner;
     }
 
-    public Set<UserSelect> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Set<UserSelect> likes) {
-        this.likes = likes;
-    }
 }

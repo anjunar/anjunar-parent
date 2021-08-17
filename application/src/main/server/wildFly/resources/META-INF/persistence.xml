@@ -2,7 +2,6 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
     <persistence-unit name="main" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/anjunar</jta-data-source>
-        <class>de.bitvale.common.ddd.AbstractAggregate</class>
         <class>de.bitvale.common.ddd.AbstractEntity</class>
 
         <class>de.bitvale.common.filedisk.HarddiskFile</class>
@@ -13,6 +12,8 @@
         <class>de.bitvale.common.security.Role</class>
         <class>de.bitvale.common.security.User</class>
         <class>de.bitvale.common.security.Image</class>
+
+        <class>de.bitvale.anjunar.shared.Likeable</class>
 
         <class>de.bitvale.anjunar.pages.Page</class>
         <class>de.bitvale.anjunar.pages.page.Question</class>

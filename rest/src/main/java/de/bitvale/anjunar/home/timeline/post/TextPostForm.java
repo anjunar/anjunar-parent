@@ -1,6 +1,5 @@
 package de.bitvale.anjunar.home.timeline.post;
 
-import de.bitvale.anjunar.timeline.AbstractPost;
 import de.bitvale.anjunar.timeline.TextPost;
 import de.bitvale.common.security.Identity;
 
@@ -13,15 +12,25 @@ public class TextPostForm extends AbstractPostForm {
         return visitor.visit(this);
     }
 
+    private static class TextPostFormConverter extends AbstractPostFormConverter<TextPost, TextPostForm> {
+
+        public static TextPostFormConverter INSTANCE = new TextPostFormConverter();
+
+        public TextPostForm factory(TextPostForm form, TextPost post) {
+            return super.factory(form, post);
+        }
+
+        public TextPost updater(TextPostForm resource, TextPost post, Identity identity, EntityManager entityManager) {
+            return super.updater(resource, post, entityManager, identity);
+        }
+    }
+
     public static TextPostForm factory(TextPost post) {
-        TextPostForm form = new TextPostForm();
-        AbstractPostForm.abstractFactory(form, post);
-        return form;
+        return TextPostFormConverter.INSTANCE.factory(new TextPostForm(), post);
     }
 
     public static TextPost updater(TextPostForm resource, TextPost post, Identity identity, EntityManager entityManager) {
-        AbstractPostForm.abstractUpdater(resource, post, identity, entityManager);
-        return post;
+        return TextPostFormConverter.INSTANCE.updater(resource, post, entityManager, identity);
     }
 
 }

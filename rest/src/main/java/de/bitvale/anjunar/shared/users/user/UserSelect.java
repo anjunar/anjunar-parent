@@ -73,6 +73,8 @@ public class UserSelect extends AbstractRestEntity {
         resource.setBirthDate(user.getBirthDate());
         resource.setLanguage(user.getLanguage());
         resource.setImage(Blob.factory(user.getPicture()));
+        resource.setCreated(user.getCreated());
+        resource.setModified(user.getModified());
         return resource;
     }
 

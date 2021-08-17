@@ -1,6 +1,7 @@
 package de.bitvale.anjunar.pages;
 
-import de.bitvale.common.ddd.AbstractAggregate;
+import de.bitvale.anjunar.shared.Likeable;
+import de.bitvale.common.ddd.AbstractEntity;
 import de.bitvale.common.security.User;
 import org.hibernate.envers.*;
 
@@ -17,9 +18,10 @@ import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 @Table(name = "do_page")
 @AuditOverrides(value = {
         @AuditOverride(forClass = Page.class),
-        @AuditOverride(forClass = AbstractAggregate.class),
+        @AuditOverride(forClass = Likeable.class),
+        @AuditOverride(forClass = AbstractEntity.class),
 })
-public class Page extends AbstractAggregate {
+public class Page extends Likeable {
 
     private String title;
 
@@ -39,10 +41,6 @@ public class Page extends AbstractAggregate {
     @OneToMany()
     @Audited(targetAuditMode = NOT_AUDITED)
     private final Set<Page> links = new HashSet<>();
-
-    @ManyToMany
-    @Audited(targetAuditMode = NOT_AUDITED)
-    private final Set<User> likes = new HashSet<>();
 
     public String getTitle() {
         return title;
@@ -88,7 +86,4 @@ public class Page extends AbstractAggregate {
         return links;
     }
 
-    public Set<User> getLikes() {
-        return likes;
-    }
 }

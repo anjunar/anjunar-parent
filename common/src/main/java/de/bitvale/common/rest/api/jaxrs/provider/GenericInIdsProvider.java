@@ -1,9 +1,9 @@
 package de.bitvale.common.rest.api.jaxrs.provider;
 
+import de.bitvale.common.ddd.AbstractEntity;
+import de.bitvale.common.ddd.AbstractEntity_;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestPredicateProvider;
 import de.bitvale.common.security.Identity;
-import de.bitvale.common.ddd.AbstractEntity_;
-import de.bitvale.common.ddd.AbstractEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;

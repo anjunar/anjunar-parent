@@ -2,7 +2,11 @@ package de.bitvale.anjunar.pages;
 
 import de.bitvale.anjunar.shared.system.Language;
 import de.bitvale.common.rest.api.AbstractRestEntity;
+import de.bitvale.common.rest.api.AbstractRestEntityConverter;
 import de.bitvale.common.rest.api.meta.Input;
+import de.bitvale.common.security.Identity;
+
+import javax.persistence.EntityManager;
 
 public class PagesForm extends AbstractRestEntity {
 
@@ -39,14 +43,26 @@ public class PagesForm extends AbstractRestEntity {
         this.language = language;
     }
 
+    private static class PagesFormConverter extends AbstractRestEntityConverter<Page, PagesForm> {
+
+        public static PagesFormConverter INSTANCE = new PagesFormConverter();
+
+        public PagesForm factory(Page page, PagesForm resource) {
+            resource.setId(page.getId());
+            resource.setTitle(page.getTitle());
+            resource.setText(page.getText());
+            resource.setLanguage(Language.factory(page.getLanguage()));
+
+            return resource;
+        }
+
+        @Override
+        public Page updater(PagesForm restEntity, Page entity, EntityManager entityManager, Identity identity) {
+            return null;
+        }
+    }
+
     public static PagesForm factory(Page page) {
-        PagesForm resource = new PagesForm();
-
-        resource.setId(page.getId());
-        resource.setTitle(page.getTitle());
-        resource.setText(page.getText());
-        resource.setLanguage(Language.factory(page.getLanguage()));
-
-        return resource;
+        return PagesFormConverter.INSTANCE.factory(page, new PagesForm());
     }
 }

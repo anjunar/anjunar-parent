@@ -56,6 +56,8 @@ public class AnswersResource implements ListResource<AnswerForm, AnswersSearch> 
                 new Sortable("id", false, false),
                 new Sortable("owner", false, true),
                 new Sortable("editor", true, true),
+                new Sortable("created", true, true),
+                new Sortable("modified", true, true),
                 new Sortable("views", true, true),
         });
 

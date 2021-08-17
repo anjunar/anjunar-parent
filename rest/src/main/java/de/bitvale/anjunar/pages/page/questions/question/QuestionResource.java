@@ -20,6 +20,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -56,7 +57,7 @@ public class QuestionResource implements FormResource<QuestionForm> {
         QuestionForm resource = new QuestionForm();
 
         resource.setPage(page);
-        resource.setCreated(LocalDateTime.now());
+        resource.setCreated(Instant.now());
         resource.setOwner(UserSelect.factory(identity.getUser()));
 
         factory.from(QuestionResource.class)
@@ -70,7 +71,6 @@ public class QuestionResource implements FormResource<QuestionForm> {
     @RolesAllowed({"Administrator", "User", "Guest"})
     public QuestionForm read(@QueryParam("id") UUID uuid) {
         Question question = entityManager.find(Question.class, uuid);
-        question.setViews(question.getViews() + 1);
 
         QuestionForm resource = QuestionForm.factory(question);
 

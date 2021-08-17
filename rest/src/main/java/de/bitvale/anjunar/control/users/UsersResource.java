@@ -53,7 +53,9 @@ public class UsersResource implements ListResource<UserForm, UsersSearch> {
                 new Sortable("lastName", true, true),
                 new Sortable("birthDate", true, true),
                 new Sortable("email", true, true),
-                new Sortable("enabled", false, true)
+                new Sortable("enabled", false, true),
+                new Sortable("created", true, true),
+                new Sortable("modified", true, true)
         });
 
         factory.from(UsersResource.class)

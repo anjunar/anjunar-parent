@@ -1,7 +1,8 @@
 package de.bitvale.anjunar.pages.page;
 
+import de.bitvale.anjunar.shared.Likeable;
+import de.bitvale.common.ddd.AbstractEntity;
 import de.bitvale.common.security.User;
-import de.bitvale.common.ddd.AbstractAggregate;
 import de.bitvale.anjunar.pages.Page;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "do_question")
-public class Question extends AbstractAggregate {
+public class Question extends Likeable {
 
     @Lob
     private String topic;
@@ -31,12 +32,6 @@ public class Question extends AbstractAggregate {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private final List<Answer> replies = new ArrayList<>();
-
-    @Column(name = "do_views")
-    private int views = 0;
-
-    @ManyToMany
-    private final Set<User> likes = new HashSet<>();
 
     public String getHtml() {
         return html;
@@ -82,15 +77,4 @@ public class Question extends AbstractAggregate {
         this.page = page;
     }
 
-    public int getViews() {
-        return views;
-    }
-
-    public void setViews(int views) {
-        this.views = views;
-    }
-
-    public Set<User> getLikes() {
-        return likes;
-    }
 }

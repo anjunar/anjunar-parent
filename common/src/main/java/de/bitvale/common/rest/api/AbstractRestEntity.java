@@ -1,9 +1,11 @@
 package de.bitvale.common.rest.api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.bitvale.common.rest.api.meta.Input;
 import de.bitvale.common.rest.api.meta.MetaForm;
 
+import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -13,13 +15,24 @@ public abstract class AbstractRestEntity implements RestEntity, ActionsContainer
     @Input(type = "id", primaryKey = true)
     private UUID id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
+    @Input(type = "datetime-local")
+    private Instant created;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
+    @Input(type = "datetime-local")
+    private Instant modified;
+
     @Input(ignore = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Link> actions = new LinkedHashSet<>();
 
     @Input(ignore = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Link> links = new LinkedHashSet<>();
 
     @Input(ignore = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Link> sources = new LinkedHashSet<>();
 
     @Input(ignore = true)
@@ -37,6 +50,22 @@ public abstract class AbstractRestEntity implements RestEntity, ActionsContainer
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Instant getCreated() {
+        return created;
+    }
+
+    public void setCreated(Instant created) {
+        this.created = created;
+    }
+
+    public Instant getModified() {
+        return modified;
+    }
+
+    public void setModified(Instant modified) {
+        this.modified = modified;
     }
 
     @Override

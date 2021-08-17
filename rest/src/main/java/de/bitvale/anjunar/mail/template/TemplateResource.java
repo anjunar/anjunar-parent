@@ -94,7 +94,7 @@ public class TemplateResource implements FormResource<TemplateForm> {
 
         Template template = new Template();
 
-        TemplateForm.updater(form, template);
+        TemplateForm.updater(form, template, entityManager, identity);
 
         entityManager.persist(template);
 
@@ -118,7 +118,7 @@ public class TemplateResource implements FormResource<TemplateForm> {
 
         Template template = entityManager.find(Template.class, id);
 
-        TemplateForm.updater(form, template);
+        TemplateForm.updater(form, template, entityManager, identity);
 
         factory.from(TemplateResource.class)
                 .record(templateResource -> templateResource.delete(template.getId()))

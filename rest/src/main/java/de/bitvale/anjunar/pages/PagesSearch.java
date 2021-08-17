@@ -1,5 +1,6 @@
 package de.bitvale.anjunar.pages;
 
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableSearch;
 import de.bitvale.anjunar.shared.system.Language;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestSearch;
 import de.bitvale.common.rest.api.jaxrs.RestPredicate;
@@ -10,7 +11,7 @@ import javax.ws.rs.QueryParam;
 import java.util.List;
 import java.util.Locale;
 
-public class PagesSearch extends AbstractRestSearch {
+public class PagesSearch extends AbstractLikeableSearch {
 
     @RestSort(GenericSortProvider.class)
     private List<String> sort;

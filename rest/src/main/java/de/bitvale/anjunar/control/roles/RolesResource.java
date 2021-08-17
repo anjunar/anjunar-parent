@@ -50,7 +50,9 @@ public class RolesResource implements ListResource<RoleForm, RolesSearch> {
         metaTable.addSortable(new Sortable[]{
                 new Sortable("id", false, false),
                 new Sortable("name", true, true),
-                new Sortable("description", true, true)
+                new Sortable("description", true, true),
+                new Sortable("created", true, true),
+                new Sortable("modified", true, true)
         });
 
         factory.from(RolesResource.class)

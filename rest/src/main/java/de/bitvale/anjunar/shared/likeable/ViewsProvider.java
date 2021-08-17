@@ -1,8 +1,9 @@
-package de.bitvale.anjunar.pages.page.questions.question.answers;
+package de.bitvale.anjunar.shared.likeable;
 
 import de.bitvale.anjunar.pages.page.Answer;
 import de.bitvale.anjunar.pages.page.Answer_;
 import de.bitvale.anjunar.pages.page.Question_;
+import de.bitvale.anjunar.shared.Likeable_;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestPredicateProvider;
 import de.bitvale.common.security.Identity;
 
@@ -18,6 +19,6 @@ public class ViewsProvider extends AbstractRestPredicateProvider<Integer, Answer
         if (value == null) {
             return builder.conjunction();
         }
-        return builder.greaterThanOrEqualTo(root.get(Answer_.views), value);
+        return builder.greaterThanOrEqualTo(root.get(Likeable_.views), value);
     }
 }

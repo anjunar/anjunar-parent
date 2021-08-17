@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * @author Patrick Bittner on 02.05.2014.
  */
-public interface Aggregate {
+public interface Entity {
 
     UUID getId();
 

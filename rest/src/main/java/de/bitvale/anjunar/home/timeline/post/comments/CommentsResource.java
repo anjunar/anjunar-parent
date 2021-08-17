@@ -57,6 +57,8 @@ public class CommentsResource implements ListResource<CommentForm, CommentsSearc
                 new Sortable("text", true, true),
                 new Sortable("post", false, false),
                 new Sortable("owner", false, true),
+                new Sortable("created", true, true),
+                new Sortable("modified", true, true),
                 new Sortable("likes", false, false)
         });
 

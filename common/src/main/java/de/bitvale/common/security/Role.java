@@ -1,6 +1,6 @@
 package de.bitvale.common.security;
 
-import de.bitvale.common.ddd.AbstractAggregate;
+import de.bitvale.common.ddd.AbstractEntity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "co_role")
-public class Role extends AbstractAggregate {
+public class Role extends AbstractEntity {
 
     private String name;
 

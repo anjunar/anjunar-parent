@@ -59,22 +59,17 @@ export default class HateoasGrid extends HTMLElement {
                 },
                 items: {
                     direct : (query, callback) => {
-                        let sort = [];
-                        if (query.sort) {
-                            sort = query.sort.map((sort => "&sort=" + sort));
-                        }
-                        let search = "";
+                        link.body = link.body || {};
+
                         if (query.search) {
-                            search = "&" + query.search.property + "=" + query.search.value
+                            link.body[query.search.property] = query.search.value
                         }
 
-                        let url;
-                        if (link.url.indexOf("?") > -1) {
-                            url = `${link.url}&index=${query.index}&limit=${query.limit}${sort.join("")}${search}`
-                        } else {
-                            url = `${link.url}?index=${query.index}&limit=${query.limit}${sort.join("")}${search}`
-                        }
-                        jsonClient.post(url)
+                        link.body.sort = query.sort;
+                        link.body.index = query.index;
+                        link.body.limit = query.limit;
+
+                        jsonClient.post(link.url, {body: link.body})
                             .then(response => {
                                 callback(response.rows, response.size, response.links)
                             })

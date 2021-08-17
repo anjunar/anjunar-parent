@@ -1,8 +1,9 @@
 package de.bitvale.anjunar.pages.page;
 
-import de.bitvale.anjunar.shared.system.Language;
 import de.bitvale.anjunar.pages.Page;
-import de.bitvale.common.rest.api.AbstractRestEntity;
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableRestEntity;
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableRestEntityConverter;
+import de.bitvale.anjunar.shared.system.Language;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.meta.Input;
 import de.bitvale.common.security.Identity;
@@ -12,7 +13,7 @@ import javax.persistence.EntityManager;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PageForm extends AbstractRestEntity {
+public class PageForm extends AbstractLikeableRestEntity {
 
     @Input(type = "text", naming = true)
     private String title;
@@ -59,29 +60,41 @@ public class PageForm extends AbstractRestEntity {
         this.pageLinks = pageLinks;
     }
 
-    public static PageForm factory(Page page) {
-        PageForm pageForm = new PageForm();
+    private static class PageFormConverter extends AbstractLikeableRestEntityConverter<Page, PageForm> {
 
-        pageForm.setId(page.getId());
-        pageForm.setTitle(page.getTitle());
-        pageForm.setContent(Editor.factory(page.getContent(), page.getText()));
-        pageForm.setLanguage(Language.factory(page.getLanguage()));
-        for (Page link : page.getLinks()) {
-            pageForm.getPageLinks().add(PageSelect.factory(link));
+        public static PageFormConverter INSTANCE = new PageFormConverter();
+
+        public PageForm factory(PageForm pageForm, Page page) {
+            pageForm.setId(page.getId());
+            pageForm.setTitle(page.getTitle());
+            pageForm.setContent(Editor.factory(page.getContent(), page.getText()));
+            pageForm.setLanguage(Language.factory(page.getLanguage()));
+            for (Page link : page.getLinks()) {
+                pageForm.getPageLinks().add(PageSelect.factory(link));
+            }
+            return super.factory(pageForm, page);
         }
-        return pageForm;
+
+        @Override
+        public Page updater(PageForm pageForm, Page page, EntityManager entityManager, Identity identity) {
+            page.setTitle(pageForm.getTitle());
+            page.setContent(pageForm.getContent().getHtml());
+            page.setText(pageForm.getContent().getText());
+            page.setModifier(identity.getUser());
+            page.setLanguage(Language.updater(pageForm.getLanguage()));
+            page.getLinks().clear();
+            for (PageSelect pageLink : pageForm.getPageLinks()) {
+                page.getLinks().add(entityManager.find(Page.class, pageLink.getId()));
+            }
+            return super.updater(pageForm, page, entityManager, identity);
+        }
+    }
+
+    public static PageForm factory(Page page) {
+        return PageFormConverter.INSTANCE.factory(new PageForm(), page);
     }
 
     public static Page updater(PageForm pageForm, Page page, Identity identity, EntityManager entityManager) {
-        page.setTitle(pageForm.getTitle());
-        page.setContent(pageForm.getContent().getHtml());
-        page.setText(pageForm.getContent().getText());
-        page.setModifier(identity.getUser());
-        page.setLanguage(Language.updater(pageForm.getLanguage()));
-        page.getLinks().clear();
-        for (PageSelect pageLink : pageForm.getPageLinks()) {
-            page.getLinks().add(entityManager.find(Page.class, pageLink.getId()));
-        }
-        return page;
+        return PageFormConverter.INSTANCE.updater(pageForm, page, entityManager, identity);
     }
 }

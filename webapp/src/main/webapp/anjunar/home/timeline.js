@@ -66,7 +66,15 @@ export default class Timeline extends HTMLWindow {
                     },
                     items: {
                         direct: (query, callback) => {
-                            jsonClient.post(`service/home/timeline?user=${user.id}&index=${query.index}&limit=${query.limit}&sort=created:desc`)
+
+                            let body = {
+                                user : user.id,
+                                index : query.index,
+                                limit : query.limit,
+                                sort : ["created:desc"]
+                            }
+
+                            jsonClient.post(`service/home/timeline`, {body : body})
                                 .then((response) => {
                                     callback(response.rows, response.size, response.links);
                                 });

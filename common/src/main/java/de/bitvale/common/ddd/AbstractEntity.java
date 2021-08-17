@@ -10,28 +10,19 @@ import java.util.UUID;
  * @author Patrick Bittner on 31/01/15.
  */
 @MappedSuperclass
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Entity {
 
     @Id
     @Type(type = "uuid-binary")
-    @Column(name = "id", length = 16, unique= true, nullable = false)
+    @Column(name = "id", length = 16, unique = true, nullable = false)
     private UUID id = UUID.randomUUID();
+
+    @Version
+    private int version;
 
     private Instant created;
 
     private Instant modified;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Instant getCreated() {
-        return created;
-    }
-
-    public Instant getModified() {
-        return modified;
-    }
 
     @PreUpdate
     private void postUpdate() {
@@ -42,6 +33,22 @@ public abstract class AbstractEntity {
     private void postCreate() {
         modified = Instant.now();
         created = Instant.now();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public Instant getCreated() {
+        return created;
+    }
+
+    public Instant getModified() {
+        return modified;
     }
 
     @Override

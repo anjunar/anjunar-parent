@@ -1,11 +1,8 @@
-package de.bitvale.anjunar.home.timeline;
+package de.bitvale.anjunar.shared.likeable;
 
-import de.bitvale.anjunar.control.users.user.UserForm;
 import de.bitvale.anjunar.pages.page.Question;
-import de.bitvale.anjunar.pages.page.Question_;
+import de.bitvale.anjunar.shared.Likeable_;
 import de.bitvale.anjunar.shared.users.user.UserSelect;
-import de.bitvale.anjunar.timeline.AbstractPost;
-import de.bitvale.anjunar.timeline.AbstractPost_;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestPredicateProvider;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.User;
@@ -20,16 +17,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class LikesProvider extends AbstractRestPredicateProvider<Set<UserForm>, AbstractPost> {
+public class LikesProvider extends AbstractRestPredicateProvider<Set<UserSelect>, Question> {
     @Override
-    public Predicate build(Set<UserForm> value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<AbstractPost> root, CriteriaQuery<?> query) {
+    public Predicate build(Set<UserSelect> value, Identity identity, EntityManager entityManager, CriteriaBuilder builder, Root<Question> root, CriteriaQuery<?> query) {
         if (value != null && value.size() > 0) {
             Set<UUID> users = new HashSet<>();
-            for (UserForm userSelect : value) {
+            for (UserSelect userSelect : value) {
                 User user = entityManager.find(User.class, userSelect.getId());
                 users.add(user.getId());
             }
-            return root.join(AbstractPost_.likes).get(User_.id).in(users);
+            return root.join(Likeable_.likes).get(User_.id).in(users);
         }
         return builder.conjunction();
     }

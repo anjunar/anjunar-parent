@@ -1,5 +1,8 @@
 package de.bitvale.anjunar.control.users;
 
+import de.bitvale.common.rest.api.Duration;
+import de.bitvale.common.rest.api.DurationCreatedProvider;
+import de.bitvale.common.rest.api.DurationModifiedProvider;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestSearch;
 import de.bitvale.common.rest.api.jaxrs.RestPredicate;
 import de.bitvale.common.rest.api.jaxrs.RestSort;
@@ -74,4 +77,5 @@ public class UsersSearch extends AbstractRestSearch {
     public void setNaming(String naming) {
         this.naming = naming;
     }
+
 }

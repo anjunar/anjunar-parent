@@ -3,8 +3,9 @@ package de.bitvale.anjunar.pages.page.questions.question.answers.answer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import de.bitvale.anjunar.pages.page.Answer;
 import de.bitvale.anjunar.pages.page.Question;
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableRestEntity;
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableRestEntityConverter;
 import de.bitvale.anjunar.shared.users.user.UserSelect;
-import de.bitvale.common.rest.api.AbstractRestEntity;
 import de.bitvale.common.rest.api.Editor;
 import de.bitvale.common.rest.api.meta.Input;
 import de.bitvale.common.security.Identity;
@@ -17,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class AnswerForm extends AbstractRestEntity {
+public class AnswerForm extends AbstractLikeableRestEntity {
 
     @Input(type = "editor")
     @Dom
@@ -32,8 +33,6 @@ public class AnswerForm extends AbstractRestEntity {
     @Input(type = "datetime-local")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     private Instant created;
-
-    private Integer views;
 
     @Input(type = "lazymultiselect")
     private final Set<UserSelect> likes = new HashSet<>();
@@ -70,44 +69,42 @@ public class AnswerForm extends AbstractRestEntity {
         this.created = created;
     }
 
-    public Integer getViews() {
-        return views;
-    }
-
-    public void setViews(Integer views) {
-        this.views = views;
-    }
-
     public Set<UserSelect> getLikes() {
         return likes;
     }
 
-    public static AnswerForm factory(Answer answer) {
-        AnswerForm resource = new AnswerForm();
-        resource.setId(answer.getId());
-        resource.setEditor(Editor.factory(answer.getHtml(), answer.getText()));
-        resource.setTopic(answer.getTopic().getId());
-        resource.setCreated(answer.getCreated());
-        resource.setOwner(UserSelect.factory(answer.getOwner()));
-        resource.setViews(answer.getViews());
-        for (User like : answer.getLikes()) {
-            resource.getLikes().add(UserSelect.factory(like));
+    private static class AnswerFormConverter extends AbstractLikeableRestEntityConverter<Answer, AnswerForm> {
+
+        public static AnswerFormConverter INSTANCE = new AnswerFormConverter();
+
+        public AnswerForm factory(AnswerForm resource, Answer answer) {
+            resource.setId(answer.getId());
+            resource.setEditor(Editor.factory(answer.getHtml(), answer.getText()));
+            resource.setTopic(answer.getTopic().getId());
+            resource.setCreated(answer.getCreated());
+            resource.setOwner(UserSelect.factory(answer.getOwner()));
+            return resource;
         }
-        return resource;
+
+        @Override
+        public Answer updater(AnswerForm form, Answer answer, EntityManager entityManager, Identity identity) {
+            Question question = entityManager.find(Question.class, form.getTopic());
+            answer.setText(form.getEditor().getText());
+            answer.setHtml(form.getEditor().getHtml());
+            answer.setTopic(question);
+            User owner = entityManager.find(User.class, form.getOwner().getId());
+            answer.setOwner(owner);
+            return super.updater(form, answer, entityManager, identity);
+        }
+
+    }
+
+    public static AnswerForm factory(Answer answer) {
+        return AnswerFormConverter.INSTANCE.factory(new AnswerForm(), answer);
     }
 
     public static void update(Answer answer, AnswerForm form, Identity identity, EntityManager entityManager) {
-        Question question = entityManager.find(Question.class, form.getTopic());
-        answer.setText(form.getEditor().getText());
-        answer.setHtml(form.getEditor().getHtml());
-        answer.setTopic(question);
-        User owner = entityManager.find(User.class, form.getOwner().getId());
-        answer.setOwner(owner);
-        answer.setViews(form.getViews());
-        answer.getLikes().clear();
-        for (UserSelect like : form.getLikes()) {
-            answer.getLikes().add(entityManager.find(User.class, like.getId()));
-        }
+        AnswerFormConverter.INSTANCE.updater(form, answer, entityManager, identity);
     }
 
 }

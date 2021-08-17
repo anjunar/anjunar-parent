@@ -82,7 +82,6 @@ public class AnswerResource implements FormResource<AnswerForm> {
     public AnswerForm read(UUID id) {
 
         Answer answer = entityManager.find(Answer.class, id);
-        answer.setViews(answer.getViews() + 1);
 
         AnswerForm resource = AnswerForm.factory(answer);
 

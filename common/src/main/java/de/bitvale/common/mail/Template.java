@@ -1,6 +1,6 @@
 package de.bitvale.common.mail;
 
-import de.bitvale.common.ddd.AbstractAggregate;
+import de.bitvale.common.ddd.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
@@ -9,7 +9,7 @@ import java.util.Locale;
 
 @Entity
 @Table(name = "co_template")
-public class Template extends AbstractAggregate {
+public class Template extends AbstractEntity {
 
     private String name;
 

@@ -1,8 +1,9 @@
 package de.bitvale.anjunar.control.users.user;
 
-import de.bitvale.common.rest.api.AbstractRestEntity;
-import de.bitvale.common.rest.api.Blob;
 import de.bitvale.anjunar.control.roles.role.RoleForm;
+import de.bitvale.common.rest.api.AbstractRestEntity;
+import de.bitvale.common.rest.api.AbstractRestEntityConverter;
+import de.bitvale.common.rest.api.Blob;
 import de.bitvale.common.rest.api.meta.Input;
 import de.bitvale.common.security.Identity;
 import de.bitvale.common.security.Image;
@@ -113,46 +114,61 @@ public class UserForm extends AbstractRestEntity {
         this.roles = roles;
     }
 
-    public static UserForm factory(User user) {
-        UserForm resource = new UserForm();
-        resource.setId(user.getId());
-        resource.setFirstName(user.getFirstName());
-        resource.setLastName(user.getLastName());
-        resource.setBirthDate(user.getBirthDate());
-        resource.setPassword("s3cr3t");
-        resource.setEmail(user.getEmail());
-        resource.setEnabled(user.isEnabled());
-        resource.setPicture(Blob.factory(user.getPicture()));
-        Set<RoleForm> roleForms = new HashSet<>();
-        for (Role role : user.getRoles()) {
-            roleForms.add(RoleForm.factory(role));
+    public static class UserFormConverter extends AbstractRestEntityConverter<User, UserForm> {
+
+        public static final UserFormConverter INSTANCE = new UserFormConverter();
+
+        @Override
+        public UserForm factory(UserForm form, User user) {
+            form.setId(user.getId());
+            form.setFirstName(user.getFirstName());
+            form.setLastName(user.getLastName());
+            form.setBirthDate(user.getBirthDate());
+            form.setPassword("s3cr3t");
+            form.setEmail(user.getEmail());
+            form.setEnabled(user.isEnabled());
+            form.setPicture(Blob.factory(user.getPicture()));
+            Set<RoleForm> roleForms = new HashSet<>();
+            for (Role role : user.getRoles()) {
+                roleForms.add(RoleForm.factory(role));
+            }
+            form.setRoles(roleForms);
+            return super.factory(form, user);
         }
-        resource.setRoles(roleForms);
-        return resource;
+
+        @Override
+        public User updater(UserForm resource, User user, EntityManager entityManager, Identity identity) {
+            user.setFirstName(resource.getFirstName());
+            user.setLastName(resource.getLastName());
+            user.setBirthDate(resource.getBirthDate());
+            user.setEnabled(resource.isEnabled());
+            user.setEmail(resource.getEmail());
+            if (user.getPicture() == null) {
+                user.setPicture((Image) Blob.updater(resource.getPicture(), new Image()));
+            } else {
+                user.setPicture((Image) Blob.updater(resource.getPicture(), user.getPicture()));
+            }
+
+            Set<RoleForm> roleForms = resource.getRoles();
+            if (identity.hasRole("Administrator")) {
+                user.getRoles().clear();
+                for (RoleForm roleForm : roleForms) {
+                    Role role = entityManager.find(Role.class, roleForm.getId());
+                    user.getRoles().add(role);
+                }
+            }
+
+            return user;
+        }
+    }
+
+    public static UserForm factory(User user) {
+        return UserFormConverter.INSTANCE.factory(new UserForm(), user);
     }
 
     public static User updater(UserForm resource, User user, EntityManager entityManager, Identity identity) {
-        user.setFirstName(resource.getFirstName());
-        user.setLastName(resource.getLastName());
-        user.setBirthDate(resource.getBirthDate());
-        user.setEnabled(resource.isEnabled());
-        user.setEmail(resource.getEmail());
-        if (user.getPicture() == null) {
-            user.setPicture((Image) Blob.updater(resource.getPicture(), new Image()));
-        } else {
-            user.setPicture((Image) Blob.updater(resource.getPicture(), user.getPicture()));
-        }
-
-        Set<RoleForm> roleForms = resource.getRoles();
-        if (identity.hasRole("Administrator")) {
-            user.getRoles().clear();
-            for (RoleForm roleForm : roleForms) {
-                Role role = entityManager.find(Role.class, roleForm.getId());
-                user.getRoles().add(role);
-            }
-        }
-
-        return user;
+        return UserFormConverter.INSTANCE.updater(resource, user, entityManager, identity);
     }
+
 
 }

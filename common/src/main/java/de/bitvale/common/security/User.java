@@ -1,6 +1,6 @@
 package de.bitvale.common.security;
 
-import de.bitvale.common.ddd.AbstractAggregate;
+import de.bitvale.common.ddd.AbstractEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "co_user")
-public class User extends AbstractAggregate {
+public class User extends AbstractEntity {
 
     private String firstName;
 

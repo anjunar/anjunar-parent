@@ -50,7 +50,9 @@ public class PagesResource implements ListResource<PagesForm, PagesSearch> {
         metaTable.addSortable(new Sortable[]{
                 new Sortable("title", true, true),
                 new Sortable("language", true, true),
-                new Sortable("text", true, true)
+                new Sortable("text", true, true),
+                new Sortable("created", true, true),
+                new Sortable("modified", true, true)
         });
 
         PagesSearch search = new PagesSearch();

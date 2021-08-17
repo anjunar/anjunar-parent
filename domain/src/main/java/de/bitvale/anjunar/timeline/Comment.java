@@ -1,7 +1,8 @@
 package de.bitvale.anjunar.timeline;
 
+import de.bitvale.anjunar.shared.Likeable;
 import de.bitvale.common.security.User;
-import de.bitvale.common.ddd.AbstractAggregate;
+import de.bitvale.common.ddd.AbstractEntity;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -9,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "do_comment")
-public class Comment extends AbstractAggregate {
+public class Comment extends Likeable {
 
     @Lob
     private String text;
@@ -19,9 +20,6 @@ public class Comment extends AbstractAggregate {
 
     @ManyToOne
     private User owner;
-
-    @ManyToMany
-    private final Set<User> likes = new HashSet<>();
 
     public String getText() {
         return text;
@@ -45,10 +43,6 @@ public class Comment extends AbstractAggregate {
 
     public void setOwner(User owner) {
         this.owner = owner;
-    }
-
-    public Set<User> getLikes() {
-        return likes;
     }
 
 }

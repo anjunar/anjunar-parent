@@ -1,5 +1,6 @@
 package de.bitvale.anjunar.pages.page.questions.question.answers;
 
+import de.bitvale.anjunar.shared.likeable.AbstractLikeableSearch;
 import de.bitvale.anjunar.shared.users.user.UserSelect;
 import de.bitvale.common.rest.api.jaxrs.AbstractRestSearch;
 import de.bitvale.common.rest.api.jaxrs.RestPredicate;
@@ -9,7 +10,7 @@ import de.bitvale.common.rest.api.jaxrs.provider.GenericSortProvider;
 import java.util.List;
 import java.util.UUID;
 
-public class AnswersSearch extends AbstractRestSearch {
+public class AnswersSearch extends AbstractLikeableSearch {
 
     @RestSort(GenericSortProvider.class)
     private List<String> sort;
@@ -22,9 +23,6 @@ public class AnswersSearch extends AbstractRestSearch {
 
     @RestPredicate(UserProvider.class)
     private UserSelect owner;
-
-    @RestPredicate(ViewsProvider.class)
-    private int views;
 
     public List<String> getSort() {
         return sort;
@@ -58,11 +56,4 @@ public class AnswersSearch extends AbstractRestSearch {
         this.owner = owner;
     }
 
-    public int getViews() {
-        return views;
-    }
-
-    public void setViews(int views) {
-        this.views = views;
-    }
 }

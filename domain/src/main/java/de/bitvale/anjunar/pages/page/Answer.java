@@ -1,7 +1,8 @@
 package de.bitvale.anjunar.pages.page;
 
-import de.bitvale.common.security.User;
+import de.bitvale.anjunar.shared.Likeable;
 import de.bitvale.common.ddd.AbstractEntity;
+import de.bitvale.common.security.User;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -9,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "do_answer")
-public class Answer extends AbstractEntity {
+public class Answer extends Likeable {
 
     @Lob
     private String text;
@@ -22,12 +23,6 @@ public class Answer extends AbstractEntity {
 
     @ManyToOne
     private Question question;
-
-    @Column(name = "do_views")
-    private int views = 0;
-
-    @ManyToMany
-    private final Set<User> likes = new HashSet<>();
 
     public String getHtml() {
         return html;
@@ -69,15 +64,4 @@ public class Answer extends AbstractEntity {
         this.question = question;
     }
 
-    public int getViews() {
-        return views;
-    }
-
-    public void setViews(int views) {
-        this.views = views;
-    }
-
-    public Set<User> getLikes() {
-        return likes;
-    }
 }

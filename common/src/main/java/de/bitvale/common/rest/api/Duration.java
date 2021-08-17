@@ -1,10 +1,10 @@
-package de.bitvale.anjunar.shared.system;
+package de.bitvale.common.rest.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public class CreatedForm {
+public class Duration {
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm", timezone = "UTC")
     private LocalDateTime start;

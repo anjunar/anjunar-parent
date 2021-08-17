@@ -1,6 +1,6 @@
 package de.bitvale.common.filedisk;
 
-import de.bitvale.common.ddd.AbstractAggregate;
+import de.bitvale.common.ddd.AbstractEntity;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public class HarddiskFile extends AbstractAggregate {
+public class HarddiskFile extends AbstractEntity {
 
     private String name;
 

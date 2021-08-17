@@ -8,7 +8,6 @@
         <property name="hibernate.dialect">org.hibernate.dialect.Oracle12cDialect</property>
 -->
 
-        <mapping class="de.bitvale.common.ddd.AbstractAggregate"/>
         <mapping class="de.bitvale.common.ddd.AbstractEntity"/>
 
         <mapping class="de.bitvale.common.filedisk.HarddiskFile"/>
@@ -20,6 +19,8 @@
         <mapping class="de.bitvale.common.security.Relationship"/>
         <mapping class="de.bitvale.common.security.User"/>
         <mapping class="de.bitvale.common.security.Image"/>
+
+        <mapping class="de.bitvale.anjunar.shared.Likeable"/>
 
         <mapping class="de.bitvale.anjunar.pages.Page"/>
         <mapping class="de.bitvale.anjunar.pages.page.Answer"/>

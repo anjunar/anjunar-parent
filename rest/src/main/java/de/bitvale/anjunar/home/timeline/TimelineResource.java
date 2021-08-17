@@ -54,6 +54,7 @@ public class TimelineResource implements ListResource<AbstractPostForm, Timeline
                 new Sortable("text", true, true),
                 new Sortable("owner", true, true),
                 new Sortable("created", true, true),
+                new Sortable("modified", true, true),
                 new Sortable("likes", false, false)
         });
 

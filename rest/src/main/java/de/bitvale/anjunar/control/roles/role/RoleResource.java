@@ -77,7 +77,7 @@ public class RoleResource implements FormResource<RoleForm> {
 
         Role role = new Role();
 
-        RoleForm.updater(form, role);
+        RoleForm.updater(form, role, entityManager, identity);
 
         entityManager.persist(role);
         form.setId(role.getId());
@@ -100,7 +100,7 @@ public class RoleResource implements FormResource<RoleForm> {
 
         Role role = entityManager.find(Role.class, id);
 
-        RoleForm.updater(form, role);
+        RoleForm.updater(form, role, entityManager, identity);
 
         factory.from(RoleResource.class)
                 .record(roleResource -> roleResource.delete(role.getId()))
