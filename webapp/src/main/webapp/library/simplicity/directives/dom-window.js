@@ -80,17 +80,19 @@ export default class DomWindow extends HTMLElement {
                 let matrix = getMatrix(this.#content);
                 let top = - matrix.y + event.deltaY;
                 let clientOffsetHeight = this.#content.offsetHeight - element.offsetHeight + 16;
-                if (top < 0) {
-                    top = 0;
-                }
-                if (top > clientOffsetHeight) {
-                    top = clientOffsetHeight;
-                }
-                let position = top / clientOffsetHeight;
-                let matScrollbarVertical = this.querySelector("mat-scrollbar-vertical");
-                matScrollbarVertical.position = position;
+                if (clientOffsetHeight > 0) {
+                    if (top < 0) {
+                        top = 0;
+                    }
+                    if (top > clientOffsetHeight) {
+                        top = clientOffsetHeight;
+                    }
+                    let position = top / clientOffsetHeight;
+                    let matScrollbarVertical = this.querySelector("mat-scrollbar-vertical");
+                    matScrollbarVertical.position = position;
 
-                this.#content.style.transform = `translate3d(0px, ${- top}px, 0px)`
+                    this.#content.style.transform = `translate3d(0px, ${- top}px, 0px)`
+                }
             })
         }
 

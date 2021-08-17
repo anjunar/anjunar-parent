@@ -14,9 +14,6 @@ export default class Likes extends HTMLElement {
     }
 
     render() {
-        let app = document.querySelector("app-anjunar");
-        let user = app.service;
-
         builder(this, {
             element: "div",
             style: {

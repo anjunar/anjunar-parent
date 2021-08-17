@@ -34,9 +34,6 @@ public class AnswerForm extends AbstractLikeableRestEntity {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
     private Instant created;
 
-    @Input(type = "lazymultiselect")
-    private final Set<UserSelect> likes = new HashSet<>();
-
     public Editor getEditor() {
         return editor;
     }
@@ -69,10 +66,6 @@ public class AnswerForm extends AbstractLikeableRestEntity {
         this.created = created;
     }
 
-    public Set<UserSelect> getLikes() {
-        return likes;
-    }
-
     private static class AnswerFormConverter extends AbstractLikeableRestEntityConverter<Answer, AnswerForm> {
 
         public static AnswerFormConverter INSTANCE = new AnswerFormConverter();
@@ -83,7 +76,7 @@ public class AnswerForm extends AbstractLikeableRestEntity {
             resource.setTopic(answer.getTopic().getId());
             resource.setCreated(answer.getCreated());
             resource.setOwner(UserSelect.factory(answer.getOwner()));
-            return resource;
+            return super.factory(resource, answer);
         }
 
         @Override

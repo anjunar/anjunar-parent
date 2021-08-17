@@ -55,7 +55,7 @@ public class AnswerResource implements FormResource<AnswerForm> {
         AnswerForm resource = new AnswerForm();
 
         resource.setTopic(uuid);
-        resource.setOwner(new UserSelect());
+        resource.setOwner(UserSelect.factory(identity.getUser()));
         resource.setEditor(new Editor());
         resource.setViews(0);
 

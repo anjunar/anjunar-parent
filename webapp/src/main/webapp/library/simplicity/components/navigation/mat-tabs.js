@@ -74,7 +74,7 @@ export default class MatTabs extends HTMLElement {
                                         this.dispatchEvent(new CustomEvent("page", {detail: {page: index}}))
                                     })
 
-                                    let tree = this.#meta.item.element;
+                                    let tree = this.#meta.element;
                                     builder(element, tree(item));
 
                                     if (index === this.#page) {

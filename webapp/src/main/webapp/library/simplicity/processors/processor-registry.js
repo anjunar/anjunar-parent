@@ -10,6 +10,7 @@ import textContentProcessorFactory from "./textContent-processor.js";
 import updateProcessorFactory from "./update-processor.js";
 import valueProcessorFactory from "./value-processor.js";
 import inputProcessorFactory from "./input-processor.js";
+import metaProcessorFactory from "./meta-processor.js";
 
 export default function registry(property, leaf, value) {
     return [
@@ -21,6 +22,7 @@ export default function registry(property, leaf, value) {
         repeatProcessorFactory(property, leaf, value),
         initializeProcessorFactory(property, leaf, value),
         inputProcessorFactory(property, leaf, value),
+        metaProcessorFactory(property, leaf, value),
         styleProcessorFactory(property, leaf, value),
         textContentProcessorFactory(property, leaf, value),
         updateProcessorFactory(property, leaf, value),

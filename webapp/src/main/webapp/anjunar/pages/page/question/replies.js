@@ -5,6 +5,7 @@ import {dateFormat, hateoas} from "../../../../library/simplicity/services/tools
 import HateoasForm from "../../../../library/simplicity/hateoas/hateoas-form.js";
 import {i18nFactory} from "../../../../library/simplicity/services/i18nResolver.js";
 import Likes from "../../../shared/likes.js";
+import MatList from "../../../../library/simplicity/components/table/mat-list.js";
 
 export default class Replies extends HTMLWindow {
 
@@ -35,66 +36,80 @@ export default class Replies extends HTMLWindow {
             model: this.#topic,
             children: [
                 {
+                    element: "h3",
+                    text : this.#topic.topic,
+                    style: {
+                        color: "var(--main-blue-color)"
+                    }
+                },
+                {
                     element: "div",
                     style: {
-                        backgroundColor: "var(--main-dark2-color)",
-                        marginTop: "5px",
-                        padding: "5px",
-                        display: "flex"
+                        display : "flex"
                     },
                     children: [
                         {
                             element: "div",
-                            style: {
-                                marginLeft: "14px",
-                                height: "80px",
-                                width: "80px",
-                                marginRight: "5px"
-                            },
-                            children: [
-                                {
-                                    style: {
-                                        height: "80px",
-                                        width: "80px",
-                                        objectFit: "cover"
-                                    },
-                                    element: "img",
-                                    src: this.#topic.owner.image.data
-                                }
-                            ]
+                            text : `${i18n("Views")}: ${this.#topic.views}`,
+                            style : {
+                                color: "var(--main-grey-color)",
+                                width : "200px",
+                                lineHeight : "24px",
+                                fontSize : "14px"
+                            }
                         },
                         {
                             element: "div",
+                            text : () => {
+                                return `${i18n("Likes")}: ${this.#topic.likes.length}`
+                            },
                             style : {
-                                width : "100%"
+                                color: "var(--main-grey-color)",
+                                width : "200px",
+                                lineHeight : "24px",
+                                fontSize : "14px"
+                            }
+                        }
+                    ]
+                },
+                {
+                    element: "hr",
+                    style : {
+                        marginTop: "12px",
+                        backgroundColor : "var(--main-dark1-color)"
+                    }
+                },
+                {
+                    element: "div",
+                    innerHTML: () => {
+                        return this.#topic.editor.html
+                    }
+                },
+                {
+                    element: "div",
+                    style: {
+                        display : "flex",
+                        fontSize : "14px"
+                    },
+                    children : [
+                        {
+                            element: "div",
+                            style: {
+                                position : "relative"
                             },
                             children: [
                                 {
-                                    element: "h3",
-                                    style: {
-                                        color: "var(--main-blue-color)"
-                                    },
-                                    text: () => {
-                                        return this.#topic.topic
-                                    }
-                                },
-                                {
                                     element: "div",
-                                    innerHTML: () => {
-                                        return this.#topic.editor.html
-                                    }
-                                },
-                                {
-                                    element: "div",
-                                    style: {
-                                        display: "flex",
+                                    style : {
+                                        display : "flex",
                                         alignItems: "center"
                                     },
                                     children: [
                                         {
-                                            element: "div",
-                                            style: {
-                                                flex: "1"
+                                            element: Likes,
+                                            likeable: this.#topic,
+                                            onLike : () => {
+                                                jsonClient.put(`service/pages/page/topics/topic?id=${this.#topic.id}`, {body : this.#topic})
                                             }
                                         },
                                         {
@@ -113,34 +128,62 @@ export default class Replies extends HTMLWindow {
                                                 window.location.hash = `#/anjunar/pages/page/question?id=${this.#topic.id}`
                                                 return false;
                                             }
-                                        },
-                                        {
-                                            element: "span",
-                                            style: {
-                                                fontSize: "12px"
-                                            },
-                                            text: dateFormat(this.#topic.created)
-                                        },
-                                        {
-                                            element: "span",
-                                            style: {
-                                                marginLeft : "5px",
-                                                fontSize: "12px"
-                                            },
-                                            text: `${i18n("Views")}: ${this.#topic.views}`
-                                        },
-                                        {
-                                            element: Likes,
-                                            likeable: this.#topic,
-                                            onLike : () => {
-                                                jsonClient.put(`service/pages/page/topics/topic?id=${this.#topic.id}`, {body : this.#topic})
-                                            }
                                         }
                                     ]
                                 },
+                                {
+                                    element: "div",
+                                    text : dateFormat(this.#topic.created),
+                                    style : {
+                                        position : "absolute",
+                                        bottom : "0",
+                                        left : "0",
+                                        width : "400px",
+                                        color: "var(--main-grey-color)"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            element: "div",
+                            style : {
+                                flex : "1"
+                            }
+                        },
+                        {
+                            element: "div",
+                            children : [
+                                {
+                                    element: "div",
+                                    children : [
+                                        {
+                                            element: "img",
+                                            src: this.#topic.owner.image.data,
+                                            style: {
+                                                marginRight: "5px",
+                                                height: "80px",
+                                                width: "80px",
+                                                objectFit: "cover"
+                                            }
+                                        }, {
+                                            element : "div",
+                                            text : this.#topic.owner.firstName + " " + this.#topic.owner.lastName,
+                                            style : {
+                                                color: "var(--main-grey-color)"
+                                            }
+                                        }
+                                    ]
+                                }
                             ]
                         }
                     ]
+                },
+                {
+                    element: "hr",
+                    style : {
+                        marginTop: "12px",
+                        backgroundColor : "var(--main-dark1-color)"
+                    }
                 },
                 {
                     element: "h3",
@@ -155,6 +198,177 @@ export default class Replies extends HTMLWindow {
                     },
                     children: [
                         {
+                            element: MatList,
+                            items : {
+                                direct : (query, callback) => {
+                                    let link = hateoas(this.#replies.sources, "list")
+
+                                    link.body = link.body || {};
+
+                                    if (query.search) {
+                                        link.body[query.search.property] = query.search.value
+                                    }
+
+                                    link.body.sort = query.sort;
+                                    link.body.index = query.index;
+                                    link.body.limit = query.limit;
+
+                                    jsonClient.post(link.url, {body: link.body})
+                                        .then(response => {
+                                            callback(response.rows, response.size, response.links)
+                                        })
+                                }
+                            },
+                            onCreate: (event) => {
+                                window.location.hash = `#/anjunar/pages/page/question/reply-dialog?topic=${this.#topic.id}`
+                            },
+                            meta : {
+                                element : (reply) => {
+                                    return {
+                                        element : "div",
+                                        children : [
+                                            {
+                                                element: "div",
+                                                style: {
+                                                    display : "flex"
+                                                },
+                                                children: [
+                                                    {
+                                                        element: "div",
+                                                        text : `${i18n("Views")}: ${reply.views}`,
+                                                        style : {
+                                                            color: "var(--main-grey-color)",
+                                                            width : "200px",
+                                                            lineHeight : "24px",
+                                                            fontSize : "14px"
+                                                        }
+                                                    },
+                                                    {
+                                                        element: "div",
+                                                        text : () => {
+                                                            return `${i18n("Likes")}: ${reply.likes.length}`
+                                                        },
+                                                        style : {
+                                                            color: "var(--main-grey-color)",
+                                                            width : "200px",
+                                                            lineHeight : "24px",
+                                                            fontSize : "14px"
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                element: "hr",
+                                                style : {
+                                                    marginTop: "12px",
+                                                    backgroundColor : "var(--main-dark1-color)"
+                                                }
+                                            },
+                                            {
+                                                element: "div",
+                                                innerHTML: () => {
+                                                    return reply.editor.html
+                                                }
+                                            },
+                                            {
+                                                element: "div",
+                                                style: {
+                                                    display : "flex",
+                                                    fontSize : "14px"
+                                                },
+                                                children : [
+                                                    {
+                                                        element: "div",
+                                                        style: {
+                                                            position : "relative"
+                                                        },
+                                                        children: [
+                                                            {
+                                                                element: "div",
+                                                                style : {
+                                                                    display : "flex",
+                                                                    alignItems: "center"
+                                                                },
+                                                                children: [
+                                                                    {
+                                                                        element: Likes,
+                                                                        likeable : reply,
+                                                                        onLike : () => {
+                                                                            jsonClient.put(`service/pages/page/topics/topic/replies/reply?id=${reply.id}`, {body : reply})
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        element: "button",
+                                                                        type: "button",
+                                                                        className: "button",
+                                                                        text: i18n("Edit"),
+                                                                        style: {
+                                                                            fontSize: "12px",
+                                                                            display : () => {
+                                                                                return hateoas(reply.actions, "update") ? "block" : "none"
+                                                                            }
+                                                                        },
+                                                                        onClick: (event) => {
+                                                                            event.stopPropagation();
+                                                                            window.location.hash = `#/anjunar/pages/page/question/reply-dialog?id=${reply.id}`
+                                                                            return false;
+                                                                        }
+                                                                    },
+                                                                ]
+                                                            },
+                                                            {
+                                                                element: "div",
+                                                                text : dateFormat(reply.created),
+                                                                style : {
+                                                                    position : "absolute",
+                                                                    bottom : "0",
+                                                                    left : "0",
+                                                                    width : "400px",
+                                                                    color: "var(--main-grey-color)"
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        element: "div",
+                                                        style : {
+                                                            flex : "1"
+                                                        }
+                                                    },
+                                                    {
+                                                        element: "div",
+                                                        children : [
+                                                            {
+                                                                element: "div",
+                                                                children : [
+                                                                    {
+                                                                        element: "img",
+                                                                        src: reply.owner.image.data,
+                                                                        style: {
+                                                                            marginRight: "5px",
+                                                                            height: "80px",
+                                                                            width: "80px",
+                                                                            objectFit: "cover"
+                                                                        }
+                                                                    }, {
+                                                                        element : "div",
+                                                                        text : reply.owner.firstName + " " + reply.owner.lastName,
+                                                                        style : {
+                                                                            color: "var(--main-grey-color)"
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        /*{
                             element: HateoasTable,
                             header: false,
                             model: this.#replies,
@@ -255,7 +469,7 @@ export default class Replies extends HTMLWindow {
                                     }
                                 })
                             }
-                        }
+                        }*/
                     ]
                 }
             ]
@@ -276,6 +490,10 @@ const i18n = i18nFactory({
     "Edit": {
         "en-DE": "Edit",
         "de-DE": "Bearbeiten"
+    },
+    "Likes" : {
+        "en-DE" : "Likes",
+        "de-DE" : "Mag ich"
     }
 });
 

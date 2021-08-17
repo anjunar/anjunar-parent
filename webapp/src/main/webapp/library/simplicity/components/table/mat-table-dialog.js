@@ -42,16 +42,14 @@ export default class MatTableDialog extends HTMLWindow {
                         this.#page = newIndex
                     },
                     meta : {
-                        item : {
-                            element: (tr) => {
-                                return {
-                                    element: MatTab,
-                                    content: {
-                                        element: "div",
-                                        initialize: (element) => {
-                                            let meta = this.table.meta.header[tr.index];
-                                            builder(element, meta.element());
-                                        }
+                        element: (tr) => {
+                            return {
+                                element: MatTab,
+                                content: {
+                                    element: "div",
+                                    initialize: (element) => {
+                                        let meta = this.table.meta.header[tr.index];
+                                        builder(element, meta.element());
                                     }
                                 }
                             }

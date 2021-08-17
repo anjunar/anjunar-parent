@@ -435,31 +435,6 @@ export default class MatTable extends HTMLTableElement {
                                                     style: {
                                                         flex: "1"
                                                     }
-                                                }, {
-                                                    element: "div",
-                                                    style : {
-                                                        display : "flex"
-                                                    },
-                                                    children : {
-                                                        items : () => {
-                                                            return this.#links.filter(link => link.rel === "create")
-                                                        },
-                                                        item : (link) => {
-                                                            return {
-                                                                element: "button",
-                                                                type: "button",
-                                                                style : {
-                                                                    display : "block"
-                                                                },
-                                                                text: i18n("Create"),
-                                                                onClick: (event) => {
-                                                                    event.stopPropagation();
-                                                                    this.dispatchEvent(new CustomEvent("create", {detail: link}));
-                                                                    return false;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
                                                 },
                                                 {
                                                     element: "button",

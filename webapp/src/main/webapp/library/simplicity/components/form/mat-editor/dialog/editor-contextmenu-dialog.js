@@ -30,14 +30,12 @@ export default class EditorContextmenuDialog extends HTMLWindow {
                         }
                     },
                     meta : {
-                        item : {
-                            element: (segment) => {
-                                return {
-                                    element: MatTab,
-                                    content: {
-                                        element: "div",
-                                        text: segment.localName
-                                    }
+                        element: (segment) => {
+                            return {
+                                element: MatTab,
+                                content: {
+                                    element: "div",
+                                    text: segment.localName
                                 }
                             }
                         }
