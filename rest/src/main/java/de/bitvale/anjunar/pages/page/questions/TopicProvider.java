@@ -17,6 +17,6 @@ public class TopicProvider extends AbstractRestPredicateProvider<String, Questio
         if (value == null || value.equals("")) {
             return builder.conjunction();
         }
-        return builder.gt(builder.function("contains", Integer.class, root.get(Question_.topic), builder.literal(value), builder.literal(1)), 0);
+        return builder.gt(builder.function("contains", Integer.class, root.get(Question_.topic), builder.literal("about(" + value + ")"), builder.literal(1)), 0);
     }
 }

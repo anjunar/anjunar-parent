@@ -18,6 +18,6 @@ public class TextProvider extends AbstractRestPredicateProvider<String, Question
         if (Strings.isNullOrEmpty(value)) {
             return builder.conjunction();
         }
-        return builder.greaterThan(builder.function("contains", Integer.class, root.get(Question_.text), builder.literal(value)), 0);
+        return builder.greaterThan(builder.function("contains", Integer.class, root.get(Question_.text), builder.literal("about(" + value + ")")), 0);
     }
 }

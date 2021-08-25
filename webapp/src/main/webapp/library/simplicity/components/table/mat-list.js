@@ -45,6 +45,10 @@ export default class MatList extends HTMLElement {
         this.#meta = value;
     }
 
+    search(search) {
+        this.load(search);
+    }
+
     load(search) {
 
         let query = {

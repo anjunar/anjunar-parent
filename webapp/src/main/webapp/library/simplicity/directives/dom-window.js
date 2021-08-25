@@ -55,6 +55,7 @@ export default class DomWindow extends HTMLElement {
                 let top = clientOffsetHeight * (event.target.scrollY || 0);
                 let left = clientOffsetWidth * (event.target.scrollX || 0);
 
+                this.#content.style.transition = "all 0s cubic-bezier(0.2, .84, .5, 1)"
                 this.#content.style.transform = `translate3d(${- left}px, ${- top}px, 0px)`
             });
 
@@ -91,6 +92,7 @@ export default class DomWindow extends HTMLElement {
                     let matScrollbarVertical = this.querySelector("mat-scrollbar-vertical");
                     matScrollbarVertical.position = position;
 
+                    this.#content.style.transition = "all .5s cubic-bezier(0.2, .84, .5, 1)"
                     this.#content.style.transform = `translate3d(0px, ${- top}px, 0px)`
                 }
             })
@@ -120,7 +122,6 @@ export default class DomWindow extends HTMLElement {
                             },
                             initialize: (element) => {
                                 element.appendChild(this.#content);
-                                this.#content.style.transition = "all .5s cubic-bezier(0.2, .84, .5, 1)"
                                 if (this.#content instanceof HTMLWindow) {
                                     windowProcess(element);
                                 }
