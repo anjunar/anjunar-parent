@@ -115,19 +115,17 @@ function elementFactory(property, array, tree) {
     return new class Element {
 
         constructor() {
-            if (property !== "meta") {
-                let value = tree.element;
-                if (value instanceof HTMLElement) {
-                    instance = value;
+            let value = tree.element;
+            if (value instanceof HTMLElement) {
+                instance = value;
+            } else {
+                if (value instanceof Function) {
+                    instance = new value();
                 } else {
-                    if (value instanceof Function) {
-                        instance = new value();
+                    if (htmlTags.indexOf(value) === -1) {
+                        instance = document.createElementNS("http://www.w3.org/2000/svg", value);
                     } else {
-                        if (htmlTags.indexOf(value) === -1) {
-                            instance = document.createElementNS("http://www.w3.org/2000/svg", value);
-                        } else {
-                            instance = document.createElement(value);
-                        }
+                        instance = document.createElement(value);
                     }
                 }
             }

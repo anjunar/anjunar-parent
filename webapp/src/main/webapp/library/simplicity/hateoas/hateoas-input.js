@@ -195,28 +195,24 @@ export default class HateoasInput extends HTMLElement {
                         }
                     },
                     meta: {
-                        option: {
-                            element: (element) => {
-                                let namingProperties = element.meta.properties
-                                    .filter((element) => element.naming)
-                                    .map((elem) => element[elem.name])
-                                    .join(" ")
-                                return {
-                                    element: "div",
-                                    text: namingProperties
-                                }
+                        option: (element) => {
+                            let namingProperties = element.meta.properties
+                                .filter((element) => element.naming)
+                                .map((elem) => element[elem.name])
+                                .join(" ")
+                            return {
+                                element: "div",
+                                text: namingProperties
                             }
                         },
-                        selection: {
-                            element: (element) => {
-                                let namingProperties = element.meta.properties
-                                    .filter((element) => element.naming)
-                                    .map((elem) => element[elem.name])
-                                    .join(" ")
-                                return {
-                                    element: "div",
-                                    text: namingProperties
-                                }
+                        selection: (element) => {
+                            let namingProperties = element.meta.properties
+                                .filter((element) => element.naming)
+                                .map((elem) => element[elem.name])
+                                .join(" ")
+                            return {
+                                element: "div",
+                                text: namingProperties
                             }
                         }
                     }

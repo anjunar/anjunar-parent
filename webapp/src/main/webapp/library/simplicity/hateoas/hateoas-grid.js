@@ -82,58 +82,7 @@ export default class HateoasGrid extends HTMLElement {
                 onCreate : (event) => {
                     this.dispatchEvent(new CustomEvent("create", {detail : event.detail}))
                 },
-                meta: this.#meta || {
-                    colgroup : this.#model.sortable.map((segment) => {
-                        return {
-                            element : () => {
-                                return {
-                                    element: "div",
-                                    attributes: {
-                                        path() {
-                                            return segment.sortable ? segment.property : ""
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }),
-                    header: this.#model.columns.map((column) => {
-                        return {
-                            element : () => {
-                                return {
-                                    element: "strong",
-                                    text: column.name
-                                }
-                            }
-                        }
-                    }),
-                    body: this.#model.columns.map((column) => {
-                        return {
-                            element : (c) => {
-                                switch (column.type) {
-                                    case "image" : {
-                                        return {
-                                            element: "img",
-                                            style: {
-                                                height: "100px"
-                                            },
-                                            src : () => {
-                                                if (c.picture) {
-                                                    return c.picture.data
-                                                }
-                                            }
-                                        }
-                                    }
-                                    default :
-                                        return {
-                                            element: "div",
-                                            text: c[column.name]
-                                        }
-                                }
-                            }
-                        }
-                    })
-                }
+                meta : this.#meta
             })
         }
     }

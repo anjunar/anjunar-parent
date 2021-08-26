@@ -49,14 +49,12 @@ export default class Search extends HTMLWindow {
                         let index = event.detail.page;
                         this.#page = index;
                     },
-                    meta : {
-                        element : (tab) => {
-                            return {
-                                element : MatTab,
-                                content : {
-                                    element : "div",
-                                    text : tab
-                                }
+                    meta : (tab) => {
+                        return {
+                            element : MatTab,
+                            content : {
+                                element : "div",
+                                text : tab
                             }
                         }
                     }
@@ -116,25 +114,23 @@ export default class Search extends HTMLWindow {
                                     onCreate: (event) => {
                                         window.location.hash = "#/anjunar/pages/editor"
                                     },
-                                    meta : {
-                                        element : (page) => {
-                                            return {
-                                                element: "div",
-                                                children : [
-                                                    {
-                                                        element: "h3",
-                                                        text : page.title
-                                                    },
-                                                    {
-                                                        element: "p",
-                                                        text : page.text,
-                                                        style : {
-                                                            overflow : "clip",
-                                                            height : "48px"
-                                                        }
+                                    meta : (page) => {
+                                        return {
+                                            element: "div",
+                                            children : [
+                                                {
+                                                    element: "h3",
+                                                    text : page.title
+                                                },
+                                                {
+                                                    element: "p",
+                                                    text : page.text,
+                                                    style : {
+                                                        overflow : "clip",
+                                                        height : "48px"
                                                     }
-                                                ]
-                                            }
+                                                }
+                                            ]
                                         }
                                     }
                                 }
@@ -184,25 +180,23 @@ export default class Search extends HTMLWindow {
                                     onItem : (event) => {
                                         window.location.hash = `#/anjunar/pages/page/question/replies?id=${event.detail.id}`
                                     },
-                                    meta : {
-                                        element : (page) => {
-                                            return {
-                                                element: "div",
-                                                children : [
-                                                    {
-                                                        element: "h3",
-                                                        text : page.topic
-                                                    },
-                                                    {
-                                                        element: "p",
-                                                        text : page.editor.text,
-                                                        style : {
-                                                            overflow : "clip",
-                                                            height : "48px"
-                                                        }
+                                    meta : (page) => {
+                                        return {
+                                            element: "div",
+                                            children : [
+                                                {
+                                                    element: "h3",
+                                                    text : page.topic
+                                                },
+                                                {
+                                                    element: "p",
+                                                    text : page.editor.text,
+                                                    style : {
+                                                        overflow : "clip",
+                                                        height : "48px"
                                                     }
-                                                ]
-                                            }
+                                                }
+                                            ]
                                         }
                                     }
                                 }

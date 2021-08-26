@@ -180,7 +180,7 @@ export default class MatTable extends HTMLTableElement {
         let sort = (index) => {
             if (this.#meta.colgroup) {
                 if (this.#meta.colgroup.length > index) {
-                    let element = this.#meta.colgroup[index].element();
+                    let element = this.#meta.colgroup[index]();
                     let path = element.attributes.path;
                     return path();
                 }
@@ -193,7 +193,7 @@ export default class MatTable extends HTMLTableElement {
         let visible = (index) => {
             if (this.#meta.colgroup) {
                 if (this.#meta.colgroup.length > index) {
-                    let element = this.#meta.colgroup[index].element();
+                    let element = this.#meta.colgroup[index]();
                     let visible = element.attributes.visible;
                     return visible();
                 }
@@ -206,7 +206,7 @@ export default class MatTable extends HTMLTableElement {
         let sortable = (index) => {
             if (this.#meta.colgroup) {
                 if (this.#meta.colgroup.length > index) {
-                    let element = this.#meta.colgroup[index].element();
+                    let element = this.#meta.colgroup[index]();
                     let sortable = element.attributes.sortable;
                     return sortable();
                 }
@@ -263,7 +263,7 @@ export default class MatTable extends HTMLTableElement {
                                                         initialize: (element) => {
                                                             if (this.#meta.header) {
                                                                 let m = this.#meta.header[item.index];
-                                                                builder(element, m.element());
+                                                                builder(element, m());
                                                             }
                                                         }
                                                     },
@@ -352,7 +352,7 @@ export default class MatTable extends HTMLTableElement {
                                                     element: "div",
                                                     initialize: (element) => {
                                                         let m = this.#meta.body[td.index];
-                                                        builder(element, m.element(tr));
+                                                        builder(element, m(tr));
                                                     }
                                                 }
                                             ]

@@ -48,148 +48,146 @@ export default class Questions extends HTMLWindow {
                 onItem : (event) => {
                     window.location.hash = `#/anjunar/pages/page/question/replies?id=${event.detail.id}`
                 },
-                meta: {
-                    element: (topic) => {
-                        return {
-                            element : "div",
-                            children : [
-                                {
-                                    element: "div",
-                                    style: {
-                                        display: "flex",
-                                        fontSize : "14px",
-                                        width : "100%",
-                                        marginTop : "5px"
-                                    },
-                                    children: [
-                                        {
-                                            element: "div",
-                                            children: [
-                                                {
-                                                    element: "div",
-                                                    text : i18n("Likes") + " " + topic.likes.length,
-                                                    style : {
-                                                        height: "80px",
-                                                        width : "80px",
-                                                        lineHeight: "80px",
-                                                        textAlign : "center",
-                                                        color: "var(--main-grey-color)"
-                                                    }
-                                                },
-                                                {
-                                                    element: "div",
-                                                    text : i18n("Views") + " " + topic.views,
-                                                    style : {
-                                                        height: "80px",
-                                                        width : "80px",
-                                                        lineHeight: "80px",
-                                                        textAlign : "center",
-                                                        color: "var(--main-grey-color)"
-                                                    }
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            element: "div",
-                                            style : {
-                                                width : "100%"
-                                            },
-                                            children: [
-                                                {
-                                                    element: "div",
-                                                    style: {
-                                                        height: "80px"
-                                                    },
-                                                    children : [
-                                                        {
-                                                            element: "h3",
-                                                            style: {
-                                                                color: "var(--main-blue-color)",
-                                                                margin: "0px"
-                                                            },
-                                                            text: topic.topic
-                                                        }, {
-                                                            element: "div",
-                                                            innerHTML: topic.editor.text,
-                                                            style: {
-                                                                maxHeight: "calc(3 * 14px)",
-                                                                lineHeight : "14px",
-                                                                overflow: "hidden"
-                                                            }
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    element: "div",
-                                                    style: {
-                                                        display : "flex"
-                                                    },
-                                                    children : [
-                                                        {
-                                                            element: "div",
-                                                            style: {
-                                                                position : "relative"
-                                                            },
-                                                            children: [
-                                                                {
-                                                                    element: "div",
-                                                                    text : dateFormat(topic.created),
-                                                                    style : {
-                                                                        position : "absolute",
-                                                                        bottom : "0",
-                                                                        width : "400px",
-                                                                        color: "var(--main-grey-color)"
-                                                                    }
-                                                                }
-                                                            ]
-                                                        },
-                                                        {
-                                                            element: "div",
-                                                            style : {
-                                                                flex : "1"
-                                                            }
-                                                        },
-                                                        {
-                                                            element: "div",
-                                                            children : [
-                                                                {
-                                                                    element: "div",
-                                                                    children : [
-                                                                        {
-                                                                            element: "img",
-                                                                            src: topic.owner.image.data,
-                                                                            style: {
-                                                                                marginRight: "5px",
-                                                                                height: "80px",
-                                                                                width: "80px",
-                                                                                objectFit: "cover"
-                                                                            }
-                                                                        }, {
-                                                                            element : "div",
-                                                                            text : topic.owner.firstName + " " + topic.owner.lastName,
-                                                                            style : {
-                                                                                color: "var(--main-grey-color)"
-                                                                            }
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                },
-                                            ]
-                                        }
-                                    ]
+                meta: (topic) => {
+                    return {
+                        element : "div",
+                        children : [
+                            {
+                                element: "div",
+                                style: {
+                                    display: "flex",
+                                    fontSize : "14px",
+                                    width : "100%",
+                                    marginTop : "5px"
                                 },
-                                {
-                                    element : "hr",
-                                    style : {
-                                        marginTop: "12px",
-                                        backgroundColor : "var(--main-dark1-color)"
+                                children: [
+                                    {
+                                        element: "div",
+                                        children: [
+                                            {
+                                                element: "div",
+                                                text : i18n("Likes") + " " + topic.likes.length,
+                                                style : {
+                                                    height: "80px",
+                                                    width : "80px",
+                                                    lineHeight: "80px",
+                                                    textAlign : "center",
+                                                    color: "var(--main-grey-color)"
+                                                }
+                                            },
+                                            {
+                                                element: "div",
+                                                text : i18n("Views") + " " + topic.views,
+                                                style : {
+                                                    height: "80px",
+                                                    width : "80px",
+                                                    lineHeight: "80px",
+                                                    textAlign : "center",
+                                                    color: "var(--main-grey-color)"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        element: "div",
+                                        style : {
+                                            width : "100%"
+                                        },
+                                        children: [
+                                            {
+                                                element: "div",
+                                                style: {
+                                                    height: "80px"
+                                                },
+                                                children : [
+                                                    {
+                                                        element: "h3",
+                                                        style: {
+                                                            color: "var(--main-blue-color)",
+                                                            margin: "0px"
+                                                        },
+                                                        text: topic.topic
+                                                    }, {
+                                                        element: "div",
+                                                        innerHTML: topic.editor.text,
+                                                        style: {
+                                                            maxHeight: "calc(3 * 14px)",
+                                                            lineHeight : "14px",
+                                                            overflow: "hidden"
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                element: "div",
+                                                style: {
+                                                    display : "flex"
+                                                },
+                                                children : [
+                                                    {
+                                                        element: "div",
+                                                        style: {
+                                                            position : "relative"
+                                                        },
+                                                        children: [
+                                                            {
+                                                                element: "div",
+                                                                text : dateFormat(topic.created),
+                                                                style : {
+                                                                    position : "absolute",
+                                                                    bottom : "0",
+                                                                    width : "400px",
+                                                                    color: "var(--main-grey-color)"
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        element: "div",
+                                                        style : {
+                                                            flex : "1"
+                                                        }
+                                                    },
+                                                    {
+                                                        element: "div",
+                                                        children : [
+                                                            {
+                                                                element: "div",
+                                                                children : [
+                                                                    {
+                                                                        element: "img",
+                                                                        src: topic.owner.image.data,
+                                                                        style: {
+                                                                            marginRight: "5px",
+                                                                            height: "80px",
+                                                                            width: "80px",
+                                                                            objectFit: "cover"
+                                                                        }
+                                                                    }, {
+                                                                        element : "div",
+                                                                        text : topic.owner.firstName + " " + topic.owner.lastName,
+                                                                        style : {
+                                                                            color: "var(--main-grey-color)"
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                        ]
                                     }
+                                ]
+                            },
+                            {
+                                element : "hr",
+                                style : {
+                                    marginTop: "12px",
+                                    backgroundColor : "var(--main-dark1-color)"
                                 }
-                            ]
-                        }
+                            }
+                        ]
                     }
                 }
             }

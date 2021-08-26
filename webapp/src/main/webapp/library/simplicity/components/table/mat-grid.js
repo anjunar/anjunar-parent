@@ -126,8 +126,7 @@ export default class MatGrid extends HTMLElement {
                                     return false;
                                 },
                                 initialize: (element) => {
-                                    let m = this.#meta.item;
-                                    builder(element, m.element(item));
+                                    builder(element, this.#meta(item));
                                 }
                             }
                         }

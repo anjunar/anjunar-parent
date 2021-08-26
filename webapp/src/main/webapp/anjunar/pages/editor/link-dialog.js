@@ -35,14 +35,10 @@ export default class LinkDialog extends HTMLElement {
                                     })
                             }
                         },
-                        meta : {
-                            option : {
-                                element : (link) => {
-                                    return {
-                                        element : "div",
-                                        text : link.title
-                                    }
-                                }
+                        meta : (link) => {
+                            return {
+                                element : "div",
+                                text : link.title
                             }
                         }
                     }

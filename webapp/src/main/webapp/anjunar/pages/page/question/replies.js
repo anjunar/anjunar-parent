@@ -222,149 +222,147 @@ export default class Replies extends HTMLWindow {
                             onCreate: (event) => {
                                 window.location.hash = `#/anjunar/pages/page/question/reply-dialog?topic=${this.#topic.id}`
                             },
-                            meta : {
-                                element : (reply) => {
-                                    return {
-                                        element : "div",
-                                        children : [
-                                            {
-                                                element: "div",
-                                                style: {
-                                                    display : "flex"
-                                                },
-                                                children: [
-                                                    {
-                                                        element: "div",
-                                                        text : `${i18n("Views")}: ${reply.views}`,
-                                                        style : {
-                                                            color: "var(--main-grey-color)",
-                                                            width : "200px",
-                                                            lineHeight : "24px",
-                                                            fontSize : "14px"
-                                                        }
-                                                    },
-                                                    {
-                                                        element: "div",
-                                                        text : () => {
-                                                            return `${i18n("Likes")}: ${reply.likes.length}`
-                                                        },
-                                                        style : {
-                                                            color: "var(--main-grey-color)",
-                                                            width : "200px",
-                                                            lineHeight : "24px",
-                                                            fontSize : "14px"
-                                                        }
+                            meta : (reply) => {
+                                return {
+                                    element : "div",
+                                    children : [
+                                        {
+                                            element: "div",
+                                            style: {
+                                                display : "flex"
+                                            },
+                                            children: [
+                                                {
+                                                    element: "div",
+                                                    text : `${i18n("Views")}: ${reply.views}`,
+                                                    style : {
+                                                        color: "var(--main-grey-color)",
+                                                        width : "200px",
+                                                        lineHeight : "24px",
+                                                        fontSize : "14px"
                                                     }
-                                                ]
-                                            },
-                                            {
-                                                element: "hr",
-                                                style : {
-                                                    marginTop: "12px",
-                                                    backgroundColor : "var(--main-dark1-color)"
-                                                }
-                                            },
-                                            {
-                                                element: "div",
-                                                innerHTML: () => {
-                                                    return reply.editor.html
-                                                }
-                                            },
-                                            {
-                                                element: "div",
-                                                style: {
-                                                    display : "flex",
-                                                    fontSize : "14px"
                                                 },
-                                                children : [
-                                                    {
-                                                        element: "div",
-                                                        style: {
-                                                            position : "relative"
-                                                        },
-                                                        children: [
-                                                            {
-                                                                element: "div",
-                                                                style : {
-                                                                    display : "flex",
-                                                                    alignItems: "center"
-                                                                },
-                                                                children: [
-                                                                    {
-                                                                        element: Likes,
-                                                                        likeable : reply,
-                                                                        onLike : () => {
-                                                                            jsonClient.put(`service/pages/page/topics/topic/replies/reply?id=${reply.id}`, {body : reply})
-                                                                        }
-                                                                    },
-                                                                    {
-                                                                        element: "button",
-                                                                        type: "button",
-                                                                        className: "button",
-                                                                        text: i18n("Edit"),
-                                                                        style: {
-                                                                            fontSize: "12px",
-                                                                            display : () => {
-                                                                                return hateoas(reply.actions, "update") ? "block" : "none"
-                                                                            }
-                                                                        },
-                                                                        onClick: (event) => {
-                                                                            event.stopPropagation();
-                                                                            window.location.hash = `#/anjunar/pages/page/question/reply-dialog?id=${reply.id}`
-                                                                            return false;
-                                                                        }
-                                                                    },
-                                                                ]
+                                                {
+                                                    element: "div",
+                                                    text : () => {
+                                                        return `${i18n("Likes")}: ${reply.likes.length}`
+                                                    },
+                                                    style : {
+                                                        color: "var(--main-grey-color)",
+                                                        width : "200px",
+                                                        lineHeight : "24px",
+                                                        fontSize : "14px"
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            element: "hr",
+                                            style : {
+                                                marginTop: "12px",
+                                                backgroundColor : "var(--main-dark1-color)"
+                                            }
+                                        },
+                                        {
+                                            element: "div",
+                                            innerHTML: () => {
+                                                return reply.editor.html
+                                            }
+                                        },
+                                        {
+                                            element: "div",
+                                            style: {
+                                                display : "flex",
+                                                fontSize : "14px"
+                                            },
+                                            children : [
+                                                {
+                                                    element: "div",
+                                                    style: {
+                                                        position : "relative"
+                                                    },
+                                                    children: [
+                                                        {
+                                                            element: "div",
+                                                            style : {
+                                                                display : "flex",
+                                                                alignItems: "center"
                                                             },
-                                                            {
-                                                                element: "div",
-                                                                text : dateFormat(reply.created),
-                                                                style : {
-                                                                    position : "absolute",
-                                                                    bottom : "0",
-                                                                    left : "0",
-                                                                    width : "400px",
-                                                                    color: "var(--main-grey-color)"
-                                                                }
-                                                            }
-                                                        ]
-                                                    },
-                                                    {
-                                                        element: "div",
-                                                        style : {
-                                                            flex : "1"
-                                                        }
-                                                    },
-                                                    {
-                                                        element: "div",
-                                                        children : [
-                                                            {
-                                                                element: "div",
-                                                                children : [
-                                                                    {
-                                                                        element: "img",
-                                                                        src: reply.owner.image.data,
-                                                                        style: {
-                                                                            marginRight: "5px",
-                                                                            height: "80px",
-                                                                            width: "80px",
-                                                                            objectFit: "cover"
-                                                                        }
-                                                                    }, {
-                                                                        element : "div",
-                                                                        text : reply.owner.firstName + " " + reply.owner.lastName,
-                                                                        style : {
-                                                                            color: "var(--main-grey-color)"
-                                                                        }
+                                                            children: [
+                                                                {
+                                                                    element: Likes,
+                                                                    likeable : reply,
+                                                                    onLike : () => {
+                                                                        jsonClient.put(`service/pages/page/topics/topic/replies/reply?id=${reply.id}`, {body : reply})
                                                                     }
-                                                                ]
+                                                                },
+                                                                {
+                                                                    element: "button",
+                                                                    type: "button",
+                                                                    className: "button",
+                                                                    text: i18n("Edit"),
+                                                                    style: {
+                                                                        fontSize: "12px",
+                                                                        display : () => {
+                                                                            return hateoas(reply.actions, "update") ? "block" : "none"
+                                                                        }
+                                                                    },
+                                                                    onClick: (event) => {
+                                                                        event.stopPropagation();
+                                                                        window.location.hash = `#/anjunar/pages/page/question/reply-dialog?id=${reply.id}`
+                                                                        return false;
+                                                                    }
+                                                                },
+                                                            ]
+                                                        },
+                                                        {
+                                                            element: "div",
+                                                            text : dateFormat(reply.created),
+                                                            style : {
+                                                                position : "absolute",
+                                                                bottom : "0",
+                                                                left : "0",
+                                                                width : "400px",
+                                                                color: "var(--main-grey-color)"
                                                             }
-                                                        ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    element: "div",
+                                                    style : {
+                                                        flex : "1"
                                                     }
-                                                ]
-                                            },
-                                        ]
-                                    }
+                                                },
+                                                {
+                                                    element: "div",
+                                                    children : [
+                                                        {
+                                                            element: "div",
+                                                            children : [
+                                                                {
+                                                                    element: "img",
+                                                                    src: reply.owner.image.data,
+                                                                    style: {
+                                                                        marginRight: "5px",
+                                                                        height: "80px",
+                                                                        width: "80px",
+                                                                        objectFit: "cover"
+                                                                    }
+                                                                }, {
+                                                                    element : "div",
+                                                                    text : reply.owner.firstName + " " + reply.owner.lastName,
+                                                                    style : {
+                                                                        color: "var(--main-grey-color)"
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                    ]
                                 }
                             }
                         },

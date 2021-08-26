@@ -38,20 +38,16 @@ export default class LanguagesDialog extends HTMLWindow {
                 }
             },
             meta: {
-                option: {
-                    element: (page) => {
-                        return {
-                            element: "div",
-                            text: page.title
-                        }
+                option: (page) => {
+                    return {
+                        element: "div",
+                        text: page.title
                     }
                 },
-                selection : {
-                    element: (page) => {
-                        return {
-                            element: "div",
-                            text: page.title
-                        }
+                selection : (page) => {
+                    return {
+                        element: "div",
+                        text: page.title
                     }
                 }
             }

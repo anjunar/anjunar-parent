@@ -191,8 +191,8 @@ export default class DomLazySelect extends HTMLElement {
                                             }
                                         },
                                         initialize : (element) => {
-                                            let m = this.#meta.option
-                                            builder(element, m.element(item));
+                                            let m = this.#meta
+                                            builder(element, m(item));
                                         }
                                     }
                                 }

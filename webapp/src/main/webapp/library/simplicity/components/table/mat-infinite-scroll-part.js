@@ -79,8 +79,8 @@ export default class MatInfiniteScrollPart extends HTMLElement {
                     return {
                         element : "div",
                         initialize : (element) => {
-                            let m = this.#meta.part;
-                            builder(element, m.element(item));
+                            let m = this.#meta;
+                            builder(element, m(item));
                         }
                     }
                 }

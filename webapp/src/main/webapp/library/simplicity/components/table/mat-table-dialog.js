@@ -41,16 +41,14 @@ export default class MatTableDialog extends HTMLWindow {
                         let newIndex = column.index
                         this.#page = newIndex
                     },
-                    meta : {
-                        element: (tr) => {
-                            return {
-                                element: MatTab,
-                                content: {
-                                    element: "div",
-                                    initialize: (element) => {
-                                        let meta = this.table.meta.header[tr.index];
-                                        builder(element, meta.element());
-                                    }
+                    meta : (tr) => {
+                        return {
+                            element: MatTab,
+                            content: {
+                                element: "div",
+                                initialize: (element) => {
+                                    let meta = this.table.meta.header[tr.index];
+                                    builder(element, meta());
                                 }
                             }
                         }
@@ -94,7 +92,7 @@ export default class MatTableDialog extends HTMLWindow {
                                                             element: "div",
                                                             initialize: (element) => {
                                                                 if (this.table.meta.filter) {
-                                                                    let meta = this.table.meta.filter[tr.index].element(tr);
+                                                                    let meta = this.table.meta.filter[tr.index](tr);
                                                                     builder(element, meta);
                                                                 } else {
                                                                     builder(element, {

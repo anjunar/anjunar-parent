@@ -167,19 +167,15 @@ export default class MatMultiSelect extends HTMLElement {
                         });
                     },
                 },
-                meta: {
-                    option: {
-                        element : (item) => {
-                            return {
-                                element: "div",
-                                initialize : (element) => {
-                                    let m = this.#meta.option
-                                    builder(element, m.element(item));
-                                }
-                            }
+                meta: (item) => {
+                    return {
+                        element: "div",
+                        initialize : (element) => {
+                            let m = this.#meta.option
+                            builder(element, m(item));
                         }
                     }
-                },
+                }
             }, {
                 element : "div",
                 style : {
@@ -221,7 +217,7 @@ export default class MatMultiSelect extends HTMLElement {
                                                     element : "div",
                                                     initialize : (element) => {
                                                         let m = this.#meta.selection
-                                                        builder(element, m.element(item));
+                                                        builder(element, m(item));
                                                     }
                                                 },
                                                 {

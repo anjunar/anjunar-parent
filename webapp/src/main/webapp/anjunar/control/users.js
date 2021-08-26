@@ -54,55 +54,51 @@ export default class Users extends HTMLWindow {
                 onCreate: (event) => {
                     window.location.hash = `#/anjunar/control/user`
                 },
-                meta: {
-                    item: {
-                        element: (people) => {
-                            return {
+                meta: (people) => {
+                    return {
+                        element: "div",
+                        style: {
+                            margin: "2px",
+                            border: "1px solid var(--main-dark1-color)",
+                            width: "194px",
+                            height: "194px",
+                            position: "relative"
+                        },
+                        children: [
+                            {
                                 element: "div",
                                 style: {
-                                    margin: "2px",
-                                    border: "1px solid var(--main-dark1-color)",
-                                    width: "194px",
-                                    height: "194px",
-                                    position: "relative"
+                                    margin: "auto",
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    overflow: "auto"
                                 },
                                 children: [
                                     {
+                                        element: "img",
+                                        src: () => {
+                                            if (people.picture) {
+                                                return people.picture.data
+                                            }
+                                            return "";
+                                        },
+                                        style: {
+                                            maxWidth: "150px",
+                                            maxHeight: "150px"
+                                        }
+                                    },
+                                    {
                                         element: "div",
                                         style: {
-                                            margin: "auto",
-                                            position: "absolute",
-                                            top: "50%",
-                                            left: "50%",
-                                            transform: "translate(-50%, -50%)",
-                                            overflow: "auto"
+                                            textAlign: "center"
                                         },
-                                        children: [
-                                            {
-                                                element: "img",
-                                                src: () => {
-                                                    if (people.picture) {
-                                                        return people.picture.data
-                                                    }
-                                                    return "";
-                                                },
-                                                style: {
-                                                    maxWidth: "150px",
-                                                    maxHeight: "150px"
-                                                }
-                                            },
-                                            {
-                                                element: "div",
-                                                style: {
-                                                    textAlign: "center"
-                                                },
-                                                text: `${people.firstName} ${people.lastName}`
-                                            }
-                                        ]
+                                        text: `${people.firstName} ${people.lastName}`
                                     }
                                 ]
                             }
-                        }
+                        ]
                     }
                 }
             }

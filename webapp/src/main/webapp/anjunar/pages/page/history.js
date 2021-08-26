@@ -27,28 +27,22 @@ export default class History extends HTMLWindow {
             },
             meta: {
                 body: [
-                    {
-                        element : (page) => {
-                            return {
-                                element: "div",
-                                text: page.revision
-                            }
+                    (page) => {
+                        return {
+                            element: "div",
+                            text: page.revision
                         }
                     },
-                    {
-                        element : (page) => {
-                            return {
-                                element: "div",
-                                text: dateFormat(page.modified)
-                            }
-                        }
-                    },
-                    {
-                        element : (page) => {
-                            return {
-                                element: "div",
-                                text: `${page.modifier.firstName} ${page.modifier.lastName}`
-                            }
+                    (page) => {
+            return {
+                element: "div",
+                text: dateFormat(page.modified)
+            }
+        },
+                    (page) => {
+                        return {
+                            element: "div",
+                            text: `${page.modifier.firstName} ${page.modifier.lastName}`
                         }
                     }
                 ]

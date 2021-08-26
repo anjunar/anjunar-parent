@@ -110,7 +110,7 @@ export default class MatList extends HTMLElement {
                         return {
                             element: "div",
                             initialize: (element) => {
-                                let tree = this.#meta.element;
+                                let tree = this.#meta;
                                 builder(element, tree(item));
                                 element.addEventListener("click", () => {
                                     this.dispatchEvent(new CustomEvent("item", {detail : item}))
